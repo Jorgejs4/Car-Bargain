@@ -1,8 +1,10 @@
+import json
 from pathlib import Path
 
 import httpx
 from app.models import Listing, ListingSnapshot
 from app.services.raw_store import save_raw
+from scrapers.autoscout24.scraper import AutoScout24Scraper
 from scrapers.mobile_de.scraper import MobileDeScraper
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -13,7 +15,7 @@ FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "mobile_de" / "sear
 def _patch_lock(monkeypatch) -> None:
     from workers import tasks
 
-    monkeypatch.setattr(tasks, "_acquire_lock", lambda: True)
+    monkeypatch.setattr(tasks, "_acquire_lock", lambda source: True)
 
 
 def test_scrape_mobile_de_task_ingests(monkeypatch) -> None:
@@ -105,12 +107,85 @@ def test_ingest_runs_twice_is_idempotent_for_listing_count(monkeypatch) -> None:
 def test_scrape_task_skips_when_lock_held(monkeypatch) -> None:
     from workers import tasks
 
-    monkeypatch.setattr(tasks, "_acquire_lock", lambda: False)
+    monkeypatch.setattr(tasks, "_acquire_lock", lambda source: False)
 
     result = tasks.scrape_mobile_de(max_pages=1)
 
     assert result["skipped"] is True
     assert result["reason"] == "lock"
+
+
+def _srp_html(page_props: dict) -> str:
+    wrapped = {"props": {"pageProps": page_props}}
+    return f'<script id="__NEXT_DATA__" type="application/json">{json.dumps(wrapped)}</script>'
+
+
+def test_scrape_autoscout24_task_ingests(monkeypatch) -> None:
+    from workers import tasks
+
+    _patch_lock(monkeypatch)
+
+    state = json.loads(Path(__file__).resolve().parents[1].joinpath(
+        "fixtures", "autoscout24", "srp.json"
+    ).read_text(encoding="utf-8"))
+    html = _srp_html(state["props"]["pageProps"])
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, text=html)
+
+    scraper = AutoScout24Scraper(client=httpx.Client(transport=httpx.MockTransport(handler)))
+    monkeypatch.setattr(tasks, "AutoScout24Scraper", lambda **kwargs: scraper)
+    monkeypatch.setattr(tasks, "save_raw", lambda *a, **k: None)
+
+    result = tasks.scrape_autoscout24(max_pages=1, enqueue_image_downloads=False)
+
+    assert result["source"] == "autoscout24"
+    assert result["listings"] == 2
+    assert result["listings_created"] == 2
+
+    from app.db.session import engine
+
+    with Session(engine) as db:
+        assert db.scalar(select(Listing).where(Listing.source == "autoscout24")) is not None
+
+
+def test_scrape_autoscout24_task_lock_per_source(monkeypatch) -> None:
+    from workers import tasks
+
+    monkeypatch.setattr(tasks, "_acquire_lock", lambda source: False)
+    result = tasks.scrape_autoscout24(max_pages=1)
+    assert result["skipped"] is True
+
+
+def test_scrape_coches_net_task_ingests(monkeypatch) -> None:
+    from workers import tasks
+
+    _patch_lock(monkeypatch)
+
+    state = json.loads(Path(__file__).resolve().parents[1].joinpath(
+        "fixtures", "coches_net", "srp.json"
+    ).read_text(encoding="utf-8"))
+
+    class FakeCochesNetScraper:
+        def run(self, max_pages=1, on_page=None):
+            from scrapers.coches_net.mapper import CochesNetMapper
+            from scrapers.coches_net.parser import CochesNetParser
+
+            parser = CochesNetParser()
+            mapper = CochesNetMapper()
+            result = []
+            for record in parser.parse(state):
+                result.append(mapper.map(record))
+            return result
+
+    monkeypatch.setattr(tasks, "CochesNetScraper", lambda **kwargs: FakeCochesNetScraper())
+    monkeypatch.setattr(tasks, "save_raw", lambda *a, **k: None)
+
+    result = tasks.scrape_coches_net(max_pages=1, enqueue_image_downloads=False)
+
+    assert result["source"] == "coches_net"
+    assert result["listings"] == 2
+    assert result["listings_created"] == 2
 
 
 def _make_committed_listing(raw_data: dict) -> int:

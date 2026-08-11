@@ -1,0 +1,8253 @@
+{
+ "props": {
+  "pageProps": {
+   "marketplace": {
+    "domain": "autoscout24",
+    "country": {
+     "iso": "es",
+     "tld": "es"
+    },
+    "language": {
+     "iso": "es"
+    },
+    "etldPlusOne": "autoscout24.es",
+    "slug": "AS_es_ES"
+   },
+   "catDisplayNames": {},
+   "pageTitle": "Coches de segunda mano en venta - AutoScout24 España",
+   "listHeaderTitle": "282.021 ofertas para tu búsqueda",
+   "pageid": "list",
+   "cultureInfo": {
+    "isoCulture": "es-ES",
+    "tld": "es",
+    "country": "es"
+   },
+   "pageQuery": {
+    "ustate": "N,U",
+    "sort": "standard",
+    "desc": "0",
+    "atype": "C",
+    "powertype": "kw",
+    "page": "1",
+    "cy": "E",
+    "pricetype": "public",
+    "query_id": "skflvel2lc",
+    "tier_rotation": "true"
+   },
+   "displayLocation": null,
+   "numberOfResults": 282021,
+   "isEuWideCountExperimentActive": false,
+   "numberOfPages": 200,
+   "listings": [
+    {
+     "id": "17c65c53-eb28-4cf9-89c0-1f8c69c74567",
+     "identifier": {
+      "legacyId": null,
+      "crossReferenceId": null
+     },
+     "images": [
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_94991a63-d52f-449f-8a65-9f03c8a9502b.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_96098521-aedc-4fce-b0ac-b89ffd335a62.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_3d1076e1-9c3f-4156-84dc-8b5959135f0b.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_a01ec27a-0d8c-48fb-bd5f-40683af014e9.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_f5f44009-22b9-458a-8f78-a1c1a9d54c23.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_03adf9fa-25a7-44bc-b4d1-32d8142ce2fa.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_bdbb3ef9-9294-49c4-add4-a025745aaa1b.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_f7e150ba-dcbd-4009-b834-bdacdfffec74.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_506c1a71-edf5-499e-b814-17206647ab3c.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_70f50a45-cdb2-404a-9bec-090b1e0dccb3.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_02e98454-7f03-4594-a6b5-f3db16330f02.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_065c6a26-5e58-4975-9265-7c1663e48337.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_44ae5fd8-c478-4a96-890f-49159dab555f.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_039f1eaf-7566-4dd4-98be-4e1d8f0241ad.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_43d38f04-4c13-40b9-8dd6-f8780ed46064.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_a135e73f-28aa-4aca-9e70-dcbccb8ca208.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_f77ab147-67df-4762-acfe-65c3784f1438.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_16ba20b7-0d0d-4eb9-a9be-2a8ad2440fa1.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_3acf4660-941f-456d-8caf-b2018e8d876a.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_222a0be0-cd19-4b41-8b0c-464325d01d22.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_a6f8112b-71f0-4dac-b528-a2a918300537.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_1f88f3be-7a6f-40d3-8dd1-9fef2215a732.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_8c080b31-3dff-4527-8866-8d46e2b59a9f.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_1bce4098-e108-4672-8cda-944f76c7abc9.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_1ab61885-2038-428d-8e70-3d42fd29b7cc.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_f0a93823-73fb-43d1-817f-c97d88883839.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_cb089ac5-b903-4946-9227-5d4ecb8d2e84.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_8ed14d24-0a0e-4919-87ad-7694f71f7e58.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_982fedf5-1799-466a-a385-8097adf5ce2d.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/17c65c53-eb28-4cf9-89c0-1f8c69c74567_e8f21308-7d60-429d-8934-6c2b4b799c74.jpg/250x188.webp"
+     ],
+     "ocsImagesA": [],
+     "hasVideo": true,
+     "price": {
+      "priceFormatted": "€ 3.890",
+      "priceEvaluation": 0,
+      "isVatLabelLegallyRequired": false,
+      "priceRaw": 3890,
+      "isPriceEvaluationEnabled": true,
+      "isConditionalPrice": false
+     },
+     "availableNow": true,
+     "availability": {
+      "fromDate": null,
+      "inDays": null
+     },
+     "superDeal": {
+      "oldPriceFormatted": "",
+      "isEligible": false
+     },
+     "url": "/anuncios/citroen-c4-cactus-bluehdi-100-feel-diesel-blanco-cat_ma21mo20406-17c65c53-eb28-4cf9-89c0-1f8c69c74567",
+     "vehicle": {
+      "articleType": "Car",
+      "type": "Car",
+      "make": "Citroen",
+      "model": "C4 Cactus",
+      "modelGroup": "C4 Cactus",
+      "variant": null,
+      "motorTypeName": "100 HDI",
+      "modelId": 20406,
+      "modelVersionInput": "BlueHDi 100 Feel",
+      "modelVersionCustom": null,
+      "subtitle": null,
+      "offerType": "U",
+      "transmission": "manual",
+      "fuel": "Diésel",
+      "mileageInKm": "220.957 km"
+     },
+     "location": {
+      "countryCode": "ES",
+      "zip": "28914",
+      "city": "Leganés",
+      "street": "C/ Julio Palacios 2"
+     },
+     "seller": {
+      "dealer": {
+       "culture": "es-ES"
+      },
+      "id": "42258473",
+      "type": "Dealer",
+      "logo": {
+       "small": {
+        "href": "https://images0.autocasion.com/unsafe/250x/adv/14/1782/47ab98caab004d7053977564ee6a25589e1bd064.jpeg"
+       }
+      },
+      "companyName": "CARHAY LEGANES",
+      "contactName": "Contáctanos en:",
+      "links": {
+       "infoPage": "https://www.autoscout24.es/profesionales/carhay-leganes?atype=C",
+       "imprint": "https://www.autoscout24.es/profesionales/carhay-leganes/aviso-legal"
+      },
+      "phones": [
+       {
+        "phoneType": "Office",
+        "formattedNumber": "+34 - 919379811",
+        "callTo": "+34919379811"
+       },
+       {
+        "phoneType": "Whatsapp",
+        "formattedNumber": "+34 - 919375215",
+        "callTo": null
+       }
+      ]
+     },
+     "appliedAdTier": "T40",
+     "adTier": "T40",
+     "isOcs": false,
+     "specialConditions": [],
+     "statistics": {
+      "leadsRange": "Some"
+     },
+     "searchResultType": "Organic",
+     "searchResultSection": "Main",
+     "tracking": {
+      "firstRegistration": "10-2015",
+      "fuelType": "d",
+      "imageContent": "no-placeholder|0.3034770412758674",
+      "isSmyleEligible": "false",
+      "mileage": "220957",
+      "priceLabel": "toolow-price ",
+      "price": "3890",
+      "orderBucket": "unknown",
+      "modelTaxonomy": "[make_id:21, model_group_id:200314, variant_id:, generation_id:2136, motortype_id:3705, trim_id:3639];"
+     },
+     "coverImageAttractiveness": 0.3034770412758674,
+     "vehicleDetails": [
+      {
+       "data": "220.957 km",
+       "iconName": "mileage_odometer",
+       "ariaLabel": "Kilometraje"
+      },
+      {
+       "data": "manual",
+       "iconName": "gearbox",
+       "ariaLabel": "Transmisión"
+      },
+      {
+       "data": "10/2015",
+       "iconName": "calendar",
+       "ariaLabel": "Año"
+      },
+      {
+       "data": "Diésel",
+       "iconName": "gas_pump",
+       "ariaLabel": "Tipo de combustible"
+      },
+      {
+       "data": "73 kW (99 CV)",
+       "iconName": "speedometer",
+       "ariaLabel": "Potencia"
+      }
+     ],
+     "wltpValues": [],
+     "trackingParameters": [
+      {
+       "key": "boost_level",
+       "value": "t40"
+      },
+      {
+       "key": "applied_boost_level",
+       "value": "t40"
+      },
+      {
+       "key": "relevance_adjustment",
+       "value": "boost"
+      },
+      {
+       "key": "boosting_product",
+       "value": "mia"
+      }
+     ]
+    },
+    {
+     "id": "23a325fa-6cc5-403e-9729-d192e34f2105",
+     "identifier": {
+      "legacyId": null,
+      "crossReferenceId": null
+     },
+     "images": [
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_88dc8e0e-6df5-4a90-9cfd-ad0f5bcffda4.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_1ce802e0-9553-4eaf-bcdd-54e07e80674a.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_e94c5a49-3716-4973-8817-37232c4e6eab.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_97d535cc-05e7-4f18-917b-c6c695f99636.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_4fbe25bb-5c04-4f5c-98c8-c69b9e18e782.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_edd18379-c21d-4cf4-8ed5-e646e0c92faf.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_2f07a7cc-bdbb-49e8-b3f3-a88ff3d9c3a7.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_a8675a85-b5a7-4ced-bc7d-c12306389052.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_993d914d-c913-4b6f-9288-e7407141672a.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_91160ecd-8937-44fd-ac34-3eed6b1b8282.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_1c9bded2-3c9f-4e21-adab-6a1d08b09397.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_c3a9f6a5-be6c-4941-ba66-f13c41cafefd.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_99693e97-3035-4b6a-bf21-e75d8d3d2e4c.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_183fb0d2-548f-4922-949a-28616ab722f9.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_9d8917b6-0240-4232-8944-11762d07a6ab.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_cefcbb09-5e66-4494-8914-6cef94f85e43.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_384cf0b2-fe66-4daf-a319-512a0c7ff9a3.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_e71da80d-a442-4fbe-9e44-c1c48290a2f8.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_92ce1847-4c56-4b6c-b3bd-105b8767695d.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_c2870eaa-e9b8-4c84-bbdb-5dc5ee45dabc.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_475d1691-80c8-4e6f-8340-1928715f2cbe.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_ec62494f-2f9f-4b2c-ad56-baffc9330f5b.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_509f6c66-fbca-4899-bb04-9691ccf15ddb.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_3630b311-3c6b-4229-9b8b-bdddfc23b6ca.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_0e09ec7c-0248-4d49-87ee-01eeecb149ce.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_e5fd0636-d03e-4212-8328-dfa770d32391.jpg/250x188.webp",
+      "https://prod.pictures.autoscout24.net/listing-images/23a325fa-6cc5-403e-9729-d192e34f2105_649eedf7-c380-491b-a32f-f9a8e3da1e4e.jpg/250x188.webp"
+     ],
+     "ocsImagesA": [],
+     "price": {
+      "priceFormatted": "€ 12.600",
+      "priceEvaluation": 0,
+      "isVatLabelLegallyRequired": false,
+      "priceSuperscriptString": "1",
+      "priceRaw": 12600,
+      "isPriceEvaluationEnabled": true,
+      "isConditionalPrice": false
+     },
+     "seals": [
+      {
+       "id": 299,
+       "image": "https://www.autoscout24.es/seal-images/299/mlPmBlOSNXuj2n9dILsTAeckJyKSVeFW/emIkG0gx8xtTISQeKedu1t7MHgTMtJJf.jpg",
+       "culture": "es-ES"
+      }
+     ],
+     "availableNow": true,
+     "availability": {
+      "fromDate": null,
+      "inDays": null
+     },
+     "superDeal": {
+      "oldPriceFormatted": "",
+      "isEligible": false
+     },
+     "url": "/anuncios/kia-stonic-1-0-t-gdi-mhev-gt-line-120-gasolina-blanco-cat_ma39mo74632-23a325fa-6cc5-403e-9729-d192e34f2105",
+     "vehicle": {
+      "articleType": "Car",
+      "type": "Car",
+      "make": "Kia",
+      "model": "Stonic",
+      "modelGroup": "Stonic",
+      "variant": null,
+      "motorTypeName": "1.0 TGDI",
+      "modelId": 74632,
+      "modelVersionInput": "1.0 T-GDi MHEV GT Line 120",
+      "modelVersionCustom": null,
+      "subtitle": null,
+      "offerType": "U",
+      "transmission": "manual",
+      "fuel": "Gasolina",
+      "mileageInKm": "36.410 km",
+      "engineDisplacementInCCM": "998 cm³"
+     },
+     "location": {
+      "countryCode": "ES",
+      "zip": "28027",
+      "city": "MADRID",
+      "street": "CALLE ALCALA 506"
+     },
+     "seller": {
+      "dealer": {
+       "culture": "es-ES"
+      },
+      "id": "60306153",
+      "type": "Dealer",
+      "logo": {
+       "small": {
+        "href": "https://images0.autocasion.com/unsafe/250x/adv/05/1990/199c679c357633d59a790fb501686fde2c52fe2d.png"
+       }
+      },
+      "companyName": "GRUPO AKI",
+      "contactName": "Contáctanos en:",
+      "links": {
+       "infoPage": "https://www.autoscout24.es/profesionales/grupo-aki?atype=C",
+       "imprint": "https://www.autoscout24.es/profesionales/grupo-aki/aviso-legal"
+      },
+      "phones": [
+       {
+        "phoneType": "Office",
+        "formattedNumber": "+34 - 919374979",
+        "callTo": "+34919374979"
+       },
+       {
+        "phoneType": "Whatsapp",
+        "formattedNumber": "+34 - 919375215",
+        "callTo": null
+       }
+      ]
+     },
+     "appliedAdTier": "T40",
+     "adTier": "T40",
+     "isOcs": false,
+     "specialConditions": [],
+     "statistics": {
+      "leadsRange": "Some"
+     },
+     "searchResultType": "Organic",
+     "searchResultSection": "Main",
+     "tracking": {
+      "firstRegistration": "12-2022",
+      "fuelType": "b",
+      "imageContent": "no-placeholder|0.2957170022452503",
+      "isSmyleEligible": "true",
+      "mileage": "36410",
+      "priceLabel": "toolow-price ",
+      "price": "12600",
+      "orderBucket": "unknown",
+      "modelTaxonomy": "[make_id:39, model_group_id:200743, variant_id:, generation_id:1001, motortype_id:2504, trim_id:480377];"
+     },
+     "coverImageAttractiveness": 0.2957170022452503,
+     "vehicleDetails": [
+      {
+       "data": "36.410 km",
+       "iconName": "mileage_odometer",
+       "ariaLabel": "Kilometraje"
+      },
+      {
+       "data": "manual",
+       "iconName": "gearbox",
+       "ariaLabel": "Transmisión"
+      },
+      {
+       "data": "12/2022",
+       "iconName": "calendar",
+       "ariaLabel": "Año"
+      },
+      {
+       "data": "Gasolina",
+       "iconName": "gas_pump",
+       "ariaLabel": "Tipo de combustible"
+      },
+      {
+       "data": "88 kW (120 CV)",
+       "iconName": "speedometer",
+       "ariaLabel": "Potencia"
+      }
+     ],
+     "wltpValues": [],
+     "trackingParameters": [
+      {
+       "key": "boost_level",
+       "value": "t40"
+      },
+      {
+       "key": "applied_boost_level",
+       "value": "t40"
+      },
+      {
+       "key": "relevance_adjustment",
+       "value": "boost"
+      },
+      {
+       "key": "boosting_product",
+       "value": "mia"
+      }
+     ]
+    }
+   ],
+   "numberOfOcsResults": 0,
+   "trackingId": "skflvel2lc",
+   "isMobile": false,
+   "taxonomy": {
+    "sortingKeys": [
+     {
+      "label": "Precio",
+      "value": "price"
+     },
+     {
+      "label": "Tasa mensual",
+      "value": "financerate"
+     },
+     {
+      "label": "Marca/Modelo",
+      "value": "make"
+     },
+     {
+      "label": "Leasing Rate",
+      "value": "leasing_rate"
+     },
+     {
+      "label": "Año",
+      "value": "year"
+     },
+     {
+      "label": "Kilómetros",
+      "value": "mileage"
+     },
+     {
+      "label": "Potencia",
+      "value": "power"
+     },
+     {
+      "label": "Últimas ofertas primero",
+      "value": "age"
+     },
+     {
+      "label": "Mejores resultados",
+      "value": "standard"
+     },
+     {
+      "label": "Por distancia",
+      "value": "distance"
+     }
+    ],
+    "makeLabels": {
+     "6": "Alfa Romeo",
+     "8": "Aston Martin",
+     "9": "Audi",
+     "11": "Bentley",
+     "13": "BMW",
+     "14": "Alpina",
+     "15": "Bugatti",
+     "16": "Buick",
+     "17": "Cadillac",
+     "19": "Chevrolet",
+     "20": "Chrysler",
+     "21": "Citroen",
+     "22": "Daewoo",
+     "23": "Daihatsu",
+     "27": "Ferrari",
+     "28": "Fiat",
+     "29": "Ford",
+     "31": "Honda",
+     "33": "Hyundai",
+     "35": "Isuzu",
+     "37": "Jaguar",
+     "38": "Jeep",
+     "39": "Kia",
+     "40": "Lada",
+     "41": "Lamborghini",
+     "42": "Lancia",
+     "43": "Lexus",
+     "44": "Lotus",
+     "45": "Maserati",
+     "46": "Mazda",
+     "47": "Mercedes-Benz",
+     "48": "MG",
+     "50": "Mitsubishi",
+     "51": "Morgan",
+     "52": "Nissan",
+     "53": "Oldsmobile",
+     "54": "Opel",
+     "55": "Peugeot",
+     "56": "Pontiac",
+     "57": "Porsche",
+     "60": "Renault",
+     "61": "Rolls-Royce",
+     "62": "Rover",
+     "63": "Saab",
+     "64": "SEAT",
+     "65": "Skoda",
+     "66": "SsangYong",
+     "67": "Subaru",
+     "68": "Suzuki",
+     "70": "Toyota",
+     "71": "TVR",
+     "73": "Volvo",
+     "74": "Volkswagen",
+     "2120": "Triumph",
+     "2152": "Dodge",
+     "2153": "GMC",
+     "14882": "Iveco",
+     "14890": "Lincoln",
+     "14979": "AC",
+     "15525": "smart",
+     "15629": "Innocenti",
+     "15633": "Trabant",
+     "15636": "Proton",
+     "15641": "Land Rover",
+     "15643": "Austin",
+     "15644": "Autobianchi",
+     "15646": "Puch",
+     "15670": "Oldtimer",
+     "15672": "Caravans-Wohnm",
+     "15674": "HUMMER",
+     "16253": "Trucks-Lkw",
+     "16326": "Trailer-Anhänger",
+     "16327": "Tata",
+     "16328": "Otros",
+     "16333": "DAF",
+     "16335": "Caterham",
+     "16336": "Wartburg",
+     "16337": "Galloper",
+     "16338": "MINI",
+     "16339": "Donkervoort",
+     "16341": "Pagani",
+     "16348": "Maybach",
+     "16350": "Piaggio",
+     "16351": "Wiesmann",
+     "16352": "Aixam",
+     "16353": "Ligier",
+     "16355": "Infiniti",
+     "16356": "Acura",
+     "16357": "Chatenet",
+     "16359": "Mahindra",
+     "16360": "Dacia",
+     "16361": "Microcar",
+     "16367": "Brilliance",
+     "16369": "Santana",
+     "16377": "Spyker",
+     "16379": "BYD",
+     "16380": "Corvette",
+     "16382": "Great Wall",
+     "16383": "DR Automobiles",
+     "16384": "Chery",
+     "16385": "VAZ",
+     "16386": "GAZ",
+     "16387": "IZH",
+     "16388": "Moskvich",
+     "16389": "UAZ",
+     "16393": "Lifan",
+     "16394": "ZAZ",
+     "16396": "Abarth",
+     "16397": "Daimler",
+     "16398": "Reliant",
+     "16399": "Melex",
+     "16400": "Bedford",
+     "16401": "Changhe",
+     "16402": "Iso Rivolta",
+     "16403": "GEM",
+     "16404": "Tasso",
+     "16407": "Casalini",
+     "16408": "Zastava",
+     "16409": "Grecav",
+     "16410": "Martin Motors",
+     "16411": "CityEL",
+     "16415": "DS Automobiles",
+     "16416": "Bellier",
+     "16418": "Bolloré",
+     "16419": "Ariel Motor",
+     "16420": "Town Life",
+     "16421": "Giotti Victoria",
+     "16422": "VEM",
+     "16423": "De la Chapelle",
+     "16424": "Borgward",
+     "16426": "LDV",
+     "16427": "Artega",
+     "16429": "ACM",
+     "16431": "Aspid",
+     "16434": "Dangel",
+     "16435": "Mansory",
+     "16436": "Estrima",
+     "50060": "KTM",
+     "50083": "PGO",
+     "50111": "NSU",
+     "51512": "Haima",
+     "51513": "Westfield",
+     "51519": "McLaren",
+     "51520": "Tesla",
+     "51534": "Hamann",
+     "51535": "TECHART",
+     "51536": "Ruf",
+     "51538": "SpeedArt",
+     "51539": "9ff",
+     "51540": "GEMBALLA",
+     "51542": "Gac Gonow",
+     "51543": "Fisker",
+     "51545": "Amphicar",
+     "51551": "Talbot",
+     "51552": "Dutton",
+     "51553": "Panther Westwinds",
+     "51554": "MP Lafer",
+     "51557": "Tazzari EV",
+     "51749": "SWM",
+     "51766": "Minauto",
+     "51767": "Hurtan",
+     "51770": "Plymouth",
+     "51773": "DFSK",
+     "51774": "BAIC",
+     "51779": "De Tomaso",
+     "51780": "MAN",
+     "51781": "Koenigsegg",
+     "51782": "Mitsuoka",
+     "51788": "MPM Motors",
+     "51791": "Gillet",
+     "51793": "RAM",
+     "51794": "e.GO",
+     "51795": "StreetScooter",
+     "51796": "Alpine",
+     "51798": "Zhidou",
+     "51800": "Shuanghuan",
+     "51802": "CUPRA",
+     "51803": "Maxus",
+     "51807": "Zotye",
+     "51809": "Vanderhall",
+     "51812": "Regis",
+     "51813": "Goupil",
+     "51816": "Haval",
+     "51817": "Polestar",
+     "51827": "Sevic",
+     "51831": "EVO",
+     "51833": "Studebaker",
+     "51834": "Mercury",
+     "51835": "Econelo",
+     "51836": "Vanden Plas",
+     "51837": "Giana",
+     "51839": "Selvo",
+     "51849": "JAC",
+     "51852": "Wenckstern",
+     "51853": "Silence",
+     "51854": "LEVC",
+     "51859": "Delorean",
+     "51860": "XEV",
+     "51861": "Seres",
+     "51866": "Segway",
+     "51869": "XBus",
+     "51872": "Aiways",
+     "51873": "Weltmeister",
+     "51874": "Embuggy",
+     "51875": "Karma",
+     "51880": "Elaris",
+     "51881": "Holden",
+     "51883": "Linzda",
+     "51885": "Genesis",
+     "51895": "Bristol",
+     "51896": "Shelby",
+     "51897": "Militem",
+     "51900": "Boldmen",
+     "51901": "Austin-Healey",
+     "51902": "Mega",
+     "51903": "Minari",
+     "51905": "Edran",
+     "51906": "Martin",
+     "51907": "Gappy",
+     "51908": "Lorinser",
+     "51909": "Singer",
+     "51910": "Jensen",
+     "51912": "Carver",
+     "51913": "SGS",
+     "51914": "Lynk & Co",
+     "51915": "VinFast",
+     "51917": "Alba Mobility",
+     "51918": "Angelelli Automobili",
+     "51919": "Evetta",
+     "51920": "Devinci Cars",
+     "51921": "Lucid",
+     "51924": "EMC",
+     "51925": "Ineos",
+     "51926": "GTA",
+     "51928": "NIO",
+     "51929": "Aurus",
+     "51934": "Ora",
+     "51935": "Wey",
+     "51936": "Cenntro",
+     "51940": "Xpeng",
+     "51947": "Dallara",
+     "51948": "Aspark",
+     "51949": "Sportequipe",
+     "51950": "Togg",
+     "51955": "Matra",
+     "51959": "Skywell",
+     "51964": "Zeekr",
+     "51965": "Micro",
+     "51971": "Cirelli",
+     "51973": "Foton",
+     "51974": "Stormborn",
+     "51975": "KGM",
+     "51977": "Hiphi",
+     "51981": "GWM",
+     "51986": "Brute",
+     "51987": "Forthing",
+     "51988": "Hongqi",
+     "51991": "Omoda",
+     "51992": "ICH-X",
+     "51993": "Voyah",
+     "51999": "Jaecoo",
+     "52000": "Leapmotor",
+     "52003": "Livan",
+     "52004": "Mobilize",
+     "52006": "Invicta",
+     "52007": "Bestune",
+     "52008": "Ebro",
+     "52013": "Rivian",
+     "52016": "Dongfeng",
+     "52031": "Xiaomi",
+     "52033": "Farizon",
+     "52038": "Tiger",
+     "52039": "Simplici",
+     "52045": "Bertone",
+     "52046": "Li",
+     "52050": "BAW",
+     "52054": "Denza",
+     "52055": "Aerfal",
+     "52058": "Changan",
+     "52060": "Geely",
+     "52061": "Lee Group",
+     "52064": "Chamonix",
+     "53182": "DFM",
+     "53185": "firefly",
+     "53191": "Rimac",
+     "53192": "TYN-e",
+     "53196": "ARI",
+     "53439": "Linktour",
+     "53440": "Venucia",
+     "53441": "MHERO",
+     "53446": "Jetour",
+     "53447": "Devalliet",
+     "53448": "Bovensiepen"
+    },
+    "modelLabels": {},
+    "modelLineLabels": {},
+    "modelGroupLabels": {},
+    "makes": {
+     "6": {
+      "label": "Alfa Romeo",
+      "value": 6
+     },
+     "8": {
+      "label": "Aston Martin",
+      "value": 8
+     },
+     "9": {
+      "label": "Audi",
+      "value": 9
+     },
+     "11": {
+      "label": "Bentley",
+      "value": 11
+     },
+     "13": {
+      "label": "BMW",
+      "value": 13
+     },
+     "14": {
+      "label": "Alpina",
+      "value": 14
+     },
+     "15": {
+      "label": "Bugatti",
+      "value": 15
+     },
+     "16": {
+      "label": "Buick",
+      "value": 16
+     },
+     "17": {
+      "label": "Cadillac",
+      "value": 17
+     },
+     "19": {
+      "label": "Chevrolet",
+      "value": 19
+     },
+     "20": {
+      "label": "Chrysler",
+      "value": 20
+     },
+     "21": {
+      "label": "Citroen",
+      "value": 21
+     },
+     "22": {
+      "label": "Daewoo",
+      "value": 22
+     },
+     "23": {
+      "label": "Daihatsu",
+      "value": 23
+     },
+     "27": {
+      "label": "Ferrari",
+      "value": 27
+     },
+     "28": {
+      "label": "Fiat",
+      "value": 28
+     },
+     "29": {
+      "label": "Ford",
+      "value": 29
+     },
+     "31": {
+      "label": "Honda",
+      "value": 31
+     },
+     "33": {
+      "label": "Hyundai",
+      "value": 33
+     },
+     "35": {
+      "label": "Isuzu",
+      "value": 35
+     },
+     "37": {
+      "label": "Jaguar",
+      "value": 37
+     },
+     "38": {
+      "label": "Jeep",
+      "value": 38
+     },
+     "39": {
+      "label": "Kia",
+      "value": 39
+     },
+     "40": {
+      "label": "Lada",
+      "value": 40
+     },
+     "41": {
+      "label": "Lamborghini",
+      "value": 41
+     },
+     "42": {
+      "label": "Lancia",
+      "value": 42
+     },
+     "43": {
+      "label": "Lexus",
+      "value": 43
+     },
+     "44": {
+      "label": "Lotus",
+      "value": 44
+     },
+     "45": {
+      "label": "Maserati",
+      "value": 45
+     },
+     "46": {
+      "label": "Mazda",
+      "value": 46
+     },
+     "47": {
+      "label": "Mercedes-Benz",
+      "value": 47
+     },
+     "48": {
+      "label": "MG",
+      "value": 48
+     },
+     "50": {
+      "label": "Mitsubishi",
+      "value": 50
+     },
+     "51": {
+      "label": "Morgan",
+      "value": 51
+     },
+     "52": {
+      "label": "Nissan",
+      "value": 52
+     },
+     "53": {
+      "label": "Oldsmobile",
+      "value": 53
+     },
+     "54": {
+      "label": "Opel",
+      "value": 54
+     },
+     "55": {
+      "label": "Peugeot",
+      "value": 55
+     },
+     "56": {
+      "label": "Pontiac",
+      "value": 56
+     },
+     "57": {
+      "label": "Porsche",
+      "value": 57
+     },
+     "60": {
+      "label": "Renault",
+      "value": 60
+     },
+     "61": {
+      "label": "Rolls-Royce",
+      "value": 61
+     },
+     "62": {
+      "label": "Rover",
+      "value": 62
+     },
+     "63": {
+      "label": "Saab",
+      "value": 63
+     },
+     "64": {
+      "label": "SEAT",
+      "value": 64
+     },
+     "65": {
+      "label": "Skoda",
+      "value": 65
+     },
+     "66": {
+      "label": "SsangYong",
+      "value": 66
+     },
+     "67": {
+      "label": "Subaru",
+      "value": 67
+     },
+     "68": {
+      "label": "Suzuki",
+      "value": 68
+     },
+     "70": {
+      "label": "Toyota",
+      "value": 70
+     },
+     "71": {
+      "label": "TVR",
+      "value": 71
+     },
+     "73": {
+      "label": "Volvo",
+      "value": 73
+     },
+     "74": {
+      "label": "Volkswagen",
+      "value": 74
+     },
+     "2120": {
+      "label": "Triumph",
+      "value": 2120
+     },
+     "2152": {
+      "label": "Dodge",
+      "value": 2152
+     },
+     "2153": {
+      "label": "GMC",
+      "value": 2153
+     },
+     "14882": {
+      "label": "Iveco",
+      "value": 14882
+     },
+     "14890": {
+      "label": "Lincoln",
+      "value": 14890
+     },
+     "14979": {
+      "label": "AC",
+      "value": 14979
+     },
+     "15525": {
+      "label": "smart",
+      "value": 15525
+     },
+     "15629": {
+      "label": "Innocenti",
+      "value": 15629
+     },
+     "15633": {
+      "label": "Trabant",
+      "value": 15633
+     },
+     "15636": {
+      "label": "Proton",
+      "value": 15636
+     },
+     "15641": {
+      "label": "Land Rover",
+      "value": 15641
+     },
+     "15643": {
+      "label": "Austin",
+      "value": 15643
+     },
+     "15644": {
+      "label": "Autobianchi",
+      "value": 15644
+     },
+     "15646": {
+      "label": "Puch",
+      "value": 15646
+     },
+     "15670": {
+      "label": "Oldtimer",
+      "value": 15670
+     },
+     "15672": {
+      "label": "Caravans-Wohnm",
+      "value": 15672
+     },
+     "15674": {
+      "label": "HUMMER",
+      "value": 15674
+     },
+     "16253": {
+      "label": "Trucks-Lkw",
+      "value": 16253
+     },
+     "16326": {
+      "label": "Trailer-Anhänger",
+      "value": 16326
+     },
+     "16327": {
+      "label": "Tata",
+      "value": 16327
+     },
+     "16328": {
+      "label": "Otros",
+      "value": 16328
+     },
+     "16333": {
+      "label": "DAF",
+      "value": 16333
+     },
+     "16335": {
+      "label": "Caterham",
+      "value": 16335
+     },
+     "16336": {
+      "label": "Wartburg",
+      "value": 16336
+     },
+     "16337": {
+      "label": "Galloper",
+      "value": 16337
+     },
+     "16338": {
+      "label": "MINI",
+      "value": 16338
+     },
+     "16339": {
+      "label": "Donkervoort",
+      "value": 16339
+     },
+     "16341": {
+      "label": "Pagani",
+      "value": 16341
+     },
+     "16348": {
+      "label": "Maybach",
+      "value": 16348
+     },
+     "16350": {
+      "label": "Piaggio",
+      "value": 16350
+     },
+     "16351": {
+      "label": "Wiesmann",
+      "value": 16351
+     },
+     "16352": {
+      "label": "Aixam",
+      "value": 16352
+     },
+     "16353": {
+      "label": "Ligier",
+      "value": 16353
+     },
+     "16355": {
+      "label": "Infiniti",
+      "value": 16355
+     },
+     "16356": {
+      "label": "Acura",
+      "value": 16356
+     },
+     "16357": {
+      "label": "Chatenet",
+      "value": 16357
+     },
+     "16359": {
+      "label": "Mahindra",
+      "value": 16359
+     },
+     "16360": {
+      "label": "Dacia",
+      "value": 16360
+     },
+     "16361": {
+      "label": "Microcar",
+      "value": 16361
+     },
+     "16367": {
+      "label": "Brilliance",
+      "value": 16367
+     },
+     "16369": {
+      "label": "Santana",
+      "value": 16369
+     },
+     "16377": {
+      "label": "Spyker",
+      "value": 16377
+     },
+     "16379": {
+      "label": "BYD",
+      "value": 16379
+     },
+     "16380": {
+      "label": "Corvette",
+      "value": 16380
+     },
+     "16382": {
+      "label": "Great Wall",
+      "value": 16382
+     },
+     "16383": {
+      "label": "DR Automobiles",
+      "value": 16383
+     },
+     "16384": {
+      "label": "Chery",
+      "value": 16384
+     },
+     "16385": {
+      "label": "VAZ",
+      "value": 16385
+     },
+     "16386": {
+      "label": "GAZ",
+      "value": 16386
+     },
+     "16387": {
+      "label": "IZH",
+      "value": 16387
+     },
+     "16388": {
+      "label": "Moskvich",
+      "value": 16388
+     },
+     "16389": {
+      "label": "UAZ",
+      "value": 16389
+     },
+     "16393": {
+      "label": "Lifan",
+      "value": 16393
+     },
+     "16394": {
+      "label": "ZAZ",
+      "value": 16394
+     },
+     "16396": {
+      "label": "Abarth",
+      "value": 16396
+     },
+     "16397": {
+      "label": "Daimler",
+      "value": 16397
+     },
+     "16398": {
+      "label": "Reliant",
+      "value": 16398
+     },
+     "16399": {
+      "label": "Melex",
+      "value": 16399
+     },
+     "16400": {
+      "label": "Bedford",
+      "value": 16400
+     },
+     "16401": {
+      "label": "Changhe",
+      "value": 16401
+     },
+     "16402": {
+      "label": "Iso Rivolta",
+      "value": 16402
+     },
+     "16403": {
+      "label": "GEM",
+      "value": 16403
+     },
+     "16404": {
+      "label": "Tasso",
+      "value": 16404
+     },
+     "16407": {
+      "label": "Casalini",
+      "value": 16407
+     },
+     "16408": {
+      "label": "Zastava",
+      "value": 16408
+     },
+     "16409": {
+      "label": "Grecav",
+      "value": 16409
+     },
+     "16410": {
+      "label": "Martin Motors",
+      "value": 16410
+     },
+     "16411": {
+      "label": "CityEL",
+      "value": 16411
+     },
+     "16415": {
+      "label": "DS Automobiles",
+      "value": 16415
+     },
+     "16416": {
+      "label": "Bellier",
+      "value": 16416
+     },
+     "16418": {
+      "label": "Bolloré",
+      "value": 16418
+     },
+     "16419": {
+      "label": "Ariel Motor",
+      "value": 16419
+     },
+     "16420": {
+      "label": "Town Life",
+      "value": 16420
+     },
+     "16421": {
+      "label": "Giotti Victoria",
+      "value": 16421
+     },
+     "16422": {
+      "label": "VEM",
+      "value": 16422
+     },
+     "16423": {
+      "label": "De la Chapelle",
+      "value": 16423
+     },
+     "16424": {
+      "label": "Borgward",
+      "value": 16424
+     },
+     "16426": {
+      "label": "LDV",
+      "value": 16426
+     },
+     "16427": {
+      "label": "Artega",
+      "value": 16427
+     },
+     "16429": {
+      "label": "ACM",
+      "value": 16429
+     },
+     "16431": {
+      "label": "Aspid",
+      "value": 16431
+     },
+     "16434": {
+      "label": "Dangel",
+      "value": 16434
+     },
+     "16435": {
+      "label": "Mansory",
+      "value": 16435
+     },
+     "16436": {
+      "label": "Estrima",
+      "value": 16436
+     },
+     "50060": {
+      "label": "KTM",
+      "value": 50060
+     },
+     "50083": {
+      "label": "PGO",
+      "value": 50083
+     },
+     "50111": {
+      "label": "NSU",
+      "value": 50111
+     },
+     "51512": {
+      "label": "Haima",
+      "value": 51512
+     },
+     "51513": {
+      "label": "Westfield",
+      "value": 51513
+     },
+     "51519": {
+      "label": "McLaren",
+      "value": 51519
+     },
+     "51520": {
+      "label": "Tesla",
+      "value": 51520
+     },
+     "51534": {
+      "label": "Hamann",
+      "value": 51534
+     },
+     "51535": {
+      "label": "TECHART",
+      "value": 51535
+     },
+     "51536": {
+      "label": "Ruf",
+      "value": 51536
+     },
+     "51538": {
+      "label": "SpeedArt",
+      "value": 51538
+     },
+     "51539": {
+      "label": "9ff",
+      "value": 51539
+     },
+     "51540": {
+      "label": "GEMBALLA",
+      "value": 51540
+     },
+     "51542": {
+      "label": "Gac Gonow",
+      "value": 51542
+     },
+     "51543": {
+      "label": "Fisker",
+      "value": 51543
+     },
+     "51545": {
+      "label": "Amphicar",
+      "value": 51545
+     },
+     "51551": {
+      "label": "Talbot",
+      "value": 51551
+     },
+     "51552": {
+      "label": "Dutton",
+      "value": 51552
+     },
+     "51553": {
+      "label": "Panther Westwinds",
+      "value": 51553
+     },
+     "51554": {
+      "label": "MP Lafer",
+      "value": 51554
+     },
+     "51557": {
+      "label": "Tazzari EV",
+      "value": 51557
+     },
+     "51749": {
+      "label": "SWM",
+      "value": 51749
+     },
+     "51766": {
+      "label": "Minauto",
+      "value": 51766
+     },
+     "51767": {
+      "label": "Hurtan",
+      "value": 51767
+     },
+     "51770": {
+      "label": "Plymouth",
+      "value": 51770
+     },
+     "51773": {
+      "label": "DFSK",
+      "value": 51773
+     },
+     "51774": {
+      "label": "BAIC",
+      "value": 51774
+     },
+     "51779": {
+      "label": "De Tomaso",
+      "value": 51779
+     },
+     "51780": {
+      "label": "MAN",
+      "value": 51780
+     },
+     "51781": {
+      "label": "Koenigsegg",
+      "value": 51781
+     },
+     "51782": {
+      "label": "Mitsuoka",
+      "value": 51782
+     },
+     "51788": {
+      "label": "MPM Motors",
+      "value": 51788
+     },
+     "51791": {
+      "label": "Gillet",
+      "value": 51791
+     },
+     "51793": {
+      "label": "RAM",
+      "value": 51793
+     },
+     "51794": {
+      "label": "e.GO",
+      "value": 51794
+     },
+     "51795": {
+      "label": "StreetScooter",
+      "value": 51795
+     },
+     "51796": {
+      "label": "Alpine",
+      "value": 51796
+     },
+     "51798": {
+      "label": "Zhidou",
+      "value": 51798
+     },
+     "51800": {
+      "label": "Shuanghuan",
+      "value": 51800
+     },
+     "51802": {
+      "label": "CUPRA",
+      "value": 51802
+     },
+     "51803": {
+      "label": "Maxus",
+      "value": 51803
+     },
+     "51807": {
+      "label": "Zotye",
+      "value": 51807
+     },
+     "51809": {
+      "label": "Vanderhall",
+      "value": 51809
+     },
+     "51812": {
+      "label": "Regis",
+      "value": 51812
+     },
+     "51813": {
+      "label": "Goupil",
+      "value": 51813
+     },
+     "51816": {
+      "label": "Haval",
+      "value": 51816
+     },
+     "51817": {
+      "label": "Polestar",
+      "value": 51817
+     },
+     "51827": {
+      "label": "Sevic",
+      "value": 51827
+     },
+     "51831": {
+      "label": "EVO",
+      "value": 51831
+     },
+     "51833": {
+      "label": "Studebaker",
+      "value": 51833
+     },
+     "51834": {
+      "label": "Mercury",
+      "value": 51834
+     },
+     "51835": {
+      "label": "Econelo",
+      "value": 51835
+     },
+     "51836": {
+      "label": "Vanden Plas",
+      "value": 51836
+     },
+     "51837": {
+      "label": "Giana",
+      "value": 51837
+     },
+     "51839": {
+      "label": "Selvo",
+      "value": 51839
+     },
+     "51849": {
+      "label": "JAC",
+      "value": 51849
+     },
+     "51852": {
+      "label": "Wenckstern",
+      "value": 51852
+     },
+     "51853": {
+      "label": "Silence",
+      "value": 51853
+     },
+     "51854": {
+      "label": "LEVC",
+      "value": 51854
+     },
+     "51859": {
+      "label": "Delorean",
+      "value": 51859
+     },
+     "51860": {
+      "label": "XEV",
+      "value": 51860
+     },
+     "51861": {
+      "label": "Seres",
+      "value": 51861
+     },
+     "51866": {
+      "label": "Segway",
+      "value": 51866
+     },
+     "51869": {
+      "label": "XBus",
+      "value": 51869
+     },
+     "51872": {
+      "label": "Aiways",
+      "value": 51872
+     },
+     "51873": {
+      "label": "Weltmeister",
+      "value": 51873
+     },
+     "51874": {
+      "label": "Embuggy",
+      "value": 51874
+     },
+     "51875": {
+      "label": "Karma",
+      "value": 51875
+     },
+     "51880": {
+      "label": "Elaris",
+      "value": 51880
+     },
+     "51881": {
+      "label": "Holden",
+      "value": 51881
+     },
+     "51883": {
+      "label": "Linzda",
+      "value": 51883
+     },
+     "51885": {
+      "label": "Genesis",
+      "value": 51885
+     },
+     "51895": {
+      "label": "Bristol",
+      "value": 51895
+     },
+     "51896": {
+      "label": "Shelby",
+      "value": 51896
+     },
+     "51897": {
+      "label": "Militem",
+      "value": 51897
+     },
+     "51900": {
+      "label": "Boldmen",
+      "value": 51900
+     },
+     "51901": {
+      "label": "Austin-Healey",
+      "value": 51901
+     },
+     "51902": {
+      "label": "Mega",
+      "value": 51902
+     },
+     "51903": {
+      "label": "Minari",
+      "value": 51903
+     },
+     "51905": {
+      "label": "Edran",
+      "value": 51905
+     },
+     "51906": {
+      "label": "Martin",
+      "value": 51906
+     },
+     "51907": {
+      "label": "Gappy",
+      "value": 51907
+     },
+     "51908": {
+      "label": "Lorinser",
+      "value": 51908
+     },
+     "51909": {
+      "label": "Singer",
+      "value": 51909
+     },
+     "51910": {
+      "label": "Jensen",
+      "value": 51910
+     },
+     "51912": {
+      "label": "Carver",
+      "value": 51912
+     },
+     "51913": {
+      "label": "SGS",
+      "value": 51913
+     },
+     "51914": {
+      "label": "Lynk & Co",
+      "value": 51914
+     },
+     "51915": {
+      "label": "VinFast",
+      "value": 51915
+     },
+     "51917": {
+      "label": "Alba Mobility",
+      "value": 51917
+     },
+     "51918": {
+      "label": "Angelelli Automobili",
+      "value": 51918
+     },
+     "51919": {
+      "label": "Evetta",
+      "value": 51919
+     },
+     "51920": {
+      "label": "Devinci Cars",
+      "value": 51920
+     },
+     "51921": {
+      "label": "Lucid",
+      "value": 51921
+     },
+     "51924": {
+      "label": "EMC",
+      "value": 51924
+     },
+     "51925": {
+      "label": "Ineos",
+      "value": 51925
+     },
+     "51926": {
+      "label": "GTA",
+      "value": 51926
+     },
+     "51928": {
+      "label": "NIO",
+      "value": 51928
+     },
+     "51929": {
+      "label": "Aurus",
+      "value": 51929
+     },
+     "51934": {
+      "label": "Ora",
+      "value": 51934
+     },
+     "51935": {
+      "label": "Wey",
+      "value": 51935
+     },
+     "51936": {
+      "label": "Cenntro",
+      "value": 51936
+     },
+     "51940": {
+      "label": "Xpeng",
+      "value": 51940
+     },
+     "51947": {
+      "label": "Dallara",
+      "value": 51947
+     },
+     "51948": {
+      "label": "Aspark",
+      "value": 51948
+     },
+     "51949": {
+      "label": "Sportequipe",
+      "value": 51949
+     },
+     "51950": {
+      "label": "Togg",
+      "value": 51950
+     },
+     "51955": {
+      "label": "Matra",
+      "value": 51955
+     },
+     "51959": {
+      "label": "Skywell",
+      "value": 51959
+     },
+     "51964": {
+      "label": "Zeekr",
+      "value": 51964
+     },
+     "51965": {
+      "label": "Micro",
+      "value": 51965
+     },
+     "51971": {
+      "label": "Cirelli",
+      "value": 51971
+     },
+     "51973": {
+      "label": "Foton",
+      "value": 51973
+     },
+     "51974": {
+      "label": "Stormborn",
+      "value": 51974
+     },
+     "51975": {
+      "label": "KGM",
+      "value": 51975
+     },
+     "51977": {
+      "label": "Hiphi",
+      "value": 51977
+     },
+     "51981": {
+      "label": "GWM",
+      "value": 51981
+     },
+     "51986": {
+      "label": "Brute",
+      "value": 51986
+     },
+     "51987": {
+      "label": "Forthing",
+      "value": 51987
+     },
+     "51988": {
+      "label": "Hongqi",
+      "value": 51988
+     },
+     "51991": {
+      "label": "Omoda",
+      "value": 51991
+     },
+     "51992": {
+      "label": "ICH-X",
+      "value": 51992
+     },
+     "51993": {
+      "label": "Voyah",
+      "value": 51993
+     },
+     "51999": {
+      "label": "Jaecoo",
+      "value": 51999
+     },
+     "52000": {
+      "label": "Leapmotor",
+      "value": 52000
+     },
+     "52003": {
+      "label": "Livan",
+      "value": 52003
+     },
+     "52004": {
+      "label": "Mobilize",
+      "value": 52004
+     },
+     "52006": {
+      "label": "Invicta",
+      "value": 52006
+     },
+     "52007": {
+      "label": "Bestune",
+      "value": 52007
+     },
+     "52008": {
+      "label": "Ebro",
+      "value": 52008
+     },
+     "52013": {
+      "label": "Rivian",
+      "value": 52013
+     },
+     "52016": {
+      "label": "Dongfeng",
+      "value": 52016
+     },
+     "52031": {
+      "label": "Xiaomi",
+      "value": 52031
+     },
+     "52033": {
+      "label": "Farizon",
+      "value": 52033
+     },
+     "52038": {
+      "label": "Tiger",
+      "value": 52038
+     },
+     "52039": {
+      "label": "Simplici",
+      "value": 52039
+     },
+     "52045": {
+      "label": "Bertone",
+      "value": 52045
+     },
+     "52046": {
+      "label": "Li",
+      "value": 52046
+     },
+     "52050": {
+      "label": "BAW",
+      "value": 52050
+     },
+     "52054": {
+      "label": "Denza",
+      "value": 52054
+     },
+     "52055": {
+      "label": "Aerfal",
+      "value": 52055
+     },
+     "52058": {
+      "label": "Changan",
+      "value": 52058
+     },
+     "52060": {
+      "label": "Geely",
+      "value": 52060
+     },
+     "52061": {
+      "label": "Lee Group",
+      "value": 52061
+     },
+     "52064": {
+      "label": "Chamonix",
+      "value": 52064
+     },
+     "53182": {
+      "label": "DFM",
+      "value": 53182
+     },
+     "53185": {
+      "label": "firefly",
+      "value": 53185
+     },
+     "53191": {
+      "label": "Rimac",
+      "value": 53191
+     },
+     "53192": {
+      "label": "TYN-e",
+      "value": 53192
+     },
+     "53196": {
+      "label": "ARI",
+      "value": 53196
+     },
+     "53439": {
+      "label": "Linktour",
+      "value": 53439
+     },
+     "53440": {
+      "label": "Venucia",
+      "value": 53440
+     },
+     "53441": {
+      "label": "MHERO",
+      "value": 53441
+     },
+     "53446": {
+      "label": "Jetour",
+      "value": 53446
+     },
+     "53447": {
+      "label": "Devalliet",
+      "value": 53447
+     },
+     "53448": {
+      "label": "Bovensiepen",
+      "value": 53448
+     }
+    },
+    "makesSorted": [
+     {
+      "label": "9ff",
+      "value": 51539
+     },
+     {
+      "label": "Abarth",
+      "value": 16396
+     },
+     {
+      "label": "AC",
+      "value": 14979
+     },
+     {
+      "label": "ACM",
+      "value": 16429
+     },
+     {
+      "label": "Acura",
+      "value": 16356
+     },
+     {
+      "label": "Aerfal",
+      "value": 52055
+     },
+     {
+      "label": "Aiways",
+      "value": 51872
+     },
+     {
+      "label": "Aixam",
+      "value": 16352
+     },
+     {
+      "label": "Alba Mobility",
+      "value": 51917
+     },
+     {
+      "label": "Alfa Romeo",
+      "value": 6
+     },
+     {
+      "label": "Alpina",
+      "value": 14
+     },
+     {
+      "label": "Alpine",
+      "value": 51796
+     },
+     {
+      "label": "Amphicar",
+      "value": 51545
+     },
+     {
+      "label": "Angelelli Automobili",
+      "value": 51918
+     },
+     {
+      "label": "ARI",
+      "value": 53196
+     },
+     {
+      "label": "Ariel Motor",
+      "value": 16419
+     },
+     {
+      "label": "Artega",
+      "value": 16427
+     },
+     {
+      "label": "Aspark",
+      "value": 51948
+     },
+     {
+      "label": "Aspid",
+      "value": 16431
+     },
+     {
+      "label": "Aston Martin",
+      "value": 8
+     },
+     {
+      "label": "Audi",
+      "value": 9
+     },
+     {
+      "label": "Aurus",
+      "value": 51929
+     },
+     {
+      "label": "Austin",
+      "value": 15643
+     },
+     {
+      "label": "Austin-Healey",
+      "value": 51901
+     },
+     {
+      "label": "Autobianchi",
+      "value": 15644
+     },
+     {
+      "label": "BAIC",
+      "value": 51774
+     },
+     {
+      "label": "BAW",
+      "value": 52050
+     },
+     {
+      "label": "Bedford",
+      "value": 16400
+     },
+     {
+      "label": "Bellier",
+      "value": 16416
+     },
+     {
+      "label": "Bentley",
+      "value": 11
+     },
+     {
+      "label": "Bertone",
+      "value": 52045
+     },
+     {
+      "label": "Bestune",
+      "value": 52007
+     },
+     {
+      "label": "BMW",
+      "value": 13
+     },
+     {
+      "label": "Boldmen",
+      "value": 51900
+     },
+     {
+      "label": "Bolloré",
+      "value": 16418
+     },
+     {
+      "label": "Borgward",
+      "value": 16424
+     },
+     {
+      "label": "Bovensiepen",
+      "value": 53448
+     },
+     {
+      "label": "Brilliance",
+      "value": 16367
+     },
+     {
+      "label": "Bristol",
+      "value": 51895
+     },
+     {
+      "label": "Brute",
+      "value": 51986
+     },
+     {
+      "label": "Bugatti",
+      "value": 15
+     },
+     {
+      "label": "Buick",
+      "value": 16
+     },
+     {
+      "label": "BYD",
+      "value": 16379
+     },
+     {
+      "label": "Cadillac",
+      "value": 17
+     },
+     {
+      "label": "Caravans-Wohnm",
+      "value": 15672
+     },
+     {
+      "label": "Carver",
+      "value": 51912
+     },
+     {
+      "label": "Casalini",
+      "value": 16407
+     },
+     {
+      "label": "Caterham",
+      "value": 16335
+     },
+     {
+      "label": "Cenntro",
+      "value": 51936
+     },
+     {
+      "label": "Chamonix",
+      "value": 52064
+     },
+     {
+      "label": "Changan",
+      "value": 52058
+     },
+     {
+      "label": "Changhe",
+      "value": 16401
+     },
+     {
+      "label": "Chatenet",
+      "value": 16357
+     },
+     {
+      "label": "Chery",
+      "value": 16384
+     },
+     {
+      "label": "Chevrolet",
+      "value": 19
+     },
+     {
+      "label": "Chrysler",
+      "value": 20
+     },
+     {
+      "label": "Cirelli",
+      "value": 51971
+     },
+     {
+      "label": "Citroen",
+      "value": 21
+     },
+     {
+      "label": "CityEL",
+      "value": 16411
+     },
+     {
+      "label": "Corvette",
+      "value": 16380
+     },
+     {
+      "label": "CUPRA",
+      "value": 51802
+     },
+     {
+      "label": "Dacia",
+      "value": 16360
+     },
+     {
+      "label": "Daewoo",
+      "value": 22
+     },
+     {
+      "label": "DAF",
+      "value": 16333
+     },
+     {
+      "label": "Daihatsu",
+      "value": 23
+     },
+     {
+      "label": "Daimler",
+      "value": 16397
+     },
+     {
+      "label": "Dallara",
+      "value": 51947
+     },
+     {
+      "label": "Dangel",
+      "value": 16434
+     },
+     {
+      "label": "De la Chapelle",
+      "value": 16423
+     },
+     {
+      "label": "De Tomaso",
+      "value": 51779
+     },
+     {
+      "label": "Delorean",
+      "value": 51859
+     },
+     {
+      "label": "Denza",
+      "value": 52054
+     },
+     {
+      "label": "Devalliet",
+      "value": 53447
+     },
+     {
+      "label": "Devinci Cars",
+      "value": 51920
+     },
+     {
+      "label": "DFM",
+      "value": 53182
+     },
+     {
+      "label": "DFSK",
+      "value": 51773
+     },
+     {
+      "label": "Dodge",
+      "value": 2152
+     },
+     {
+      "label": "Dongfeng",
+      "value": 52016
+     },
+     {
+      "label": "Donkervoort",
+      "value": 16339
+     },
+     {
+      "label": "DR Automobiles",
+      "value": 16383
+     },
+     {
+      "label": "DS Automobiles",
+      "value": 16415
+     },
+     {
+      "label": "Dutton",
+      "value": 51552
+     },
+     {
+      "label": "e.GO",
+      "value": 51794
+     },
+     {
+      "label": "Ebro",
+      "value": 52008
+     },
+     {
+      "label": "Econelo",
+      "value": 51835
+     },
+     {
+      "label": "Edran",
+      "value": 51905
+     },
+     {
+      "label": "Elaris",
+      "value": 51880
+     },
+     {
+      "label": "Embuggy",
+      "value": 51874
+     },
+     {
+      "label": "EMC",
+      "value": 51924
+     },
+     {
+      "label": "Estrima",
+      "value": 16436
+     },
+     {
+      "label": "Evetta",
+      "value": 51919
+     },
+     {
+      "label": "EVO",
+      "value": 51831
+     },
+     {
+      "label": "Farizon",
+      "value": 52033
+     },
+     {
+      "label": "Ferrari",
+      "value": 27
+     },
+     {
+      "label": "Fiat",
+      "value": 28
+     },
+     {
+      "label": "firefly",
+      "value": 53185
+     },
+     {
+      "label": "Fisker",
+      "value": 51543
+     },
+     {
+      "label": "Ford",
+      "value": 29
+     },
+     {
+      "label": "Forthing",
+      "value": 51987
+     },
+     {
+      "label": "Foton",
+      "value": 51973
+     },
+     {
+      "label": "Gac Gonow",
+      "value": 51542
+     },
+     {
+      "label": "Galloper",
+      "value": 16337
+     },
+     {
+      "label": "Gappy",
+      "value": 51907
+     },
+     {
+      "label": "GAZ",
+      "value": 16386
+     },
+     {
+      "label": "Geely",
+      "value": 52060
+     },
+     {
+      "label": "GEM",
+      "value": 16403
+     },
+     {
+      "label": "GEMBALLA",
+      "value": 51540
+     },
+     {
+      "label": "Genesis",
+      "value": 51885
+     },
+     {
+      "label": "Giana",
+      "value": 51837
+     },
+     {
+      "label": "Gillet",
+      "value": 51791
+     },
+     {
+      "label": "Giotti Victoria",
+      "value": 16421
+     },
+     {
+      "label": "GMC",
+      "value": 2153
+     },
+     {
+      "label": "Goupil",
+      "value": 51813
+     },
+     {
+      "label": "Great Wall",
+      "value": 16382
+     },
+     {
+      "label": "Grecav",
+      "value": 16409
+     },
+     {
+      "label": "GTA",
+      "value": 51926
+     },
+     {
+      "label": "GWM",
+      "value": 51981
+     },
+     {
+      "label": "Haima",
+      "value": 51512
+     },
+     {
+      "label": "Hamann",
+      "value": 51534
+     },
+     {
+      "label": "Haval",
+      "value": 51816
+     },
+     {
+      "label": "Hiphi",
+      "value": 51977
+     },
+     {
+      "label": "Holden",
+      "value": 51881
+     },
+     {
+      "label": "Honda",
+      "value": 31
+     },
+     {
+      "label": "Hongqi",
+      "value": 51988
+     },
+     {
+      "label": "HUMMER",
+      "value": 15674
+     },
+     {
+      "label": "Hurtan",
+      "value": 51767
+     },
+     {
+      "label": "Hyundai",
+      "value": 33
+     },
+     {
+      "label": "ICH-X",
+      "value": 51992
+     },
+     {
+      "label": "Ineos",
+      "value": 51925
+     },
+     {
+      "label": "Infiniti",
+      "value": 16355
+     },
+     {
+      "label": "Innocenti",
+      "value": 15629
+     },
+     {
+      "label": "Invicta",
+      "value": 52006
+     },
+     {
+      "label": "Iso Rivolta",
+      "value": 16402
+     },
+     {
+      "label": "Isuzu",
+      "value": 35
+     },
+     {
+      "label": "Iveco",
+      "value": 14882
+     },
+     {
+      "label": "IZH",
+      "value": 16387
+     },
+     {
+      "label": "JAC",
+      "value": 51849
+     },
+     {
+      "label": "Jaecoo",
+      "value": 51999
+     },
+     {
+      "label": "Jaguar",
+      "value": 37
+     },
+     {
+      "label": "Jeep",
+      "value": 38
+     },
+     {
+      "label": "Jensen",
+      "value": 51910
+     },
+     {
+      "label": "Jetour",
+      "value": 53446
+     },
+     {
+      "label": "Karma",
+      "value": 51875
+     },
+     {
+      "label": "KGM",
+      "value": 51975
+     },
+     {
+      "label": "Kia",
+      "value": 39
+     },
+     {
+      "label": "Koenigsegg",
+      "value": 51781
+     },
+     {
+      "label": "KTM",
+      "value": 50060
+     },
+     {
+      "label": "Lada",
+      "value": 40
+     },
+     {
+      "label": "Lamborghini",
+      "value": 41
+     },
+     {
+      "label": "Lancia",
+      "value": 42
+     },
+     {
+      "label": "Land Rover",
+      "value": 15641
+     },
+     {
+      "label": "LDV",
+      "value": 16426
+     },
+     {
+      "label": "Leapmotor",
+      "value": 52000
+     },
+     {
+      "label": "Lee Group",
+      "value": 52061
+     },
+     {
+      "label": "LEVC",
+      "value": 51854
+     },
+     {
+      "label": "Lexus",
+      "value": 43
+     },
+     {
+      "label": "Li",
+      "value": 52046
+     },
+     {
+      "label": "Lifan",
+      "value": 16393
+     },
+     {
+      "label": "Ligier",
+      "value": 16353
+     },
+     {
+      "label": "Lincoln",
+      "value": 14890
+     },
+     {
+      "label": "Linktour",
+      "value": 53439
+     },
+     {
+      "label": "Linzda",
+      "value": 51883
+     },
+     {
+      "label": "Livan",
+      "value": 52003
+     },
+     {
+      "label": "Lorinser",
+      "value": 51908
+     },
+     {
+      "label": "Lotus",
+      "value": 44
+     },
+     {
+      "label": "Lucid",
+      "value": 51921
+     },
+     {
+      "label": "Lynk & Co",
+      "value": 51914
+     },
+     {
+      "label": "Mahindra",
+      "value": 16359
+     },
+     {
+      "label": "MAN",
+      "value": 51780
+     },
+     {
+      "label": "Mansory",
+      "value": 16435
+     },
+     {
+      "label": "Martin",
+      "value": 51906
+     },
+     {
+      "label": "Martin Motors",
+      "value": 16410
+     },
+     {
+      "label": "Maserati",
+      "value": 45
+     },
+     {
+      "label": "Matra",
+      "value": 51955
+     },
+     {
+      "label": "Maxus",
+      "value": 51803
+     },
+     {
+      "label": "Maybach",
+      "value": 16348
+     },
+     {
+      "label": "Mazda",
+      "value": 46
+     },
+     {
+      "label": "McLaren",
+      "value": 51519
+     },
+     {
+      "label": "Mega",
+      "value": 51902
+     },
+     {
+      "label": "Melex",
+      "value": 16399
+     },
+     {
+      "label": "Mercedes-Benz",
+      "value": 47
+     },
+     {
+      "label": "Mercury",
+      "value": 51834
+     },
+     {
+      "label": "MG",
+      "value": 48
+     },
+     {
+      "label": "MHERO",
+      "value": 53441
+     },
+     {
+      "label": "Micro",
+      "value": 51965
+     },
+     {
+      "label": "Microcar",
+      "value": 16361
+     },
+     {
+      "label": "Militem",
+      "value": 51897
+     },
+     {
+      "label": "Minari",
+      "value": 51903
+     },
+     {
+      "label": "Minauto",
+      "value": 51766
+     },
+     {
+      "label": "MINI",
+      "value": 16338
+     },
+     {
+      "label": "Mitsubishi",
+      "value": 50
+     },
+     {
+      "label": "Mitsuoka",
+      "value": 51782
+     },
+     {
+      "label": "Mobilize",
+      "value": 52004
+     },
+     {
+      "label": "Morgan",
+      "value": 51
+     },
+     {
+      "label": "Moskvich",
+      "value": 16388
+     },
+     {
+      "label": "MP Lafer",
+      "value": 51554
+     },
+     {
+      "label": "MPM Motors",
+      "value": 51788
+     },
+     {
+      "label": "NIO",
+      "value": 51928
+     },
+     {
+      "label": "Nissan",
+      "value": 52
+     },
+     {
+      "label": "NSU",
+      "value": 50111
+     },
+     {
+      "label": "Oldsmobile",
+      "value": 53
+     },
+     {
+      "label": "Oldtimer",
+      "value": 15670
+     },
+     {
+      "label": "Omoda",
+      "value": 51991
+     },
+     {
+      "label": "Opel",
+      "value": 54
+     },
+     {
+      "label": "Ora",
+      "value": 51934
+     },
+     {
+      "label": "Otros",
+      "value": 16328
+     },
+     {
+      "label": "Pagani",
+      "value": 16341
+     },
+     {
+      "label": "Panther Westwinds",
+      "value": 51553
+     },
+     {
+      "label": "Peugeot",
+      "value": 55
+     },
+     {
+      "label": "PGO",
+      "value": 50083
+     },
+     {
+      "label": "Piaggio",
+      "value": 16350
+     },
+     {
+      "label": "Plymouth",
+      "value": 51770
+     },
+     {
+      "label": "Polestar",
+      "value": 51817
+     },
+     {
+      "label": "Pontiac",
+      "value": 56
+     },
+     {
+      "label": "Porsche",
+      "value": 57
+     },
+     {
+      "label": "Proton",
+      "value": 15636
+     },
+     {
+      "label": "Puch",
+      "value": 15646
+     },
+     {
+      "label": "RAM",
+      "value": 51793
+     },
+     {
+      "label": "Regis",
+      "value": 51812
+     },
+     {
+      "label": "Reliant",
+      "value": 16398
+     },
+     {
+      "label": "Renault",
+      "value": 60
+     },
+     {
+      "label": "Rimac",
+      "value": 53191
+     },
+     {
+      "label": "Rivian",
+      "value": 52013
+     },
+     {
+      "label": "Rolls-Royce",
+      "value": 61
+     },
+     {
+      "label": "Rover",
+      "value": 62
+     },
+     {
+      "label": "Ruf",
+      "value": 51536
+     },
+     {
+      "label": "Saab",
+      "value": 63
+     },
+     {
+      "label": "Santana",
+      "value": 16369
+     },
+     {
+      "label": "SEAT",
+      "value": 64
+     },
+     {
+      "label": "Segway",
+      "value": 51866
+     },
+     {
+      "label": "Selvo",
+      "value": 51839
+     },
+     {
+      "label": "Seres",
+      "value": 51861
+     },
+     {
+      "label": "Sevic",
+      "value": 51827
+     },
+     {
+      "label": "SGS",
+      "value": 51913
+     },
+     {
+      "label": "Shelby",
+      "value": 51896
+     },
+     {
+      "label": "Shuanghuan",
+      "value": 51800
+     },
+     {
+      "label": "Silence",
+      "value": 51853
+     },
+     {
+      "label": "Simplici",
+      "value": 52039
+     },
+     {
+      "label": "Singer",
+      "value": 51909
+     },
+     {
+      "label": "Skoda",
+      "value": 65
+     },
+     {
+      "label": "Skywell",
+      "value": 51959
+     },
+     {
+      "label": "smart",
+      "value": 15525
+     },
+     {
+      "label": "SpeedArt",
+      "value": 51538
+     },
+     {
+      "label": "Sportequipe",
+      "value": 51949
+     },
+     {
+      "label": "Spyker",
+      "value": 16377
+     },
+     {
+      "label": "SsangYong",
+      "value": 66
+     },
+     {
+      "label": "Stormborn",
+      "value": 51974
+     },
+     {
+      "label": "StreetScooter",
+      "value": 51795
+     },
+     {
+      "label": "Studebaker",
+      "value": 51833
+     },
+     {
+      "label": "Subaru",
+      "value": 67
+     },
+     {
+      "label": "Suzuki",
+      "value": 68
+     },
+     {
+      "label": "SWM",
+      "value": 51749
+     },
+     {
+      "label": "Talbot",
+      "value": 51551
+     },
+     {
+      "label": "Tasso",
+      "value": 16404
+     },
+     {
+      "label": "Tata",
+      "value": 16327
+     },
+     {
+      "label": "Tazzari EV",
+      "value": 51557
+     },
+     {
+      "label": "TECHART",
+      "value": 51535
+     },
+     {
+      "label": "Tesla",
+      "value": 51520
+     },
+     {
+      "label": "Tiger",
+      "value": 52038
+     },
+     {
+      "label": "Togg",
+      "value": 51950
+     },
+     {
+      "label": "Town Life",
+      "value": 16420
+     },
+     {
+      "label": "Toyota",
+      "value": 70
+     },
+     {
+      "label": "Trabant",
+      "value": 15633
+     },
+     {
+      "label": "Trailer-Anhänger",
+      "value": 16326
+     },
+     {
+      "label": "Triumph",
+      "value": 2120
+     },
+     {
+      "label": "Trucks-Lkw",
+      "value": 16253
+     },
+     {
+      "label": "TVR",
+      "value": 71
+     },
+     {
+      "label": "TYN-e",
+      "value": 53192
+     },
+     {
+      "label": "UAZ",
+      "value": 16389
+     },
+     {
+      "label": "Vanden Plas",
+      "value": 51836
+     },
+     {
+      "label": "Vanderhall",
+      "value": 51809
+     },
+     {
+      "label": "VAZ",
+      "value": 16385
+     },
+     {
+      "label": "VEM",
+      "value": 16422
+     },
+     {
+      "label": "Venucia",
+      "value": 53440
+     },
+     {
+      "label": "VinFast",
+      "value": 51915
+     },
+     {
+      "label": "Volkswagen",
+      "value": 74
+     },
+     {
+      "label": "Volvo",
+      "value": 73
+     },
+     {
+      "label": "Voyah",
+      "value": 51993
+     },
+     {
+      "label": "Wartburg",
+      "value": 16336
+     },
+     {
+      "label": "Weltmeister",
+      "value": 51873
+     },
+     {
+      "label": "Wenckstern",
+      "value": 51852
+     },
+     {
+      "label": "Westfield",
+      "value": 51513
+     },
+     {
+      "label": "Wey",
+      "value": 51935
+     },
+     {
+      "label": "Wiesmann",
+      "value": 16351
+     },
+     {
+      "label": "XBus",
+      "value": 51869
+     },
+     {
+      "label": "XEV",
+      "value": 51860
+     },
+     {
+      "label": "Xiaomi",
+      "value": 52031
+     },
+     {
+      "label": "Xpeng",
+      "value": 51940
+     },
+     {
+      "label": "Zastava",
+      "value": 16408
+     },
+     {
+      "label": "ZAZ",
+      "value": 16394
+     },
+     {
+      "label": "Zeekr",
+      "value": 51964
+     },
+     {
+      "label": "Zhidou",
+      "value": 51798
+     },
+     {
+      "label": "Zotye",
+      "value": 51807
+     }
+    ],
+    "topMakeIds": [
+     47,
+     13,
+     9,
+     74,
+     57,
+     70,
+     29,
+     15641,
+     73,
+     27
+    ],
+    "topMakes": [
+     {
+      "label": "Audi",
+      "value": 9
+     },
+     {
+      "label": "BMW",
+      "value": 13
+     },
+     {
+      "label": "Ferrari",
+      "value": 27
+     },
+     {
+      "label": "Ford",
+      "value": 29
+     },
+     {
+      "label": "Land Rover",
+      "value": 15641
+     },
+     {
+      "label": "Mercedes-Benz",
+      "value": 47
+     },
+     {
+      "label": "Porsche",
+      "value": 57
+     },
+     {
+      "label": "Toyota",
+      "value": 70
+     },
+     {
+      "label": "Volkswagen",
+      "value": 74
+     },
+     {
+      "label": "Volvo",
+      "value": 73
+     }
+    ],
+    "otherMakes": [
+     {
+      "label": "9ff",
+      "value": 51539
+     },
+     {
+      "label": "Abarth",
+      "value": 16396
+     },
+     {
+      "label": "AC",
+      "value": 14979
+     },
+     {
+      "label": "ACM",
+      "value": 16429
+     },
+     {
+      "label": "Acura",
+      "value": 16356
+     },
+     {
+      "label": "Aerfal",
+      "value": 52055
+     },
+     {
+      "label": "Aiways",
+      "value": 51872
+     },
+     {
+      "label": "Aixam",
+      "value": 16352
+     },
+     {
+      "label": "Alba Mobility",
+      "value": 51917
+     },
+     {
+      "label": "Alfa Romeo",
+      "value": 6
+     },
+     {
+      "label": "Alpina",
+      "value": 14
+     },
+     {
+      "label": "Alpine",
+      "value": 51796
+     },
+     {
+      "label": "Amphicar",
+      "value": 51545
+     },
+     {
+      "label": "Angelelli Automobili",
+      "value": 51918
+     },
+     {
+      "label": "ARI",
+      "value": 53196
+     },
+     {
+      "label": "Ariel Motor",
+      "value": 16419
+     },
+     {
+      "label": "Artega",
+      "value": 16427
+     },
+     {
+      "label": "Aspark",
+      "value": 51948
+     },
+     {
+      "label": "Aspid",
+      "value": 16431
+     },
+     {
+      "label": "Aston Martin",
+      "value": 8
+     },
+     {
+      "label": "Aurus",
+      "value": 51929
+     },
+     {
+      "label": "Austin",
+      "value": 15643
+     },
+     {
+      "label": "Austin-Healey",
+      "value": 51901
+     },
+     {
+      "label": "Autobianchi",
+      "value": 15644
+     },
+     {
+      "label": "BAIC",
+      "value": 51774
+     },
+     {
+      "label": "BAW",
+      "value": 52050
+     },
+     {
+      "label": "Bedford",
+      "value": 16400
+     },
+     {
+      "label": "Bellier",
+      "value": 16416
+     },
+     {
+      "label": "Bentley",
+      "value": 11
+     },
+     {
+      "label": "Bertone",
+      "value": 52045
+     },
+     {
+      "label": "Bestune",
+      "value": 52007
+     },
+     {
+      "label": "Boldmen",
+      "value": 51900
+     },
+     {
+      "label": "Bolloré",
+      "value": 16418
+     },
+     {
+      "label": "Borgward",
+      "value": 16424
+     },
+     {
+      "label": "Bovensiepen",
+      "value": 53448
+     },
+     {
+      "label": "Brilliance",
+      "value": 16367
+     },
+     {
+      "label": "Bristol",
+      "value": 51895
+     },
+     {
+      "label": "Brute",
+      "value": 51986
+     },
+     {
+      "label": "Bugatti",
+      "value": 15
+     },
+     {
+      "label": "Buick",
+      "value": 16
+     },
+     {
+      "label": "BYD",
+      "value": 16379
+     },
+     {
+      "label": "Cadillac",
+      "value": 17
+     },
+     {
+      "label": "Caravans-Wohnm",
+      "value": 15672
+     },
+     {
+      "label": "Carver",
+      "value": 51912
+     },
+     {
+      "label": "Casalini",
+      "value": 16407
+     },
+     {
+      "label": "Caterham",
+      "value": 16335
+     },
+     {
+      "label": "Cenntro",
+      "value": 51936
+     },
+     {
+      "label": "Chamonix",
+      "value": 52064
+     },
+     {
+      "label": "Changan",
+      "value": 52058
+     },
+     {
+      "label": "Changhe",
+      "value": 16401
+     },
+     {
+      "label": "Chatenet",
+      "value": 16357
+     },
+     {
+      "label": "Chery",
+      "value": 16384
+     },
+     {
+      "label": "Chevrolet",
+      "value": 19
+     },
+     {
+      "label": "Chrysler",
+      "value": 20
+     },
+     {
+      "label": "Cirelli",
+      "value": 51971
+     },
+     {
+      "label": "Citroen",
+      "value": 21
+     },
+     {
+      "label": "CityEL",
+      "value": 16411
+     },
+     {
+      "label": "Corvette",
+      "value": 16380
+     },
+     {
+      "label": "CUPRA",
+      "value": 51802
+     },
+     {
+      "label": "Dacia",
+      "value": 16360
+     },
+     {
+      "label": "Daewoo",
+      "value": 22
+     },
+     {
+      "label": "DAF",
+      "value": 16333
+     },
+     {
+      "label": "Daihatsu",
+      "value": 23
+     },
+     {
+      "label": "Daimler",
+      "value": 16397
+     },
+     {
+      "label": "Dallara",
+      "value": 51947
+     },
+     {
+      "label": "Dangel",
+      "value": 16434
+     },
+     {
+      "label": "De la Chapelle",
+      "value": 16423
+     },
+     {
+      "label": "De Tomaso",
+      "value": 51779
+     },
+     {
+      "label": "Delorean",
+      "value": 51859
+     },
+     {
+      "label": "Denza",
+      "value": 52054
+     },
+     {
+      "label": "Devalliet",
+      "value": 53447
+     },
+     {
+      "label": "Devinci Cars",
+      "value": 51920
+     },
+     {
+      "label": "DFM",
+      "value": 53182
+     },
+     {
+      "label": "DFSK",
+      "value": 51773
+     },
+     {
+      "label": "Dodge",
+      "value": 2152
+     },
+     {
+      "label": "Dongfeng",
+      "value": 52016
+     },
+     {
+      "label": "Donkervoort",
+      "value": 16339
+     },
+     {
+      "label": "DR Automobiles",
+      "value": 16383
+     },
+     {
+      "label": "DS Automobiles",
+      "value": 16415
+     },
+     {
+      "label": "Dutton",
+      "value": 51552
+     },
+     {
+      "label": "e.GO",
+      "value": 51794
+     },
+     {
+      "label": "Ebro",
+      "value": 52008
+     },
+     {
+      "label": "Econelo",
+      "value": 51835
+     },
+     {
+      "label": "Edran",
+      "value": 51905
+     },
+     {
+      "label": "Elaris",
+      "value": 51880
+     },
+     {
+      "label": "Embuggy",
+      "value": 51874
+     },
+     {
+      "label": "EMC",
+      "value": 51924
+     },
+     {
+      "label": "Estrima",
+      "value": 16436
+     },
+     {
+      "label": "Evetta",
+      "value": 51919
+     },
+     {
+      "label": "EVO",
+      "value": 51831
+     },
+     {
+      "label": "Farizon",
+      "value": 52033
+     },
+     {
+      "label": "Fiat",
+      "value": 28
+     },
+     {
+      "label": "firefly",
+      "value": 53185
+     },
+     {
+      "label": "Fisker",
+      "value": 51543
+     },
+     {
+      "label": "Forthing",
+      "value": 51987
+     },
+     {
+      "label": "Foton",
+      "value": 51973
+     },
+     {
+      "label": "Gac Gonow",
+      "value": 51542
+     },
+     {
+      "label": "Galloper",
+      "value": 16337
+     },
+     {
+      "label": "Gappy",
+      "value": 51907
+     },
+     {
+      "label": "GAZ",
+      "value": 16386
+     },
+     {
+      "label": "Geely",
+      "value": 52060
+     },
+     {
+      "label": "GEM",
+      "value": 16403
+     },
+     {
+      "label": "GEMBALLA",
+      "value": 51540
+     },
+     {
+      "label": "Genesis",
+      "value": 51885
+     },
+     {
+      "label": "Giana",
+      "value": 51837
+     },
+     {
+      "label": "Gillet",
+      "value": 51791
+     },
+     {
+      "label": "Giotti Victoria",
+      "value": 16421
+     },
+     {
+      "label": "GMC",
+      "value": 2153
+     },
+     {
+      "label": "Goupil",
+      "value": 51813
+     },
+     {
+      "label": "Great Wall",
+      "value": 16382
+     },
+     {
+      "label": "Grecav",
+      "value": 16409
+     },
+     {
+      "label": "GTA",
+      "value": 51926
+     },
+     {
+      "label": "GWM",
+      "value": 51981
+     },
+     {
+      "label": "Haima",
+      "value": 51512
+     },
+     {
+      "label": "Hamann",
+      "value": 51534
+     },
+     {
+      "label": "Haval",
+      "value": 51816
+     },
+     {
+      "label": "Hiphi",
+      "value": 51977
+     },
+     {
+      "label": "Holden",
+      "value": 51881
+     },
+     {
+      "label": "Honda",
+      "value": 31
+     },
+     {
+      "label": "Hongqi",
+      "value": 51988
+     },
+     {
+      "label": "HUMMER",
+      "value": 15674
+     },
+     {
+      "label": "Hurtan",
+      "value": 51767
+     },
+     {
+      "label": "Hyundai",
+      "value": 33
+     },
+     {
+      "label": "ICH-X",
+      "value": 51992
+     },
+     {
+      "label": "Ineos",
+      "value": 51925
+     },
+     {
+      "label": "Infiniti",
+      "value": 16355
+     },
+     {
+      "label": "Innocenti",
+      "value": 15629
+     },
+     {
+      "label": "Invicta",
+      "value": 52006
+     },
+     {
+      "label": "Iso Rivolta",
+      "value": 16402
+     },
+     {
+      "label": "Isuzu",
+      "value": 35
+     },
+     {
+      "label": "Iveco",
+      "value": 14882
+     },
+     {
+      "label": "IZH",
+      "value": 16387
+     },
+     {
+      "label": "JAC",
+      "value": 51849
+     },
+     {
+      "label": "Jaecoo",
+      "value": 51999
+     },
+     {
+      "label": "Jaguar",
+      "value": 37
+     },
+     {
+      "label": "Jeep",
+      "value": 38
+     },
+     {
+      "label": "Jensen",
+      "value": 51910
+     },
+     {
+      "label": "Jetour",
+      "value": 53446
+     },
+     {
+      "label": "Karma",
+      "value": 51875
+     },
+     {
+      "label": "KGM",
+      "value": 51975
+     },
+     {
+      "label": "Kia",
+      "value": 39
+     },
+     {
+      "label": "Koenigsegg",
+      "value": 51781
+     },
+     {
+      "label": "KTM",
+      "value": 50060
+     },
+     {
+      "label": "Lada",
+      "value": 40
+     },
+     {
+      "label": "Lamborghini",
+      "value": 41
+     },
+     {
+      "label": "Lancia",
+      "value": 42
+     },
+     {
+      "label": "LDV",
+      "value": 16426
+     },
+     {
+      "label": "Leapmotor",
+      "value": 52000
+     },
+     {
+      "label": "Lee Group",
+      "value": 52061
+     },
+     {
+      "label": "LEVC",
+      "value": 51854
+     },
+     {
+      "label": "Lexus",
+      "value": 43
+     },
+     {
+      "label": "Li",
+      "value": 52046
+     },
+     {
+      "label": "Lifan",
+      "value": 16393
+     },
+     {
+      "label": "Ligier",
+      "value": 16353
+     },
+     {
+      "label": "Lincoln",
+      "value": 14890
+     },
+     {
+      "label": "Linktour",
+      "value": 53439
+     },
+     {
+      "label": "Linzda",
+      "value": 51883
+     },
+     {
+      "label": "Livan",
+      "value": 52003
+     },
+     {
+      "label": "Lorinser",
+      "value": 51908
+     },
+     {
+      "label": "Lotus",
+      "value": 44
+     },
+     {
+      "label": "Lucid",
+      "value": 51921
+     },
+     {
+      "label": "Lynk & Co",
+      "value": 51914
+     },
+     {
+      "label": "Mahindra",
+      "value": 16359
+     },
+     {
+      "label": "MAN",
+      "value": 51780
+     },
+     {
+      "label": "Mansory",
+      "value": 16435
+     },
+     {
+      "label": "Martin",
+      "value": 51906
+     },
+     {
+      "label": "Martin Motors",
+      "value": 16410
+     },
+     {
+      "label": "Maserati",
+      "value": 45
+     },
+     {
+      "label": "Matra",
+      "value": 51955
+     },
+     {
+      "label": "Maxus",
+      "value": 51803
+     },
+     {
+      "label": "Maybach",
+      "value": 16348
+     },
+     {
+      "label": "Mazda",
+      "value": 46
+     },
+     {
+      "label": "McLaren",
+      "value": 51519
+     },
+     {
+      "label": "Mega",
+      "value": 51902
+     },
+     {
+      "label": "Melex",
+      "value": 16399
+     },
+     {
+      "label": "Mercury",
+      "value": 51834
+     },
+     {
+      "label": "MG",
+      "value": 48
+     },
+     {
+      "label": "MHERO",
+      "value": 53441
+     },
+     {
+      "label": "Micro",
+      "value": 51965
+     },
+     {
+      "label": "Microcar",
+      "value": 16361
+     },
+     {
+      "label": "Militem",
+      "value": 51897
+     },
+     {
+      "label": "Minari",
+      "value": 51903
+     },
+     {
+      "label": "Minauto",
+      "value": 51766
+     },
+     {
+      "label": "MINI",
+      "value": 16338
+     },
+     {
+      "label": "Mitsubishi",
+      "value": 50
+     },
+     {
+      "label": "Mitsuoka",
+      "value": 51782
+     },
+     {
+      "label": "Mobilize",
+      "value": 52004
+     },
+     {
+      "label": "Morgan",
+      "value": 51
+     },
+     {
+      "label": "Moskvich",
+      "value": 16388
+     },
+     {
+      "label": "MP Lafer",
+      "value": 51554
+     },
+     {
+      "label": "MPM Motors",
+      "value": 51788
+     },
+     {
+      "label": "NIO",
+      "value": 51928
+     },
+     {
+      "label": "Nissan",
+      "value": 52
+     },
+     {
+      "label": "NSU",
+      "value": 50111
+     },
+     {
+      "label": "Oldsmobile",
+      "value": 53
+     },
+     {
+      "label": "Oldtimer",
+      "value": 15670
+     },
+     {
+      "label": "Omoda",
+      "value": 51991
+     },
+     {
+      "label": "Opel",
+      "value": 54
+     },
+     {
+      "label": "Ora",
+      "value": 51934
+     },
+     {
+      "label": "Otros",
+      "value": 16328
+     },
+     {
+      "label": "Pagani",
+      "value": 16341
+     },
+     {
+      "label": "Panther Westwinds",
+      "value": 51553
+     },
+     {
+      "label": "Peugeot",
+      "value": 55
+     },
+     {
+      "label": "PGO",
+      "value": 50083
+     },
+     {
+      "label": "Piaggio",
+      "value": 16350
+     },
+     {
+      "label": "Plymouth",
+      "value": 51770
+     },
+     {
+      "label": "Polestar",
+      "value": 51817
+     },
+     {
+      "label": "Pontiac",
+      "value": 56
+     },
+     {
+      "label": "Proton",
+      "value": 15636
+     },
+     {
+      "label": "Puch",
+      "value": 15646
+     },
+     {
+      "label": "RAM",
+      "value": 51793
+     },
+     {
+      "label": "Regis",
+      "value": 51812
+     },
+     {
+      "label": "Reliant",
+      "value": 16398
+     },
+     {
+      "label": "Renault",
+      "value": 60
+     },
+     {
+      "label": "Rimac",
+      "value": 53191
+     },
+     {
+      "label": "Rivian",
+      "value": 52013
+     },
+     {
+      "label": "Rolls-Royce",
+      "value": 61
+     },
+     {
+      "label": "Rover",
+      "value": 62
+     },
+     {
+      "label": "Ruf",
+      "value": 51536
+     },
+     {
+      "label": "Saab",
+      "value": 63
+     },
+     {
+      "label": "Santana",
+      "value": 16369
+     },
+     {
+      "label": "SEAT",
+      "value": 64
+     },
+     {
+      "label": "Segway",
+      "value": 51866
+     },
+     {
+      "label": "Selvo",
+      "value": 51839
+     },
+     {
+      "label": "Seres",
+      "value": 51861
+     },
+     {
+      "label": "Sevic",
+      "value": 51827
+     },
+     {
+      "label": "SGS",
+      "value": 51913
+     },
+     {
+      "label": "Shelby",
+      "value": 51896
+     },
+     {
+      "label": "Shuanghuan",
+      "value": 51800
+     },
+     {
+      "label": "Silence",
+      "value": 51853
+     },
+     {
+      "label": "Simplici",
+      "value": 52039
+     },
+     {
+      "label": "Singer",
+      "value": 51909
+     },
+     {
+      "label": "Skoda",
+      "value": 65
+     },
+     {
+      "label": "Skywell",
+      "value": 51959
+     },
+     {
+      "label": "smart",
+      "value": 15525
+     },
+     {
+      "label": "SpeedArt",
+      "value": 51538
+     },
+     {
+      "label": "Sportequipe",
+      "value": 51949
+     },
+     {
+      "label": "Spyker",
+      "value": 16377
+     },
+     {
+      "label": "SsangYong",
+      "value": 66
+     },
+     {
+      "label": "Stormborn",
+      "value": 51974
+     },
+     {
+      "label": "StreetScooter",
+      "value": 51795
+     },
+     {
+      "label": "Studebaker",
+      "value": 51833
+     },
+     {
+      "label": "Subaru",
+      "value": 67
+     },
+     {
+      "label": "Suzuki",
+      "value": 68
+     },
+     {
+      "label": "SWM",
+      "value": 51749
+     },
+     {
+      "label": "Talbot",
+      "value": 51551
+     },
+     {
+      "label": "Tasso",
+      "value": 16404
+     },
+     {
+      "label": "Tata",
+      "value": 16327
+     },
+     {
+      "label": "Tazzari EV",
+      "value": 51557
+     },
+     {
+      "label": "TECHART",
+      "value": 51535
+     },
+     {
+      "label": "Tesla",
+      "value": 51520
+     },
+     {
+      "label": "Tiger",
+      "value": 52038
+     },
+     {
+      "label": "Togg",
+      "value": 51950
+     },
+     {
+      "label": "Town Life",
+      "value": 16420
+     },
+     {
+      "label": "Trabant",
+      "value": 15633
+     },
+     {
+      "label": "Trailer-Anhänger",
+      "value": 16326
+     },
+     {
+      "label": "Triumph",
+      "value": 2120
+     },
+     {
+      "label": "Trucks-Lkw",
+      "value": 16253
+     },
+     {
+      "label": "TVR",
+      "value": 71
+     },
+     {
+      "label": "TYN-e",
+      "value": 53192
+     },
+     {
+      "label": "UAZ",
+      "value": 16389
+     },
+     {
+      "label": "Vanden Plas",
+      "value": 51836
+     },
+     {
+      "label": "Vanderhall",
+      "value": 51809
+     },
+     {
+      "label": "VAZ",
+      "value": 16385
+     },
+     {
+      "label": "VEM",
+      "value": 16422
+     },
+     {
+      "label": "Venucia",
+      "value": 53440
+     },
+     {
+      "label": "VinFast",
+      "value": 51915
+     },
+     {
+      "label": "Voyah",
+      "value": 51993
+     },
+     {
+      "label": "Wartburg",
+      "value": 16336
+     },
+     {
+      "label": "Weltmeister",
+      "value": 51873
+     },
+     {
+      "label": "Wenckstern",
+      "value": 51852
+     },
+     {
+      "label": "Westfield",
+      "value": 51513
+     },
+     {
+      "label": "Wey",
+      "value": 51935
+     },
+     {
+      "label": "Wiesmann",
+      "value": 16351
+     },
+     {
+      "label": "XBus",
+      "value": 51869
+     },
+     {
+      "label": "XEV",
+      "value": 51860
+     },
+     {
+      "label": "Xiaomi",
+      "value": 52031
+     },
+     {
+      "label": "Xpeng",
+      "value": 51940
+     },
+     {
+      "label": "Zastava",
+      "value": 16408
+     },
+     {
+      "label": "ZAZ",
+      "value": 16394
+     },
+     {
+      "label": "Zeekr",
+      "value": 51964
+     },
+     {
+      "label": "Zhidou",
+      "value": 51798
+     },
+     {
+      "label": "Zotye",
+      "value": 51807
+     }
+    ],
+    "models": {},
+    "modelGroups": {},
+    "modelLines": {},
+    "topModels": {},
+    "equipment": [
+     {
+      "label": "360° cámara",
+      "value": 187
+     },
+     {
+      "label": "4WD",
+      "value": 11
+     },
+     {
+      "label": "ABS",
+      "value": 1
+     },
+     {
+      "label": "Adaptado discapacitados",
+      "value": 36
+     },
+     {
+      "label": "Airbag acompañante",
+      "value": 3
+     },
+     {
+      "label": "Airbag del conductor",
+      "value": 2
+     },
+     {
+      "label": "Airbag para la cabeza",
+      "value": 46
+     },
+     {
+      "label": "Airbag trasero",
+      "value": 45
+     },
+     {
+      "label": "Airbags laterales",
+      "value": 32
+     },
+     {
+      "label": "Aire Acondicionado",
+      "value": 5
+     },
+     {
+      "label": "Ajuste eléctrico de asiento trasero",
+      "value": 233
+     },
+     {
+      "label": "Ajuste lumbar",
+      "value": 143
+     },
+     {
+      "label": "Alarma",
+      "value": 18
+     },
+     {
+      "label": "Alerta cambio de carril",
+      "value": 157
+     },
+     {
+      "label": "Android Auto",
+      "value": 222
+     },
+     {
+      "label": "Apertura y arranque sin llave",
+      "value": 153
+     },
+     {
+      "label": "Apple CarPlay",
+      "value": 221
+     },
+     {
+      "label": "Asiento del copiloto abatible",
+      "value": 229
+     },
+     {
+      "label": "Asiento trasero calefactable",
+      "value": 248
+     },
+     {
+      "label": "Asiento trasero partido",
+      "value": 21
+     },
+     {
+      "label": "Asientos calef.",
+      "value": 34
+     },
+     {
+      "label": "Asientos con masaje",
+      "value": 145
+     },
+     {
+      "label": "Asientos deportivos",
+      "value": 117
+     },
+     {
+      "label": "Asientos eléctricos",
+      "value": 16
+     },
+     {
+      "label": "Asistente al arranque en pendient",
+      "value": 137
+     },
+     {
+      "label": "Asistente al frenado de emergencia",
+      "value": 148
+     },
+     {
+      "label": "Asistente de luz de carretera",
+      "value": 189
+     },
+     {
+      "label": "Asistente de visión nocturna",
+      "value": 147
+     },
+     {
+      "label": "Autonomía extendida",
+      "value": 237
+     },
+     {
+      "label": "Ayuda aparcamiento",
+      "value": 40
+     },
+     {
+      "label": "Baca",
+      "value": 27
+     },
+     {
+      "label": "Bluetooth",
+      "value": 122
+     },
+     {
+      "label": "Bola de remolque",
+      "value": 20
+     },
+     {
+      "label": "Bomba de calor",
+      "value": 249
+     },
+     {
+      "label": "Cámara de aparcamiento",
+      "value": 130
+     },
+     {
+      "label": "Cambio de levas en volante",
+      "value": 151
+     },
+     {
+      "label": "Carga bidireccional",
+      "value": 250
+     },
+     {
+      "label": "Carga inalámbrica para smartphones",
+      "value": 223
+     },
+     {
+      "label": "Catalizador",
+      "value": 29
+     },
+     {
+      "label": "CD",
+      "value": 132
+     },
+     {
+      "label": "Certificado de batería",
+      "value": 251
+     },
+     {
+      "label": "Cierre centralizado",
+      "value": 17
+     },
+     {
+      "label": "Cierre centralizado con mando a distancia",
+      "value": 47
+     },
+     {
+      "label": "Climatizador automático",
+      "value": 30
+     },
+     {
+      "label": "Climatizador automático, 2 zonas",
+      "value": 241
+     },
+     {
+      "label": "Climatizador automático, 3 zonas",
+      "value": 242
+     },
+     {
+      "label": "Climatizador automático, 4 zonas",
+      "value": 243
+     },
+     {
+      "label": "Control de distancia",
+      "value": 133
+     },
+     {
+      "label": "Control de presión de las ruedas",
+      "value": 150
+     },
+     {
+      "label": "Control de tracción",
+      "value": 31
+     },
+     {
+      "label": "Control de velocidad",
+      "value": 38
+     },
+     {
+      "label": "Control por voz",
+      "value": 156
+     },
+     {
+      "label": "Conversión en biodiésel",
+      "value": 170
+     },
+     {
+      "label": "Cortavientos",
+      "value": 44
+     },
+     {
+      "label": "Deflector",
+      "value": 238
+     },
+     {
+      "label": "Dirección asistida",
+      "value": 12
+     },
+     {
+      "label": "Elevalunas eléctrico",
+      "value": 13
+     },
+     {
+      "label": "ESP",
+      "value": 42
+     },
+     {
+      "label": "Faros antiniebla",
+      "value": 19
+     },
+     {
+      "label": "Faros de LED",
+      "value": 140
+     },
+     {
+      "label": "Faros de xenon",
+      "value": 39
+     },
+     {
+      "label": "Faros delanteros bi-xenon",
+      "value": 230
+     },
+     {
+      "label": "Faros LED íntegros",
+      "value": 239
+     },
+     {
+      "label": "Freno de estacionamiento electrónico",
+      "value": 240
+     },
+     {
+      "label": "Función de TV",
+      "value": 160
+     },
+     {
+      "label": "Iluminación ambiental",
+      "value": 219
+     },
+     {
+      "label": "Indicado para E10",
+      "value": 173
+     },
+     {
+      "label": "Inmovilizador",
+      "value": 26
+     },
+     {
+      "label": "Isofix",
+      "value": 125
+     },
+     {
+      "label": "Kit de reparación de averías",
+      "value": 217
+     },
+     {
+      "label": "Llantas de acero",
+      "value": 212
+     },
+     {
+      "label": "Llantas de aleación",
+      "value": 15
+     },
+     {
+      "label": "Luces de carretera antideslumbrantes",
+      "value": 214
+     },
+     {
+      "label": "Luces de marcha diurna LED",
+      "value": 141
+     },
+     {
+      "label": "Luces láser",
+      "value": 213
+     },
+     {
+      "label": "Luz direccional",
+      "value": 118
+     },
+     {
+      "label": "Luz diurna",
+      "value": 115
+     },
+     {
+      "label": "Manejo del lado derecho",
+      "value": 48
+     },
+     {
+      "label": "Manos libres",
+      "value": 124
+     },
+     {
+      "label": "MP3",
+      "value": 43
+     },
+     {
+      "label": "Navegador",
+      "value": 23
+     },
+     {
+      "label": "Neumáticos de invierno",
+      "value": 25
+     },
+     {
+      "label": "Neumáticos de verano",
+      "value": 210
+     },
+     {
+      "label": "Neumáticos para todo el año",
+      "value": 211
+     },
+     {
+      "label": "Ordenador",
+      "value": 41
+     },
+     {
+      "label": "Pantalla frontal",
+      "value": 123
+     },
+     {
+      "label": "Pantalla táctil",
+      "value": 159
+     },
+     {
+      "label": "Paquete para fumadores",
+      "value": 218
+     },
+     {
+      "label": "Paquete para invierno",
+      "value": 231
+     },
+     {
+      "label": "Paquete Sport",
+      "value": 112
+     },
+     {
+      "label": "Parabrisas delantero calefactable",
+      "value": 135
+     },
+     {
+      "label": "Porta esquís",
+      "value": 119
+     },
+     {
+      "label": "Portón trasero électrique",
+      "value": 139
+     },
+     {
+      "label": "Precalentador",
+      "value": 52
+     },
+     {
+      "label": "Puertas corredizas",
+      "value": 152
+     },
+     {
+      "label": "Puertas corredizas derecho",
+      "value": 245
+     },
+     {
+      "label": "Puertas corredizas izquierda",
+      "value": 244
+     },
+     {
+      "label": "Punto de conexión WiFi / WLAN",
+      "value": 220
+     },
+     {
+      "label": "Radio",
+      "value": 10
+     },
+     {
+      "label": "Radio digital",
+      "value": 138
+     },
+     {
+      "label": "Reconocimiento de señales de tráfico",
+      "value": 162
+     },
+     {
+      "label": "Reposabrazos",
+      "value": 134
+     },
+     {
+      "label": "Retrovisor interior con oscurecimiento automático",
+      "value": 225
+     },
+     {
+      "label": "Retrovisores laterales eléctricos",
+      "value": 121
+     },
+     {
+      "label": "Rueda de emergencia",
+      "value": 216
+     },
+     {
+      "label": "Rueda de repuesto",
+      "value": 215
+     },
+     {
+      "label": "Salpicadero completamente digital",
+      "value": 224
+     },
+     {
+      "label": "Sensor de aparcamiento delantero",
+      "value": 128
+     },
+     {
+      "label": "Sensor de aparcamiento trasero",
+      "value": 129
+     },
+     {
+      "label": "Sensor de lluvia",
+      "value": 127
+     },
+     {
+      "label": "Sensor de luces",
+      "value": 126
+     },
+     {
+      "label": "Separación del maletero",
+      "value": 226
+     },
+     {
+      "label": "Sistema de aparcamiento automático",
+      "value": 131
+     },
+     {
+      "label": "Sistema de aviso de la distancia",
+      "value": 232
+     },
+     {
+      "label": "Sistema de detección de fatiga",
+      "value": 146
+     },
+     {
+      "label": "Sistema de lavado de faros",
+      "value": 190
+     },
+     {
+      "label": "Sistema de limitación de la velocidad",
+      "value": 227
+     },
+     {
+      "label": "Sistema de llamada de emergencia",
+      "value": 149
+     },
+     {
+      "label": "Sistema de sonido",
+      "value": 155
+     },
+     {
+      "label": "Start/Stop automático",
+      "value": 113
+     },
+     {
+      "label": "Streaming de música integrado",
+      "value": 228
+     },
+     {
+      "label": "Suspensión de aire",
+      "value": 144
+     },
+     {
+      "label": "Suspensión deportiva",
+      "value": 116
+     },
+     {
+      "label": "Tapicería de cuero",
+      "value": 6
+     },
+     {
+      "label": "Taxi o coche de alquiler",
+      "value": 111
+     },
+     {
+      "label": "Techo panorámico",
+      "value": 50
+     },
+     {
+      "label": "Techo solar",
+      "value": 4
+     },
+     {
+      "label": "Testigo de ángulo muerto",
+      "value": 158
+     },
+     {
+      "label": "Toldo",
+      "value": 174
+     },
+     {
+      "label": "Tunning",
+      "value": 28
+     },
+     {
+      "label": "USB",
+      "value": 161
+     },
+     {
+      "label": "Ventanas tintadas",
+      "value": 54
+     },
+     {
+      "label": "Ventilación del asiento",
+      "value": 154
+     },
+     {
+      "label": "Volante calefactable",
+      "value": 136
+     },
+     {
+      "label": "Volante de cuero",
+      "value": 142
+     },
+     {
+      "label": "Volante multifunción",
+      "value": 114
+     }
+    ],
+    "radius": [
+     10,
+     20,
+     50,
+     100,
+     150,
+     200,
+     250,
+     300,
+     400
+    ],
+    "country": [
+     {
+      "label": "Europa",
+      "value": "",
+      "countryCode": "eu"
+     },
+     {
+      "label": "Austria",
+      "value": "A",
+      "countryCode": "AT"
+     },
+     {
+      "label": "Bélgica",
+      "value": "B",
+      "countryCode": "BE"
+     },
+     {
+      "label": "Alemania",
+      "value": "D",
+      "countryCode": "DE"
+     },
+     {
+      "label": "España",
+      "value": "E",
+      "countryCode": "ES"
+     },
+     {
+      "label": "Francia",
+      "value": "F",
+      "countryCode": "FR"
+     },
+     {
+      "label": "Italia",
+      "value": "I",
+      "countryCode": "IT"
+     },
+     {
+      "label": "Luxemburgo",
+      "value": "L",
+      "countryCode": "LU"
+     },
+     {
+      "label": "Países Bajos",
+      "value": "NL",
+      "countryCode": "NL"
+     }
+    ],
+    "seatsFrom": [
+     {
+      "label": 1,
+      "value": 1
+     },
+     {
+      "label": 2,
+      "value": 2
+     },
+     {
+      "label": 3,
+      "value": 3
+     },
+     {
+      "label": 4,
+      "value": 4
+     },
+     {
+      "label": 5,
+      "value": 5
+     },
+     {
+      "label": 6,
+      "value": 6
+     },
+     {
+      "label": 7,
+      "value": 7
+     },
+     {
+      "label": 8,
+      "value": 8
+     },
+     {
+      "label": 9,
+      "value": 9
+     },
+     {
+      "label": 10,
+      "value": 10
+     },
+     {
+      "label": 11,
+      "value": 11
+     },
+     {
+      "label": 12,
+      "value": 12
+     }
+    ],
+    "seatsTo": [
+     {
+      "label": 1,
+      "value": 1
+     },
+     {
+      "label": 2,
+      "value": 2
+     },
+     {
+      "label": 3,
+      "value": 3
+     },
+     {
+      "label": 4,
+      "value": 4
+     },
+     {
+      "label": 5,
+      "value": 5
+     },
+     {
+      "label": 6,
+      "value": 6
+     },
+     {
+      "label": 7,
+      "value": 7
+     },
+     {
+      "label": 8,
+      "value": 8
+     },
+     {
+      "label": 9,
+      "value": 9
+     },
+     {
+      "label": 10,
+      "value": 10
+     },
+     {
+      "label": 11,
+      "value": 11
+     },
+     {
+      "label": 12,
+      "value": 12
+     }
+    ],
+    "doorsFrom": [
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "doorsTo": [
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "bedsFrom": [],
+    "bedsTo": [],
+    "slideOutCount": [
+     {
+      "label": 1,
+      "value": 1
+     },
+     {
+      "label": 2,
+      "value": 2
+     },
+     {
+      "label": 3,
+      "value": 3
+     },
+     {
+      "label": 4,
+      "value": 4
+     },
+     {
+      "label": 5,
+      "value": 5
+     },
+     {
+      "label": 6,
+      "value": 6
+     },
+     {
+      "label": 7,
+      "value": 7
+     },
+     {
+      "label": 8,
+      "value": 8
+     },
+     {
+      "label": 9,
+      "value": 9
+     },
+     {
+      "label": 10,
+      "value": 10
+     }
+    ],
+    "numberOfBeds": [
+     {
+      "label": 1,
+      "value": 1
+     },
+     {
+      "label": 2,
+      "value": 2
+     },
+     {
+      "label": 3,
+      "value": 3
+     },
+     {
+      "label": 4,
+      "value": 4
+     },
+     {
+      "label": 5,
+      "value": 5
+     },
+     {
+      "label": 6,
+      "value": 6
+     },
+     {
+      "label": 7,
+      "value": 7
+     },
+     {
+      "label": 8,
+      "value": 8
+     },
+     {
+      "label": 9,
+      "value": 9
+     },
+     {
+      "label": 10,
+      "value": 10
+     }
+    ],
+    "bodyType": [
+     {
+      "label": "Coche pequeño",
+      "value": 1
+     },
+     {
+      "label": "Cabrio",
+      "value": 2
+     },
+     {
+      "label": "Coupé",
+      "value": 3
+     },
+     {
+      "label": "SUV/4x4/Pickup",
+      "value": 4
+     },
+     {
+      "label": "Familiar",
+      "value": 5
+     },
+     {
+      "label": "Sedán",
+      "value": 6
+     },
+     {
+      "label": "Monovolumen",
+      "value": 12
+     },
+     {
+      "label": "Furgoneta",
+      "value": 13
+     },
+     {
+      "label": "Otros",
+      "value": 7
+     }
+    ],
+    "offer": [
+     {
+      "label": "Nuevo",
+      "value": "N"
+     },
+     {
+      "label": "Ocasión",
+      "value": "U"
+     },
+     {
+      "label": "Seminuevo",
+      "value": "J"
+     },
+     {
+      "label": "Clásico",
+      "value": "O"
+     },
+     {
+      "label": "Demostración",
+      "value": "D"
+     },
+     {
+      "label": "KM0",
+      "value": "S"
+     }
+    ],
+    "mileageFrom": [
+     {
+      "label": "2.500",
+      "value": 2500
+     },
+     {
+      "label": "5.000",
+      "value": 5000
+     },
+     {
+      "label": "10.000",
+      "value": 10000
+     },
+     {
+      "label": "20.000",
+      "value": 20000
+     },
+     {
+      "label": "30.000",
+      "value": 30000
+     },
+     {
+      "label": "40.000",
+      "value": 40000
+     },
+     {
+      "label": "50.000",
+      "value": 50000
+     },
+     {
+      "label": "60.000",
+      "value": 60000
+     },
+     {
+      "label": "70.000",
+      "value": 70000
+     },
+     {
+      "label": "80.000",
+      "value": 80000
+     },
+     {
+      "label": "90.000",
+      "value": 90000
+     },
+     {
+      "label": "100.000",
+      "value": 100000
+     },
+     {
+      "label": "125.000",
+      "value": 125000
+     },
+     {
+      "label": "150.000",
+      "value": 150000
+     },
+     {
+      "label": "175.000",
+      "value": 175000
+     },
+     {
+      "label": "200.000",
+      "value": 200000
+     }
+    ],
+    "mileageTo": [
+     {
+      "label": "2.500",
+      "value": 2500
+     },
+     {
+      "label": "5.000",
+      "value": 5000
+     },
+     {
+      "label": "10.000",
+      "value": 10000
+     },
+     {
+      "label": "20.000",
+      "value": 20000
+     },
+     {
+      "label": "30.000",
+      "value": 30000
+     },
+     {
+      "label": "40.000",
+      "value": 40000
+     },
+     {
+      "label": "50.000",
+      "value": 50000
+     },
+     {
+      "label": "60.000",
+      "value": 60000
+     },
+     {
+      "label": "70.000",
+      "value": 70000
+     },
+     {
+      "label": "80.000",
+      "value": 80000
+     },
+     {
+      "label": "90.000",
+      "value": 90000
+     },
+     {
+      "label": "100.000",
+      "value": 100000
+     },
+     {
+      "label": "125.000",
+      "value": 125000
+     },
+     {
+      "label": "150.000",
+      "value": 150000
+     },
+     {
+      "label": "175.000",
+      "value": 175000
+     },
+     {
+      "label": "200.000",
+      "value": 200000
+     }
+    ],
+    "firstRegistrationFrom": [
+     2026,
+     2025,
+     2024,
+     2023,
+     2022,
+     2021,
+     2020,
+     2019,
+     2018,
+     2017,
+     2016,
+     2015,
+     2014,
+     2013,
+     2012,
+     2011,
+     2010,
+     2009,
+     2008,
+     2007,
+     2006,
+     2005,
+     2004,
+     2003,
+     2002,
+     2001,
+     2000,
+     1999,
+     1998,
+     1997,
+     1996,
+     1995,
+     1994,
+     1993,
+     1992,
+     1991,
+     1990,
+     1989,
+     1988,
+     1987,
+     1986,
+     1985,
+     1984,
+     1983,
+     1982,
+     1981,
+     1980,
+     1979,
+     1978,
+     1977,
+     1976,
+     1975,
+     1974,
+     1973,
+     1972,
+     1971,
+     1970,
+     1969,
+     1968,
+     1967,
+     1966,
+     1965,
+     1964,
+     1963,
+     1962,
+     1961,
+     1960,
+     1959,
+     1958,
+     1957,
+     1956,
+     1955,
+     1954,
+     1953,
+     1952,
+     1951,
+     1950,
+     1949,
+     1948,
+     1947,
+     1946,
+     1945,
+     1944,
+     1943,
+     1942,
+     1941,
+     1940,
+     1939,
+     1938,
+     1937,
+     1936,
+     1935,
+     1934,
+     1933,
+     1932,
+     1931,
+     1930,
+     1929,
+     1928,
+     1927,
+     1926,
+     1925,
+     1924,
+     1923,
+     1922,
+     1921,
+     1920,
+     1919,
+     1918,
+     1917,
+     1916,
+     1915,
+     1914,
+     1913,
+     1912,
+     1911,
+     1910,
+     1909,
+     1908,
+     1907,
+     1906,
+     1905,
+     1904,
+     1903,
+     1902,
+     1901,
+     1900
+    ],
+    "firstRegistrationTo": [
+     2026,
+     2025,
+     2024,
+     2023,
+     2022,
+     2021,
+     2020,
+     2019,
+     2018,
+     2017,
+     2016,
+     2015,
+     2014,
+     2013,
+     2012,
+     2011,
+     2010,
+     2009,
+     2008,
+     2007,
+     2006,
+     2005,
+     2004,
+     2003,
+     2002,
+     2001,
+     2000,
+     1999,
+     1998,
+     1997,
+     1996,
+     1995,
+     1994,
+     1993,
+     1992,
+     1991,
+     1990,
+     1989,
+     1988,
+     1987,
+     1986,
+     1985,
+     1984,
+     1983,
+     1982,
+     1981,
+     1980,
+     1979,
+     1978,
+     1977,
+     1976,
+     1975,
+     1974,
+     1973,
+     1972,
+     1971,
+     1970,
+     1969,
+     1968,
+     1967,
+     1966,
+     1965,
+     1964,
+     1963,
+     1962,
+     1961,
+     1960,
+     1959,
+     1958,
+     1957,
+     1956,
+     1955,
+     1954,
+     1953,
+     1952,
+     1951,
+     1950,
+     1949,
+     1948,
+     1947,
+     1946,
+     1945,
+     1944,
+     1943,
+     1942,
+     1941,
+     1940,
+     1939,
+     1938,
+     1937,
+     1936,
+     1935,
+     1934,
+     1933,
+     1932,
+     1931,
+     1930,
+     1929,
+     1928,
+     1927,
+     1926,
+     1925,
+     1924,
+     1923,
+     1922,
+     1921,
+     1920,
+     1919,
+     1918,
+     1917,
+     1916,
+     1915,
+     1914,
+     1913,
+     1912,
+     1911,
+     1910,
+     1909,
+     1908,
+     1907,
+     1906,
+     1905,
+     1904,
+     1903,
+     1902,
+     1901,
+     1900
+    ],
+    "modelYearFrom": [
+     2027,
+     2026,
+     2025,
+     2024,
+     2023,
+     2022,
+     2021,
+     2020,
+     2019,
+     2018,
+     2017,
+     2016,
+     2015,
+     2014,
+     2013,
+     2012,
+     2011,
+     2010,
+     2009,
+     2008,
+     2007,
+     2006,
+     2005,
+     2004,
+     2003,
+     2002,
+     2001,
+     2000,
+     1999,
+     1998,
+     1997,
+     1996,
+     1995,
+     1994,
+     1993,
+     1992,
+     1991,
+     1990,
+     1989,
+     1988,
+     1987,
+     1986,
+     1985,
+     1984,
+     1983,
+     1982,
+     1981,
+     1980,
+     1979,
+     1978,
+     1977,
+     1976,
+     1975,
+     1974,
+     1973,
+     1972,
+     1971,
+     1970,
+     1969,
+     1968,
+     1967,
+     1966,
+     1965,
+     1964,
+     1963,
+     1962,
+     1961,
+     1960,
+     1959,
+     1958,
+     1957,
+     1956,
+     1955,
+     1954,
+     1953,
+     1952,
+     1951,
+     1950,
+     1949,
+     1948,
+     1947,
+     1946,
+     1945,
+     1944,
+     1943,
+     1942,
+     1941,
+     1940,
+     1939,
+     1938,
+     1937,
+     1936,
+     1935,
+     1934,
+     1933,
+     1932,
+     1931,
+     1930,
+     1929,
+     1928,
+     1927,
+     1926,
+     1925,
+     1924,
+     1923,
+     1922,
+     1921,
+     1920,
+     1919,
+     1918,
+     1917,
+     1916,
+     1915,
+     1914,
+     1913,
+     1912,
+     1911,
+     1910,
+     1909,
+     1908,
+     1907,
+     1906,
+     1905,
+     1904,
+     1903,
+     1902,
+     1901,
+     1900
+    ],
+    "modelYearTo": [
+     2027,
+     2026,
+     2025,
+     2024,
+     2023,
+     2022,
+     2021,
+     2020,
+     2019,
+     2018,
+     2017,
+     2016,
+     2015,
+     2014,
+     2013,
+     2012,
+     2011,
+     2010,
+     2009,
+     2008,
+     2007,
+     2006,
+     2005,
+     2004,
+     2003,
+     2002,
+     2001,
+     2000,
+     1999,
+     1998,
+     1997,
+     1996,
+     1995,
+     1994,
+     1993,
+     1992,
+     1991,
+     1990,
+     1989,
+     1988,
+     1987,
+     1986,
+     1985,
+     1984,
+     1983,
+     1982,
+     1981,
+     1980,
+     1979,
+     1978,
+     1977,
+     1976,
+     1975,
+     1974,
+     1973,
+     1972,
+     1971,
+     1970,
+     1969,
+     1968,
+     1967,
+     1966,
+     1965,
+     1964,
+     1963,
+     1962,
+     1961,
+     1960,
+     1959,
+     1958,
+     1957,
+     1956,
+     1955,
+     1954,
+     1953,
+     1952,
+     1951,
+     1950,
+     1949,
+     1948,
+     1947,
+     1946,
+     1945,
+     1944,
+     1943,
+     1942,
+     1941,
+     1940,
+     1939,
+     1938,
+     1937,
+     1936,
+     1935,
+     1934,
+     1933,
+     1932,
+     1931,
+     1930,
+     1929,
+     1928,
+     1927,
+     1926,
+     1925,
+     1924,
+     1923,
+     1922,
+     1921,
+     1920,
+     1919,
+     1918,
+     1917,
+     1916,
+     1915,
+     1914,
+     1913,
+     1912,
+     1911,
+     1910,
+     1909,
+     1908,
+     1907,
+     1906,
+     1905,
+     1904,
+     1903,
+     1902,
+     1901,
+     1900
+    ],
+    "leasingRateFrom": [
+     {
+      "label": "50 €",
+      "value": 50
+     },
+     {
+      "label": "100 €",
+      "value": 100
+     },
+     {
+      "label": "200 €",
+      "value": 200
+     },
+     {
+      "label": "300 €",
+      "value": 300
+     },
+     {
+      "label": "400 €",
+      "value": 400
+     },
+     {
+      "label": "500 €",
+      "value": 500
+     },
+     {
+      "label": "600 €",
+      "value": 600
+     },
+     {
+      "label": "700 €",
+      "value": 700
+     }
+    ],
+    "leasingRateTo": [
+     {
+      "label": "50 €",
+      "value": 50
+     },
+     {
+      "label": "100 €",
+      "value": 100
+     },
+     {
+      "label": "200 €",
+      "value": 200
+     },
+     {
+      "label": "300 €",
+      "value": 300
+     },
+     {
+      "label": "400 €",
+      "value": 400
+     },
+     {
+      "label": "500 €",
+      "value": 500
+     },
+     {
+      "label": "600 €",
+      "value": 600
+     },
+     {
+      "label": "700 €",
+      "value": 700
+     }
+    ],
+    "leasingDurationFrom": [
+     {
+      "label": "12 ",
+      "value": 12
+     },
+     {
+      "label": "24 ",
+      "value": 24
+     },
+     {
+      "label": "36 ",
+      "value": 36
+     },
+     {
+      "label": "48 ",
+      "value": 48
+     },
+     {
+      "label": "60 ",
+      "value": 60
+     },
+     {
+      "label": "72 ",
+      "value": 72
+     }
+    ],
+    "leasingDurationTo": [
+     {
+      "label": "12 ",
+      "value": 12
+     },
+     {
+      "label": "24 ",
+      "value": 24
+     },
+     {
+      "label": "36 ",
+      "value": 36
+     },
+     {
+      "label": "48 ",
+      "value": 48
+     },
+     {
+      "label": "60 ",
+      "value": 60
+     },
+     {
+      "label": "72 ",
+      "value": 72
+     }
+    ],
+    "leasingYearlyIncludedMileageFrom": [
+     {
+      "label": "10.000 km",
+      "value": 10000
+     },
+     {
+      "label": "15.000 km",
+      "value": 15000
+     },
+     {
+      "label": "20.000 km",
+      "value": 20000
+     },
+     {
+      "label": "25.000 km",
+      "value": 25000
+     },
+     {
+      "label": "30.000 km",
+      "value": 30000
+     }
+    ],
+    "leasingTargetGroup": [],
+    "onlineSince": [
+     {
+      "label": "1 Día",
+      "value": 1
+     },
+     {
+      "label": "2 Días",
+      "value": 2
+     },
+     {
+      "label": "3 Días",
+      "value": 3
+     },
+     {
+      "label": "4 Días",
+      "value": 4
+     },
+     {
+      "label": "5 Días",
+      "value": 5
+     },
+     {
+      "label": "6 Días",
+      "value": 6
+     },
+     {
+      "label": "1 Semana",
+      "value": 7
+     },
+     {
+      "label": "2 Semanas",
+      "value": 14
+     }
+    ],
+    "bodyColor": [
+     {
+      "label": "Beige",
+      "value": 1
+     },
+     {
+      "label": "Azul",
+      "value": 2
+     },
+     {
+      "label": "Marrón",
+      "value": 3
+     },
+     {
+      "label": "Bronce",
+      "value": 4
+     },
+     {
+      "label": "Amarillo",
+      "value": 5
+     },
+     {
+      "label": "Gris",
+      "value": 6
+     },
+     {
+      "label": "Verde",
+      "value": 7
+     },
+     {
+      "label": "Rojo",
+      "value": 10
+     },
+     {
+      "label": "Negro",
+      "value": 11
+     },
+     {
+      "label": "Plateado",
+      "value": 12
+     },
+     {
+      "label": "Burdeos",
+      "value": 13
+     },
+     {
+      "label": "Blanco",
+      "value": 14
+     },
+     {
+      "label": "Naranja",
+      "value": 15
+     },
+     {
+      "label": "Oro",
+      "value": 16
+     }
+    ],
+    "bodyPainting": [
+     {
+      "label": "Metalizado",
+      "value": "M"
+     },
+     {
+      "label": "Otros",
+      "value": "O"
+     },
+     {
+      "label": "Efecto perla",
+      "value": "P"
+     },
+     {
+      "label": "Efecto piedra",
+      "value": "S"
+     },
+     {
+      "label": "Sólido",
+      "value": "U"
+     }
+    ],
+    "interiorColor": [
+     {
+      "label": "Beige",
+      "value": 1
+     },
+     {
+      "label": "Negro",
+      "value": 2
+     },
+     {
+      "label": "Gris",
+      "value": 3
+     },
+     {
+      "label": "Marrón",
+      "value": 4
+     },
+     {
+      "label": "Otros",
+      "value": 5
+     },
+     {
+      "label": "Azul",
+      "value": 6
+     },
+     {
+      "label": "Rojo",
+      "value": 7
+     },
+     {
+      "label": "Verde",
+      "value": 8
+     },
+     {
+      "label": "Amarillo",
+      "value": 9
+     },
+     {
+      "label": "Naranja",
+      "value": 10
+     },
+     {
+      "label": "Blanco",
+      "value": 11
+     }
+    ],
+    "upholstery": [
+     {
+      "label": "Alcántara",
+      "value": "AL"
+     },
+     {
+      "label": "Tela",
+      "value": "CL"
+     },
+     {
+      "label": "Totalmente en cuero",
+      "value": "FL"
+     },
+     {
+      "label": "Otros",
+      "value": "OT"
+     },
+     {
+      "label": "Partes en cuero",
+      "value": "PL"
+     },
+     {
+      "label": "Terciopelo",
+      "value": "VL"
+     }
+    ],
+    "conditionEquipment": [
+     {
+      "label": "Garantia",
+      "value": 37
+     },
+     {
+      "label": "Libro de mantenimiento",
+      "value": 49
+     },
+     {
+      "label": "Filtro de partículas",
+      "value": 53
+     },
+     {
+      "label": "Vehículo de no fumador",
+      "value": 110
+     },
+     {
+      "label": "HU/AU nuevo",
+      "value": 120
+     }
+    ],
+    "previousOwnersId": [
+     {
+      "label": "1",
+      "value": 1
+     },
+     {
+      "label": "2",
+      "value": 2
+     },
+     {
+      "label": "3",
+      "value": 3
+     },
+     {
+      "label": "4+",
+      "value": 4
+     }
+    ],
+    "customerType": [
+     {
+      "label": "Particular",
+      "value": "P"
+     },
+     {
+      "label": "Profesional",
+      "value": "D"
+     }
+    ],
+    "fuelType": [
+     {
+      "label": "Electro/Gasolina",
+      "value": "2"
+     },
+     {
+      "label": "Electro/Diésel",
+      "value": "3"
+     },
+     {
+      "label": "Gasolina",
+      "value": "B"
+     },
+     {
+      "label": "Gas natural (CNG)",
+      "value": "C"
+     },
+     {
+      "label": "Diésel",
+      "value": "D"
+     },
+     {
+      "label": "Eléctrico",
+      "value": "E"
+     },
+     {
+      "label": "Hidrógeno",
+      "value": "H"
+     },
+     {
+      "label": "Gas licuado (GLP)",
+      "value": "L"
+     },
+     {
+      "label": "Etanol",
+      "value": "M"
+     },
+     {
+      "label": "Otros",
+      "value": "O"
+     }
+    ],
+    "cylinders": [
+     {
+      "label": "3 cylinder",
+      "value": "3"
+     },
+     {
+      "label": "4 cylinder",
+      "value": "4"
+     },
+     {
+      "label": "6 cylinder",
+      "value": "6"
+     },
+     {
+      "label": "8 cylinder",
+      "value": "8"
+     },
+     {
+      "label": "10+ cylinder",
+      "value": "10plus"
+     }
+    ],
+    "drivetrain": [
+     {
+      "label": "Tracción a las cuatro ruedas",
+      "value": "4"
+     },
+     {
+      "label": "Tracción delantera",
+      "value": "F"
+     },
+     {
+      "label": "Tracción trasera",
+      "value": "R"
+     }
+    ],
+    "bedType": [],
+    "gearing": [
+     {
+      "label": "Automático",
+      "value": "A"
+     },
+     {
+      "label": "manual",
+      "value": "M"
+     },
+     {
+      "label": "Semiautomático",
+      "value": "S"
+     }
+    ],
+    "powerType": [
+     {
+      "label": "hp",
+      "value": "hp"
+     },
+     {
+      "label": "kW",
+      "value": "kw"
+     }
+    ],
+    "priceFrom": [
+     {
+      "label": "500 €",
+      "value": 500
+     },
+     {
+      "label": "1.000 €",
+      "value": 1000
+     },
+     {
+      "label": "1.500 €",
+      "value": 1500
+     },
+     {
+      "label": "2.000 €",
+      "value": 2000
+     },
+     {
+      "label": "2.500 €",
+      "value": 2500
+     },
+     {
+      "label": "3.000 €",
+      "value": 3000
+     },
+     {
+      "label": "4.000 €",
+      "value": 4000
+     },
+     {
+      "label": "5.000 €",
+      "value": 5000
+     },
+     {
+      "label": "6.000 €",
+      "value": 6000
+     },
+     {
+      "label": "7.000 €",
+      "value": 7000
+     },
+     {
+      "label": "8.000 €",
+      "value": 8000
+     },
+     {
+      "label": "9.000 €",
+      "value": 9000
+     },
+     {
+      "label": "10.000 €",
+      "value": 10000
+     },
+     {
+      "label": "12.500 €",
+      "value": 12500
+     },
+     {
+      "label": "15.000 €",
+      "value": 15000
+     },
+     {
+      "label": "17.500 €",
+      "value": 17500
+     },
+     {
+      "label": "20.000 €",
+      "value": 20000
+     },
+     {
+      "label": "25.000 €",
+      "value": 25000
+     },
+     {
+      "label": "30.000 €",
+      "value": 30000
+     },
+     {
+      "label": "40.000 €",
+      "value": 40000
+     },
+     {
+      "label": "50.000 €",
+      "value": 50000
+     },
+     {
+      "label": "75.000 €",
+      "value": 75000
+     },
+     {
+      "label": "100.000 €",
+      "value": 100000
+     }
+    ],
+    "priceTo": [
+     {
+      "label": "500 €",
+      "value": 500
+     },
+     {
+      "label": "1.000 €",
+      "value": 1000
+     },
+     {
+      "label": "1.500 €",
+      "value": 1500
+     },
+     {
+      "label": "2.000 €",
+      "value": 2000
+     },
+     {
+      "label": "2.500 €",
+      "value": 2500
+     },
+     {
+      "label": "3.000 €",
+      "value": 3000
+     },
+     {
+      "label": "4.000 €",
+      "value": 4000
+     },
+     {
+      "label": "5.000 €",
+      "value": 5000
+     },
+     {
+      "label": "6.000 €",
+      "value": 6000
+     },
+     {
+      "label": "7.000 €",
+      "value": 7000
+     },
+     {
+      "label": "8.000 €",
+      "value": 8000
+     },
+     {
+      "label": "9.000 €",
+      "value": 9000
+     },
+     {
+      "label": "10.000 €",
+      "value": 10000
+     },
+     {
+      "label": "12.500 €",
+      "value": 12500
+     },
+     {
+      "label": "15.000 €",
+      "value": 15000
+     },
+     {
+      "label": "17.500 €",
+      "value": 17500
+     },
+     {
+      "label": "20.000 €",
+      "value": 20000
+     },
+     {
+      "label": "25.000 €",
+      "value": 25000
+     },
+     {
+      "label": "30.000 €",
+      "value": 30000
+     },
+     {
+      "label": "40.000 €",
+      "value": 40000
+     },
+     {
+      "label": "50.000 €",
+      "value": 50000
+     },
+     {
+      "label": "75.000 €",
+      "value": 75000
+     },
+     {
+      "label": "100.000 €",
+      "value": 100000
+     }
+    ],
+    "priceEvaluation": [
+     {
+      "label": "SÚPER OFERTA",
+      "value": 1
+     },
+     {
+      "label": "BUEN PRECIO",
+      "value": 2
+     },
+     {
+      "label": "PRECIO JUSTO",
+      "value": 3
+     }
+    ],
+    "emissionClass": [
+     {
+      "label": "Euro 1",
+      "value": 1
+     },
+     {
+      "label": "Euro 2",
+      "value": 2
+     },
+     {
+      "label": "Euro 3",
+      "value": 3
+     },
+     {
+      "label": "Euro 4",
+      "value": 4
+     },
+     {
+      "label": "Euro 5",
+      "value": 5
+     },
+     {
+      "label": "Euro 6",
+      "value": 6
+     },
+     {
+      "label": "Euro 6b",
+      "value": 11
+     },
+     {
+      "label": "Euro 6c",
+      "value": 7
+     },
+     {
+      "label": "Euro 6d",
+      "value": 8
+     },
+     {
+      "label": "Euro 6d-TEMP",
+      "value": 9
+     },
+     {
+      "label": "Euro 6e",
+      "value": 10
+     }
+    ],
+    "emissionSticker": [
+     {
+      "label": "Sin etiqueta medioambiental",
+      "value": 1
+     },
+     {
+      "label": "min. 2 (Rojo)",
+      "value": 2
+     },
+     {
+      "label": "min. 3 (Amarillo)",
+      "value": 3
+     },
+     {
+      "label": "min. 4 (Verde)",
+      "value": 4
+     },
+     {
+      "label": "min. 5 (Azul)",
+      "value": 5
+     }
+    ],
+    "seals": [
+     {
+      "label": "Lexus Seminuevos",
+      "value": 217,
+      "makes": [
+       {
+        "id": 43
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/217/es/current/seal_217.aspx.html"
+     },
+     {
+      "label": "OMODA",
+      "value": 340,
+      "makes": [
+       {
+        "id": 51991
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://omodaoficial.es/"
+     },
+     {
+      "label": "Mazda Selected",
+      "value": 307,
+      "makes": [
+       {
+        "id": 46
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popups/307/rAPzVKpVkJzEG8sQI1WtHYXMm285ZX3Z/index.html"
+     },
+     {
+      "label": "JAGUAR Y LAND ROVER",
+      "value": 334,
+      "makes": [
+       {
+        "id": 37
+       },
+       {
+        "id": 15641
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://approved.es.landrover.com/"
+     },
+     {
+      "label": "SPOTICAR OPEL",
+      "value": 237,
+      "makes": [
+       {
+        "id": 54
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/237/es/current/seal_237.aspx.html"
+     },
+     {
+      "label": "Ford Selección",
+      "value": 240,
+      "makes": [
+       {
+        "id": 29
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/240/es/current/seal_240.aspx.html"
+     },
+     {
+      "label": "AUDI Selection Plus",
+      "value": 139,
+      "makes": [
+       {
+        "id": 9
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/139/es/current/seal_139.aspx.html"
+     },
+     {
+      "label": "SELECTED4U",
+      "value": 290,
+      "makes": [
+       {
+        "id": 6
+       },
+       {
+        "id": 38
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popups/290/2VbYzHJzp35SmCpYH0y8741wDaBNhz4P/index.html"
+     },
+     {
+      "label": "Porsche Approved",
+      "value": 183,
+      "makes": [
+       {
+        "id": 57
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/183/es/current/seal_183.aspx.html"
+     },
+     {
+      "label": "Land Rover Approved",
+      "value": 280,
+      "makes": [
+       {
+        "id": 15641
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://approved.es.landrover.com/#/"
+     },
+     {
+      "label": "VOLVO SELEKT",
+      "value": 206,
+      "makes": [
+       {
+        "id": 73
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/206/es/current/seal_206.aspx.html"
+     },
+     {
+      "label": "Das WeltAuto",
+      "value": 148,
+      "makes": [
+       {
+        "id": 74
+       },
+       {
+        "id": 64
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/148/es/current/seal_148.aspx.html"
+     },
+     {
+      "label": "Jaguar Approved",
+      "value": 279,
+      "makes": [
+       {
+        "id": 37
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://approved.es.jaguar.com/?_ga=2.243831621.1911891181.1654160890-59544146.1652250342#/"
+     },
+     {
+      "label": "Toyota Ocasión",
+      "value": 176,
+      "makes": [
+       {
+        "id": 70
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popups/176/4UM4d4jT4lK6WZVtCobxBeOuVlqaAm4E/index.html"
+     },
+     {
+      "label": "Nissan",
+      "value": 291,
+      "makes": [
+       {
+        "id": 52
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popups/291/cDut3SutDmC5Saf7raWAGLNFEw0cHdJN/index.html"
+     },
+     {
+      "label": "Autoexpert",
+      "value": 175,
+      "makes": [
+       {
+        "id": 28
+       },
+       {
+        "id": 16396
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/175/es/current/seal_175.aspx.html"
+     },
+     {
+      "label": "Mclaren",
+      "value": 386,
+      "makes": [
+       {
+        "id": 51519
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://cars.mclaren.com/es_es"
+     },
+     {
+      "label": "Spoticar",
+      "value": 227,
+      "makes": [
+       {
+        "id": 21
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/227/es/current/seal_227.aspx.html"
+     },
+     {
+      "label": "Bentley PRE-OWNED",
+      "value": 222,
+      "makes": [
+       {
+        "id": 11
+       }
+      ],
+      "culture": "es-ES",
+      "info": "https://www.autoscout24.es/seal-popup/222/es/current/seal_222.aspx.html"
+     }
+    ],
+    "priceType": [
+     {
+      "label": "Particular",
+      "value": "private"
+     },
+     {
+      "label": "Profesional",
+      "value": "dealer"
+     }
+    ],
+    "financeRateFrom": [
+     {
+      "label": "50 €",
+      "value": 50
+     },
+     {
+      "label": "100 €",
+      "value": 100
+     },
+     {
+      "label": "200 €",
+      "value": 200
+     },
+     {
+      "label": "300 €",
+      "value": 300
+     },
+     {
+      "label": "400 €",
+      "value": 400
+     },
+     {
+      "label": "500 €",
+      "value": 500
+     },
+     {
+      "label": "600 €",
+      "value": 600
+     },
+     {
+      "label": "700 €",
+      "value": 700
+     }
+    ],
+    "financeRateTo": [
+     {
+      "label": "50 €",
+      "value": 50
+     },
+     {
+      "label": "100 €",
+      "value": 100
+     },
+     {
+      "label": "200 €",
+      "value": 200
+     },
+     {
+      "label": "300 €",
+      "value": 300
+     },
+     {
+      "label": "400 €",
+      "value": 400
+     },
+     {
+      "label": "500 €",
+      "value": 500
+     },
+     {
+      "label": "600 €",
+      "value": 600
+     },
+     {
+      "label": "700 €",
+      "value": 700
+     }
+    ],
+    "numberOfAxles": [],
+    "grossWeightFrom": [],
+    "grossWeightTo": [],
+    "batteryOwnershipType": [
+     {
+      "label": "Incluida",
+      "value": 1
+     },
+     {
+      "label": "Alquilada",
+      "value": 2
+     },
+     {
+      "label": "Batería no incluida",
+      "value": 3
+     }
+    ],
+    "electricRangeFrom": [
+     80,
+     120,
+     180,
+     250,
+     350,
+     450,
+     550
+    ],
+    "electricRangeTo": [
+     80,
+     120,
+     180,
+     250,
+     350,
+     450,
+     550
+    ],
+    "modelGenerations": {},
+    "modelVariants": {},
+    "motorTypes": {},
+    "trimLines": {}
+   },
+   "translations": {
+    "listPage.listingCards.recommendations.header": "Esto también podría interesarte",
+    "listPage.mySearch": "Mi búsqueda",
+    "listfilters.colors.color.paintwork": "Acabado",
+    "listfilters.engineMotorSize.modal.fromInput.errMsg": "La cilindrada mínima no puede ser mayor que la cilindrada máxima.",
+    "listfilters.engineMotorSize.modal.toInput.errMsg": "La cilindrada máxima no puede ser menor que la cilindrada mínima.",
+    "listfilters.engineMotorSize.title": "Cilindrada",
+    "listfilters.equipment.allequipment": "Todo el equipamiento",
+    "listfilters.equipment.searchhelp": "Introduce una palabra clave para encontrar equipamiento específico",
+    "listfilters.equipment.searchplaceholder": "ej: Techo solar, Bluetooth, etc.",
+    "listfilters.equipment.searchtitle": "Buscar equipamiento",
+    "listfilters.equipment.selectedGroup": "Seleccionado",
+    "listfilters.equipment.title": "Equipamiento",
+    "listfilters.exteriorcolor.title": "Color exterior",
+    "listfilters.financing.modal.fromInput.errMsg": "La cuota mínima no puede ser superior a la cuota máxima.",
+    "listfilters.financing.modal.toInput.errMsg": "La cuota máxima no puede ser inferior a la cuota mínima.",
+    "listfilters.firstReg.title": "Matriculación",
+    "listfilters.interior.subtitle": "Color interior",
+    "listfilters.interiorAndUpholstery.title": "Color interior y tapizado",
+    "listfilters.keyword.helper": "Busca usando palabras clave que quieras encontrar en los títulos de los anuncios",
+    "listfilters.keyword.label": "Palabra clave",
+    "listfilters.keyword.maxLengthError": "Máximo {0} caracteres permitidos",
+    "listfilters.keyword.placeholder": "ej: xDrive, BlueMotion, etc.",
+    "listfilters.keyword.title": "Búsqueda por palabra clave",
+    "listfilters.leasingRate.modal.fromInput.errMsg": "La cuota mín. de leasing debe ser inferior a la cuota máx. de leasing.",
+    "listfilters.leasingRate.modal.toInput.errMsg": "La cuota máx. de leasing debe ser superior a la cuota mín. de leasing.",
+    "listfilters.loadCapacity.title": "Peso total autorizado",
+    "listfilters.location.title": "Ubicación",
+    "listfilters.locationBanner.actionButton": "Añadir ubicación",
+    "listfilters.locationBanner.cityPostalRequired": "Se requiere tu ciudad/código postal",
+    "listfilters.locationBanner.postalRequired": "Se requiere tu código postal",
+    "listfilters.max": "Máx",
+    "listfilters.mileage.modal.fromInput.errMsg": "Los km mín. deben ser inferiores a los km máx.",
+    "listfilters.mileage.modal.toInput.errMsg": "Los km máx. deben ser superiores a los km mín.",
+    "listfilters.min": "Min",
+    "listfilters.modal.applyButton.text": "Ver {0} resultados",
+    "listfilters.modal.clearButton.text": "Borrar",
+    "listfilters.modal.done": "Listo",
+    "listfilters.modal.fromInput.defErrMsg": "El valor desde no puede ser mayor que el valor hasta.",
+    "listfilters.modal.header.mobile.closeButton": "Cerrar",
+    "listfilters.modal.maxValue.defErrMsg": "El valor no puede superar el límite máximo.",
+    "listfilters.modal.offersCount": "% ofertas",
+    "listfilters.modal.toInput.defErrMsg": "El valor hasta no puede ser menor que el valor desde.",
+    "listfilters.power.labels.metric": "Métrico",
+    "listfilters.power.modal.fromInput.errMsg": "El valor mínimo debe ser inferior al valor máximo.",
+    "listfilters.power.modal.newdriver": "Para conductores noveles",
+    "listfilters.power.modal.toInput.errMsg": "El valor máximo debe ser superior al valor mínimo.",
+    "listfilters.power.unit.horsepower": "HP",
+    "listfilters.power.unit.kilowat": "kW",
+    "listfilters.range.from": "desde",
+    "listfilters.range.to": "hasta",
+    "listfilters.seats.title": "Asientos",
+    "listfilters.seatsAndDoors.title": "Plazas y puertas",
+    "listfilters.seatsAndDoorsAndBeds.beds": "Camas",
+    "listfilters.seatsAndDoorsAndBeds.title": "Asientos, puertas y camas",
+    "listfilters.smyle.modal.description": "Compra tu coche online ahora y recíbelo en tu domicilio",
+    "listfilters.smyle.modal.doNotShowSmyle": "No mostrar anuncios Smyle",
+    "listfilters.smyle.modal.showOnlySmyle": "Mostrar solo anuncios Smyle",
+    "listfilters.smyle.modal.showSmyle": "Mostrar anuncios Smyle",
+    "listfilters.upholstery.subtitle": "Material",
+    "listfilters.vehicleCondition.title": "Estado",
+    "listfilters.warrantyAndHistory.accident.chipLabel.showAlso": "Mostrar coches con accidentes",
+    "listfilters.warrantyAndHistory.accident.chipLabel.showOnly": "Solo mostrar coches con accidentes",
+    "listfilters.warrantyAndHistory.accident.options.dontShow": "No mostrar",
+    "listfilters.warrantyAndHistory.accident.options.showAlso": "Mostrar también",
+    "listfilters.warrantyAndHistory.accident.options.showOnly": "Mostrar solo",
+    "listfilters.warrantyAndHistory.hadAccident.subtitle": "Ha tenido accidente",
+    "listfilters.warrantyAndHistory.numOfOwners.subtitle": "Propietarios anteriores",
+    "listfilters.warrantyAndHistory.title": "Garantía e historial",
+    "listpage.accessibility.filters.superdeal": "Selecciona el filtro de súper oferta",
+    "listpage.ai.search.accessibility.removeButton": "Eliminar tu última búsqueda",
+    "listpage.gallery.next": "Siguiente",
+    "listpage.gallery.previous": "Anterior",
+    "listpage.header.around": "alrededor",
+    "listpage.header.filters": "Filtrar",
+    "listpage.header.firstRegistration": "Año",
+    "listpage.header.for": "para",
+    "listpage.header.forYourSearch": "para tu búsqueda",
+    "listpage.header.modelYear": "Año del modelo",
+    "listpage.header.noFiltersSelected": "No hay filtros aplicados",
+    "listpage.header.noResult.invalidFilter": "No hay resultados para esta combinación de filtros. Intenta sin el filtro resaltado.",
+    "listpage.header.noResult.recommendations": "Explora vehículos similares",
+    "listpage.header.noResult.recommendations.subheading": "Diferente de tus criterios de búsqueda, pero posiblemente una coincidencia perfecta.",
+    "listpage.header.noResult.suggestion": "A menudo, menos es más. Vuelve a intentarlo con menos filtros u otros diferentes:",
+    "listpage.header.offers": "Ofertas",
+    "listpage.header.offers.filter": "filtros",
+    "listpage.header.offers.filter.few": "filtros",
+    "listpage.header.offers.filter.many": "filtros",
+    "listpage.header.offers.filter.one": "filtros",
+    "listpage.header.offers.filter.other": "filtros",
+    "listpage.header.offers.filter.zero": "filtros",
+    "listpage.header.onlineSince": "Online desde",
+    "listpage.header.seats": "plazas",
+    "listpage.header.seller": "Vendedor",
+    "listpage.header.sort": "Ordenar",
+    "listpage.header.sort.ascending": "ascendente",
+    "listpage.header.sort.descending": "descendente",
+    "listpage.header.toTop": "Ir arriba",
+    "listpage.header.topMakes": "Mejores marcas",
+    "listpage.header.topModels": "Mejores modelos",
+    "listpage.header.vatDeductible": "IVA deducible",
+    "listpage.listItem.combinedShortcut": "mixto",
+    "listpage.listItem.firstRegistrationPlaceholder": "- (Año)",
+    "listpage.listItem.leasing.specialConditions.moreInfo": "Más información",
+    "listpage.listItem.leasing.title": "Oferta de leasing",
+    "listpage.listItem.link.openListingDetails": "Abrir detalles del anuncio",
+    "listpage.listItem.moreVehicles": "+ Vehículos del profesional",
+    "listpage.pagination": "Paginación",
+    "listpage.pagination.goToPage.ariaLabel": "Ir a la página",
+    "listpage.pagination.next": "Siguiente",
+    "listpage.pagination.next.ariaLabel": "Ir a la página siguiente",
+    "listpage.pagination.previous": "Anterior",
+    "listpage.pagination.previous.ariaLabel": "Regresar a la pagina anterior",
+    "listpage.restoreSessionCard.badge": "Orden abierta",
+    "listpage.restoreSessionCard.button.dismiss": "No hay interés",
+    "listpage.restoreSessionCard.button.proceedWithTheOrder": "Proceder con el pedido",
+    "listpage.restoreSessionCard.label": "¡Completa en solo {0} pasos!",
+    "listpage.saveSearch.buttonText": "Guardar búsqueda",
+    "listpage.saveSearch.errorBannerText": "Por favor, inténtalo de nuevo. ",
+    "listpage.saveSearch.errorBannerTitle": "No se ha podido guardar tu búsqueda.",
+    "listpage.saveSearch.explanationBanner.text": "Guarde su búsqueda para ahorrar tiempo y recibir notificaciones cuando haya nuevos vehículos coincidentes disponibles.",
+    "listpage.saveSearch.promotionText": "¿Desea ser informado automáticamente sobre vehículos nuevos para su búsqueda?",
+    "listpage.saveSearch.savedButtonText": "Búsqueda guardada",
+    "listpage.saveSearch.successBannerText.md": "Recibirás un correo electrónico tan pronto como haya nuevos resultados. Puedes modificar esto en cualquier momento en '<a href=\"{0}\">Mis búsquedas guardadas</a>'.",
+    "listpage.saveSearch.successBannerTitle": "¡Tu búsqueda se ha guardado!",
+    "listpage.saveSearch.tooltip.text": "Guarde su búsqueda y ahorre tiempo. Te avisaremos de las nuevas ofertas.",
+    "listpage.shared.showLess": "Mostrar menos",
+    "listpage.shared.showMore": "Mostrar más",
+    "listpage.taxonomy.leasingDuration": "Meses",
+    "searchFilters.basicData.superdeal.rebranding.filterName": "Ofertas rebajadas",
+    "searchFilters.vehicleCondition.accordionTitle": "Estado del vehículo",
+    "searchFilters.vehicleType.accordionTitle": "Estado del vehículo",
+    "searchfilters.basicData.accordionTitle": "Datos básicos & ubicación",
+    "searchfilters.basicData.beds": "Nº Camas",
+    "searchfilters.basicData.beds.filterTag": "camas",
+    "searchfilters.basicData.beds.max": "Número máximo de camas",
+    "searchfilters.basicData.beds.min": "Número mínimo de camas",
+    "searchfilters.basicData.bodyType": "Carrocería",
+    "searchfilters.basicData.details": "Datos básicos",
+    "searchfilters.basicData.doors": "Nº Puertas",
+    "searchfilters.basicData.doors.filterTag": "puertas",
+    "searchfilters.basicData.grossWeight": "PMA (kg)",
+    "searchfilters.basicData.make.add": "Añadir más marcas",
+    "searchfilters.basicData.make.title": "Marca",
+    "searchfilters.basicData.makeModel.add": "Añadir más marcas y modelos.",
+    "searchfilters.basicData.makeModel.make": "Marca",
+    "searchfilters.basicData.makeModel.make.new": "Marca & modelo",
+    "searchfilters.basicData.makeModel.model": "Modelo",
+    "searchfilters.basicData.makeModel.otherMakes": "Otras marcas",
+    "searchfilters.basicData.makeModel.title": "Marca & Modelo",
+    "searchfilters.basicData.makeModel.topMakes": "Marcas destacadas",
+    "searchfilters.basicData.makeModel.version": "Otras características",
+    "searchfilters.basicData.makeModel.version.example": "p. ej. navegador, 4Matic, garantía, etc.",
+    "searchfilters.basicData.makeModel.version.model": "Versión",
+    "searchfilters.basicData.mileage": "Kilometraje",
+    "searchfilters.basicData.mileage.max": "Kilometraje hasta",
+    "searchfilters.basicData.mileage.min": "Kilometraje desde",
+    "searchfilters.basicData.modelYear": "Año del modelo",
+    "searchfilters.basicData.modelyear.max": "Año del modelo máximo",
+    "searchfilters.basicData.modelyear.min": "Año del modelo mínimo",
+    "searchfilters.basicData.numberOfAxles": "Nº Ejes",
+    "searchfilters.basicData.registration": "Año",
+    "searchfilters.basicData.registration.max": "Año hasta",
+    "searchfilters.basicData.registration.min": "Año desde",
+    "searchfilters.basicData.seats": "Nº Plazas",
+    "searchfilters.basicData.seats.max": "Nº Plazas hasta",
+    "searchfilters.basicData.seats.min": "Nº Plazas desde",
+    "searchfilters.basicData.vehicleCondition": "Estado del vehículo",
+    "searchfilters.basicData.vehicleType": "Tipo de vehículo",
+    "searchfilters.colors.color.beige": "Beige",
+    "searchfilters.colors.color.black": "Negro",
+    "searchfilters.colors.color.blue": "Azul",
+    "searchfilters.colors.color.bodyColor": "Color de la carrocería",
+    "searchfilters.colors.color.bronze": "Bronce",
+    "searchfilters.colors.color.brown": "Marrón",
+    "searchfilters.colors.color.gold": "Oro",
+    "searchfilters.colors.color.green": "Verde",
+    "searchfilters.colors.color.grey": "Gris",
+    "searchfilters.colors.color.interiorColor": "Color del interior",
+    "searchfilters.colors.color.interiorColor.accordionTitle": "Interior",
+    "searchfilters.colors.color.orange": "Naranja",
+    "searchfilters.colors.color.paintwork": "Acabado",
+    "searchfilters.colors.color.red": "Rojo",
+    "searchfilters.colors.color.silver": "Plata",
+    "searchfilters.colors.color.upholstery": "Material",
+    "searchfilters.colors.color.upholstery.filterTag": "Material",
+    "searchfilters.colors.color.violet": "Burdeos",
+    "searchfilters.colors.color.white": "Blanco",
+    "searchfilters.colors.color.yellow": "Amarillo",
+    "searchfilters.colors.exteriorColor": "Exterior",
+    "searchfilters.detailsearch.header": "Búsqueda detallada",
+    "searchfilters.editsearch.missingTitle": "Introduzca un título para su búsqueda",
+    "searchfilters.editsearch.submitButton": "Guardar búsqueda",
+    "searchfilters.editsearch.titlePlaceholder": "Título de la búsqueda guardada",
+    "searchfilters.environment.emissionClass.inputLabel": "Normativa de emisiones:",
+    "searchfilters.environment.emissionSticker.filterTag": "Categoría de emisiones",
+    "searchfilters.environment.emissionSticker.inputLabel": "Categoría de emisiones:",
+    "searchfilters.environment.energyConsumption": "Medioambiente",
+    "searchfilters.environment.energyConsumption.filterTag": "Categoría de emisiones",
+    "searchfilters.environment.sootParticleFilter": "Filtro de partículas",
+    "searchfilters.equipment.bedType": "Tipo de cama",
+    "searchfilters.financing.rateMax": "Cuota máx.",
+    "searchfilters.financing.rateMin": "Cuota mín.",
+    "searchfilters.financing.title": "Financiación",
+    "searchfilters.hideUnused": "Ocultar filtros no utilizados",
+    "searchfilters.history.accident": "Accidentado",
+    "searchfilters.history.accident.new": "Accidentado",
+    "searchfilters.history.accident.options.dontShow": "No mostrar",
+    "searchfilters.history.accident.options.dontShow.filterTag": "No mostrar coches accidentados",
+    "searchfilters.history.accident.options.showAlso": "Mostrar también",
+    "searchfilters.history.accident.options.showAlso.filterTag": "Mostrar coches accidentados",
+    "searchfilters.history.accident.options.showOnly": "Mostrar solo",
+    "searchfilters.history.accident.options.showOnly.filterTag": "Mostrar sólo coches accidentados",
+    "searchfilters.history.details": "Historial del vehículo",
+    "searchfilters.history.owners": "Propietario(s)",
+    "searchfilters.interior.accordionTitle": "Interior",
+    "searchfilters.leasing.accordionTitle": "leasing",
+    "searchfilters.leasing.availableNow": "disponible ahora",
+    "searchfilters.leasing.duration": "duración del contrato",
+    "searchfilters.leasing.environmentBonus": "bonificación medioambiental",
+    "searchfilters.leasing.inputLabel": "solo ofertas de leasing",
+    "searchfilters.leasing.rate": "cuota de leasing",
+    "searchfilters.leasing.tradeInBonus": "bonificación por entrega",
+    "searchfilters.leasing.yearlyIncludedMileage": "kilometraje anual incluido",
+    "searchfilters.location.accessibility.areaSearchButton": "Botón para obtener la ubicación del navegador",
+    "searchfilters.location.areaSearch": "Ciudad o código postal",
+    "searchfilters.location.areaSearch.error": "Localidad o C.P. desconocidos",
+    "searchfilters.location.areaSearch.example.at": "ej: Wien o 1010",
+    "searchfilters.location.areaSearch.example.be": "ej: Bruxelles o 1000",
+    "searchfilters.location.areaSearch.example.ca": "Ciudad/código postal",
+    "searchfilters.location.areaSearch.example.de": "ej: Berlin o 10243",
+    "searchfilters.location.areaSearch.example.es": "ej: Madrid o 28013",
+    "searchfilters.location.areaSearch.example.eu": "Ciudad o C.P.",
+    "searchfilters.location.areaSearch.example.fr": "ej: Paris o 75001",
+    "searchfilters.location.areaSearch.example.it": "ej: Roma o 00184",
+    "searchfilters.location.areaSearch.example.lu": "ej: Luxembourg o L-2314",
+    "searchfilters.location.areaSearch.example.nl": "ej: Amsterdam o 1012 CZ",
+    "searchfilters.location.cityPostalcode.required": "Introduce una ciudad/código postal para usar los filtros",
+    "searchfilters.location.countries.austria": "Austria",
+    "searchfilters.location.countries.belgium": "Bélgica",
+    "searchfilters.location.countries.europe": "Europa",
+    "searchfilters.location.countries.france": "Francia",
+    "searchfilters.location.countries.germany": "Alemania",
+    "searchfilters.location.countries.italy": "Italia",
+    "searchfilters.location.countries.luxembourg": "Luxemburgo",
+    "searchfilters.location.countries.netherlands": "Holanda",
+    "searchfilters.location.countries.spain": "España",
+    "searchfilters.location.country": "País",
+    "searchfilters.location.crossborder": "Sin fronteras",
+    "searchfilters.location.details": "Ubicación",
+    "searchfilters.location.info": "Encuentra vehículos cerca de ti. Por favor escribe la localidad o el código postal en el idioma del sitio donde buscas.",
+    "searchfilters.location.info.accessibility": "Obtén más información sobre el filtro de ubicación",
+    "searchfilters.location.radius": "Radio (kms)",
+    "searchfilters.location.radius.placeholder": "Radio",
+    "searchfilters.mobile.clearFilters": "Quitar filtros",
+    "searchfilters.mobile.resultsButton": "vehículos",
+    "searchfilters.offerDetails.details": "Detalles de la oferta",
+    "searchfilters.offerDetails.onlineSince": "Online desde",
+    "searchfilters.offerDetails.vatDeductible": "IVA deducible",
+    "searchfilters.optionalEquipment.details": "Equipamiento",
+    "searchfilters.optionalEquipment.showAll": "Mostrar más filtros",
+    "searchfilters.payment.details": "Precio y financiación",
+    "searchfilters.payment.ocsListing.filter.text": "Compra online ahora",
+    "searchfilters.payment.price": "Precio",
+    "searchfilters.payment.price.from": "Precio desde (€)",
+    "searchfilters.payment.price.to": "Precio hasta (€)",
+    "searchfilters.payment.priceEvaluation": "Evaluación de precio",
+    "searchfilters.payment.priceEvaluation.details": "AutoScout24 Evaluación de precios",
+    "searchfilters.payment.priceEvaluation.link": "¿Qué es?",
+    "searchfilters.payment.rate": "Cuota de financiación",
+    "searchfilters.payment.superDeal.description": "Descripción de súper oferta",
+    "searchfilters.payment.superDeal.informNow": "Infórmate ahora",
+    "searchfilters.payment.superDeal.informNowLink": "https://www.autoscout24.de/promo-lp/autoscout24-superdeal/",
+    "searchfilters.plusMoreFilters": "+{0} filtros más",
+    "searchfilters.plusOneMoreFilter": "+1 filtro más",
+    "searchfilters.priceEvaluation.description": "La valoración del precio muestra de forma transparente la relación calidad-precio de una oferta dada en comparación con modelos similares. El algoritmo de AutoScout24 calcula el precio de mercado para cada vehículo introducido. El precio de mercado se compara entonces con el precio final del vehículo. La diferencia existente entre un precio y otro marcará la asignación de las diferentes etiquetas de precios.",
+    "searchfilters.priceEvaluation.expensivePrice": "Caro",
+    "searchfilters.priceEvaluation.expensivePrice.description": "Caro",
+    "searchfilters.priceEvaluation.fairPrice": "Precio justo",
+    "searchfilters.priceEvaluation.fairPrice.description": "La relación calidad-precio se corresponde con el valor de mercado actual.",
+    "searchfilters.priceEvaluation.fairPrice.description.new": "La relación calidad-precio se corresponde con el valor de mercado actual.",
+    "searchfilters.priceEvaluation.fairPrice.new": "Precio justo",
+    "searchfilters.priceEvaluation.filterTitle": "Etiquetas de precio",
+    "searchfilters.priceEvaluation.goodPrice": "Buen precio",
+    "searchfilters.priceEvaluation.goodPrice.description": "La relación calidad-precio es ligeramente inferior al valor de mercado actual.",
+    "searchfilters.priceEvaluation.goodPrice.description.new": "La relación calidad-precio es ligeramente inferior al valor de mercado actual.",
+    "searchfilters.priceEvaluation.goodPrice.new": "Buen precio",
+    "searchfilters.priceEvaluation.greyPrice.description": "No se puede asignar ninguna etiqueta si hay muy pocos vehículos comparables. Este es el caso de los vehículos muy raros, como los coches de época, o los vehículos con muy poca información o aquellos con precios claramente demasiado altos o demasiado bajos. Estos vehículos tampoco se incluyen en el cálculo de la etiqueta.",
+    "searchfilters.priceEvaluation.greyPrice.description.new": "No se puede asignar ninguna etiqueta si hay muy pocos vehículos comparables. Este es el caso de los vehículos muy raros, como los coches de época, o los vehículos con muy poca información o aquellos con precios claramente demasiado altos o demasiado bajos. Estos vehículos tampoco se incluyen en el cálculo de la etiqueta.",
+    "searchfilters.priceEvaluation.headline": "Así son las diferentes etiquetas de precio en AutoScout24",
+    "searchfilters.priceEvaluation.somewhatExpensivePrice": "Precio elevado",
+    "searchfilters.priceEvaluation.somewhatExpensivePrice.description": "Precio elevado",
+    "searchfilters.priceEvaluation.veryGoodPrice": "Súper oferta",
+    "searchfilters.priceEvaluation.veryGoodPrice.description": "La relación calidad-precio es muy inferior al valor de mercado actual. Te recomendamos que leas la descripción detallada de las características y defectos de este vehículo.",
+    "searchfilters.priceEvaluation.veryGoodPrice.description.new": "La relación calidad-precio es muy inferior al valor de mercado actual. Te recomendamos que leas la descripción detallada de las características y defectos de este vehículo.",
+    "searchfilters.priceEvaluation.veryGoodPrice.new": "Súper oferta",
+    "searchfilters.range.from": "desde",
+    "searchfilters.range.to": "hasta",
+    "searchfilters.recommendations.labels.from": "Desde",
+    "searchfilters.recommendations.labels.gearType": "Tipo de transmisión",
+    "searchfilters.recommendations.labels.price": "Precio",
+    "searchfilters.recommendations.labels.radius": "Distancia",
+    "searchfilters.recommendations.labels.to": "Hasta",
+    "searchfilters.removeAllFilters": "Quitar filtros",
+    "searchfilters.sellerandseals.seals.CPOLabel": "Vehículo certificado de segunda mano",
+    "searchfilters.sellerandseals.seals.combinedSealDescription": "Coches revisados y garantizados",
+    "searchfilters.sellerandseals.seals.combinedSealLabel": "Otros certificados de calidad",
+    "searchfilters.sellerandseals.seals.defaultSealDescription": "Vehículos revisados y garantizados",
+    "searchfilters.sellerandseals.seals.defaultSealLabel": "Certificado del fabricante",
+    "searchfilters.sellerandseals.title": "Vendedor y certificados",
+    "searchfilters.sellerandseals.tooltip": "Vehículos con inspección general y control de emisiones",
+    "searchfilters.technicalData.batteryOwnership": "Propiedad de la batería",
+    "searchfilters.technicalData.details": "Datos técnicos",
+    "searchfilters.technicalData.driveTrain": "Tracción",
+    "searchfilters.technicalData.electricRange": "Gama eléctrica",
+    "searchfilters.technicalData.engine": "Motor",
+    "searchfilters.technicalData.fuel": "Tipo de combustible",
+    "searchfilters.technicalData.fuelType.electric": "Eléctrico",
+    "searchfilters.technicalData.fuelType.hybrid": "Híbrido",
+    "searchfilters.technicalData.gear": "Transmisión",
+    "searchfilters.technicalData.power": "Potencia",
+    "shared.accessibility.ariaLabelClearSuggestions": "Borrar selección",
+    "shared.accessibility.ariaLabelHideSuggestions": "Ocultar sugerencias",
+    "shared.accessibility.ariaLabelShowSuggestions": "Mostrar sugerencias",
+    "shared.accessibility.ariaLabelSortListLink": "Ordenar lista Enlace",
+    "shared.accessibility.opensInNewTab": "se abre en una nueva ventana",
+    "shared.accessibility.search.noSuggestions": "No se encontraron sugerencias",
+    "shared.accessibility.search.suggestionsFound": "{count} sugerencias encontradas",
+    "shared.accessibility.searchfilters.activeFiltersCount": "Filtros activos: {0}",
+    "shared.accessibility.searchfilters.allFiltersRemoved": "Todos los filtros eliminados",
+    "shared.accessibility.searchfilters.removeFilter": "Eliminar filtro {0}.",
+    "shared.accessibility.searchfilters.removeInvalidFilter": "Eliminar filtro no válido {0}.",
+    "shared.addToList": "Guardar",
+    "shared.all": "Todos",
+    "shared.back": "Atrás",
+    "shared.clientSideErr.backButton": "Atrás",
+    "shared.clientSideErr.homeButton": "Ir a la página de inicio",
+    "shared.clientSideErr.message": "Encontramos un error al cargar esta página. Por favor, intenta recargar o vuelve atrás para continuar navegando.",
+    "shared.clientSideErr.reloadButton": "Recargar página",
+    "shared.clientSideErr.title": "Algo salió mal!",
+    "shared.close": "Cerrar",
+    "shared.combinedShortcut": "mixto",
+    "shared.compare.action.reset": "Borrar todo",
+    "shared.ctas.shownumber": "Mostrar número",
+    "shared.deliveryPossible": "Entrega disponible",
+    "shared.fav.lead.defaultComment": "Buenos días,\n\nEstoy interesado en su vehiculo. Por favor póngase en contacto conmigo.\n\nSaludos cordiales",
+    "shared.fav.lead.form.buyer.name": "Cliente potencial",
+    "shared.fav.lead.form.email.field": "Tu e-mail",
+    "shared.fav.lead.form.email.placeholder": "Por ej. juan.perez@ejemplo.com",
+    "shared.fav.lead.form.name.error": "Nombre no encontrado",
+    "shared.fav.lead.form.name.field": "Tu nombre",
+    "shared.fav.lead.form.name.placeholder": "Por ej. Carlos García",
+    "shared.fav.lead.form.phone.field": "Tu teléfono (opcional)",
+    "shared.fav.lead.form.phone.placeholder": "Por ej. 91 999 99 99",
+    "shared.favorite.addToFavorites": "Guardar",
+    "shared.favorite.added": "El vehículo se ha marcado como favorito.",
+    "shared.favorite.addedToFavorites": "Guardado",
+    "shared.favorite.fuse.loggedinUsers.actionLightBox.button": "Sí, enviadme actualizaciones",
+    "shared.favorite.fuse.loggedinUsers.actionLightBox.firstBenefit": "haya nueva información sobre el vehículo",
+    "shared.favorite.fuse.loggedinUsers.actionLightBox.fourthBenefit": "el vehículo se venda?",
+    "shared.favorite.fuse.loggedinUsers.actionLightBox.head": "¿Quieres recibir correos cuando:",
+    "shared.favorite.fuse.loggedinUsers.actionLightBox.secondBenefit": "el precio baje",
+    "shared.favorite.fuse.loggedinUsers.actionLightBox.thirdBenefit": "aumente la demanda",
+    "shared.favorite.fuse.loggedinUsers.actionLightBox.title": "El vehículo se ha guardado en tu lista de deseos.",
+    "shared.favorite.fuse.loggedinUsers.thanksLightBox.message": "Desde ahora recibirás actualizaciones por correo electrónico de los vehículos que hayas marcado.",
+    "shared.favorite.fuse.loggedinUsers.thanksLightBox.title": "¡Genial!",
+    "shared.favorite.fuse.notLoggedinUsers.confirmationLightBox.message": "Desde ahora recibirás actualizaciones por correo electrónico sobre el vehículo que has marcado.",
+    "shared.favorite.fuse.notLoggedinUsers.confirmationLightBox.title": "Gracias por tu registro.",
+    "shared.favorite.fuse.notLoggedinUsers.loginDialog.overrideText.firstBenefit": "accede a tu lista de deseos en cualquier dispositivo",
+    "shared.favorite.fuse.notLoggedinUsers.loginDialog.overrideText.head": "Inicia sesión ahora y:",
+    "shared.favorite.fuse.notLoggedinUsers.loginDialog.overrideText.secondBenefit": "recibe actualizaciones por correo electrónico sobre este vehículo",
+    "shared.favorite.fuse.notLoggedinUsers.loginDialog.overrideText.title": "El vehículo se ha guardado en la lista de deseos de este dispositivo.",
+    "shared.favorite.removed": "Eliminado de la lista de favoritos.",
+    "shared.favoriteIcon.tooltipText": "Guarde el vehículo y reciba actualizaciones cuando baje el precio.",
+    "shared.footnotes.buywithconfidence": "Esta información la proporciona el proveedor del certificado.",
+    "shared.footnotes.co2EmissionLegalText": "Puede obtenerse información adicional sobre el consumo de combustible y las emisiones específicas de CO2 de los turismos nuevos en la “Guía de consumo de combustible y emisiones de CO2” que puede obtenerse gratuitamente en todos los puntos de venta y en www.idae.es.",
+    "shared.footnotes.dealerPrice": "Precio del concesionario",
+    "shared.footnotes.fuel": "Puede obtenerse información adicional sobre el consumo de combustible y las emisiones específicas de CO2 de los turismos nuevos en la \"Guía de consumo de combustible y emisiones de CO2\" que puede obtenerse gratuitamente en todos los puntos de venta y en www.idae.es. AutoScout24 no asume ningún tipo de responsabilidad por la exactitud de los datos.",
+    "shared.footnotes.fuelFallback": "Los valores indicados se determinaron según el procedimiento de medición prescrito (de conformidad con el Reglamento de Etiquetado del Consumo Energético de Turismos (PKW-EnVKV) en su versión vigente). Los datos se refieren al modelo de vehículo ofertado y se utilizan para fines comparativos entre los diferentes tipos de vehículos.",
+    "shared.footnotes.fuelWithoutFallback": "El campo muestra valores aproximados proporcionados por el creador de la oferta. Estos valores pueden representar experiencias con este modelo o provenir de otras fuentes.",
+    "shared.footnotes.vatDeductible": "IVA deducible",
+    "shared.gallery.accessibility": "Galería de fotos del coche\n\n",
+    "shared.gallery.favoriteSlide.addToFavorite": "Añadir a la lista de deseos",
+    "shared.gallery.favoriteSlide.content": "Favorite este vehículo y reciba actualizaciones cuando el precio baje.",
+    "shared.gallery.favoriteSlide.removeFromFavorite": "Eliminar de favoritos",
+    "shared.gallery.favoriteSlide.title": "¿Aún indeciso?",
+    "shared.home": "Página de inicio",
+    "shared.new": "Nuevo",
+    "shared.next": "Siguiente",
+    "shared.otherMakes": "Otras marcas",
+    "shared.price.vatExcluded": "excluido IVA",
+    "shared.price.vatIncluded": "incluido IVA",
+    "shared.proposition.for": "por",
+    "shared.results": "vehículos",
+    "shared.search": "Buscar",
+    "shared.search_noun": "Buscar",
+    "shared.sellerType.dealer": "Profesional",
+    "shared.sellerType.privateSeller": "Particular",
+    "shared.share": "Compartir",
+    "shared.share.copied": "Enlace copiado.",
+    "shared.share.dropDownTitle": "Oferta de acciones",
+    "shared.share.dropdown.copyLink": "Copiar link",
+    "shared.share.label": "Compartir",
+    "shared.share.mail.body": "Hola,%0D%0A%0D%0A \nHe encontrado un vehículo que puede ser de tu interés:%0D%0A%0D%0A \nVehículo%0D%0A \n________________________%0D%0A%0D%0A \nMarca: {0}%0D%0A \n{1} \n%0D%0A \nAquí podrás ver todos los detalles sobre este vehículo %0D%0A \n%url%%0D%0A%0D%0A \nUn saludo",
+    "shared.share.mail.body.price": "Precio: {0}%0D%0A",
+    "shared.share.mail.title": "AutoScout24.es - Recomendación de vehículo",
+    "shared.starrating.accessibility": "Calificación de estrellas {0} de {1}",
+    "shared.superdeal.rebrandingLabel": "Rebajado",
+    "shared.survey.accessibility.closeButton": "Cerrar la encuesta de comentarios",
+    "shared.survey.sendButton.accessibiity": "Califica la encuesta {0} de {1}",
+    "shared.topMakes": "Marcas destacadas",
+    "shared.units.gramsPerKm": "g/km",
+    "shared.yes": "sí"
+   },
+   "adTargetingString": "{\"atsd\":\"\",\"countrySearch\":\"ES\",\"price\":\"1,2,3,4,5,6,7,8,9,10\",\"articleType\":\"C\",\"buyonline\":\"false\",\"ECO\":\"NO\",\"fr\":\"1,2,3,4,5,6,7,8,9,10,11\",\"hp\":\"\",\"leasing\":\"false\",\"miles\":\"\",\"rnd\":\"90\",\"seg\":\"\",\"type\":\"U,N,D,O,J,S\",\"vat\":\"0\",\"refactor\":\"list2021\",\"bad_traffic\":\"ok\"}",
+   "loggedInCustomerTypeId": "",
+   "recommendations": [],
+   "userSession": {
+    "visitorId": "d52ed5ef-2c51-4df8-8b01-343d1befd78a",
+    "isLoggedIn": false,
+    "hasConsentCookie": false
+   },
+   "seoText": null,
+   "breadcrumbs": [
+    {
+     "url": "/",
+     "name": "shared.home"
+    },
+    {
+     "url": "/lst",
+     "name": "shared.search_noun"
+    }
+   ],
+   "latestUserSession": null,
+   "togglingInfo": {
+    "as24-search-funnel-nfm-enabled": false,
+    "disable-ads-and-tracking": false,
+    "disable-ads-search-funnel": false,
+    "ocs-smyle-checkout-financing-disabled": false,
+    "disable-tracking-search-funnel": false,
+    "cpt-disable-skies-and-contentbanner": false,
+    "enable-404-for-invalid-parameter": true,
+    "enable-404-redirects": true,
+    "enable-404-redirects-logging": true,
+    "abtest-234_core_cars_show_option_for_online_purchase_smyle": false,
+    "abtest-380-mia-uplift-counterfactual-experiment": false,
+    "abtest-421-as24-experts": false,
+    "abtest-449-ranker-with-position-debiased-ctr-feature": false,
+    "enable-custom-search-button-caption": false,
+    "enable-abtest-525-filters-counters": false,
+    "enable-abtest-543-filters-counters": false,
+    "enable-abtest-547-declutter-list-page-card": false,
+    "enable-abtest-560-declutter-list-page-card": false,
+    "enable-abtest-561-personalized-filter-recommendation-on-listpage": false,
+    "enable-abtest-580-personalized-filter-recommendation-on-listpage-benl": false,
+    "enable-abtest-624-desktop-personalized-filter-recommendation-on-listpage-benl": false,
+    "enable-abtest-632-declutter-list-page-card-impact-of-check-24": false,
+    "enable-abtest-652-mia-selection-experiment": false,
+    "enable-abtest-686-active-uplift-management": false,
+    "enable-abtest-704-mia-selection-experiment": false,
+    "enable-ab-test-739-active-uplift-management-v6": false,
+    "enable-abtest-791-lp-stage-texts": false,
+    "smle-1070-smyle-21-days-return-right": true,
+    "abtest-806-modal-experience-v3": false,
+    "abtest-808-social-login-in-save-search": false,
+    "abtest-809-modal-experience-v2-it": false,
+    "abtest-811-modal-experience-v3-ca": false,
+    "abtest-817-social-login-in-save-search": false,
+    "enable-abtest-819-companion-search-de": false,
+    "cpt-integrate-addefend-at": false,
+    "enable-anonymous-save-search": false,
+    "enable-autohebdo-ads": false,
+    "enable-autotrader-ca-ads": false,
+    "cp-check24-fallback-new-wording": false,
+    "enable-cls-data-dog-logging": false,
+    "enable-compare-for-funnel": false,
+    "enable-compare-for-funnel-desktop": true,
+    "enable-conditional-price-badges-de": false,
+    "cpt-enable-consentmanager-cmp-ca": false,
+    "cpt-test-consentmanager-search-funnel": false,
+    "cpt-consentmanager-tcf-stub-only": false,
+    "enable-content-banner-smart-ads": true,
+    "enable-conversational-search-in-feed-ads": false,
+    "enable-conversational-search-ui": false,
+    "enable-custom-list-pages": true,
+    "fn-791-enable-trader-deal-builder": false,
+    "sr-debug-ranking-in-list-page": false,
+    "enable-desktop-video-format-slot": false,
+    "sr-detailed-debug-ranking-in-list-page": false,
+    "cpt-new-list-page-direct-finance-api-call": true,
+    "dualprice-feature-at": false,
+    "dualprice-feature-be": false,
+    "dualprice-feature-de": false,
+    "dualprice-feature-es": false,
+    "dualprice-feature-nl": false,
+    "electric-vehicle-experience": false,
+    "fn-744-expanded-filter-groups": false,
+    "enable-explorer-counters": false,
+    "enable-extended-listpage-ad-slots": false,
+    "favorite-leads": false,
+    "favorite-leads-new-design": false,
+    "favorite-leads-new-fields": false,
+    "fn-2260-enable-feedback-sticky-button": false,
+    "cpt-financing-and-insurance-nl-list-page": false,
+    "ugaa-4437-fuse-login-dialog": false,
+    "bsg-enable-hide-financing-and-insurance": false,
+    "sp-enable-hybrid-bikes-modal": true,
+    "sp-enable-hybrid-make-drill-down-with-images": true,
+    "ign-3042-extended-list-make-model-faq": false,
+    "enable-injected-js-errors-logging": false,
+    "enable-inp-data-dog-logging": false,
+    "enable-kaisa-call-tracker-ca": false,
+    "enable-lcp-data-dog-logging": false,
+    "leasint-661-leasing-notification": false,
+    "li-model-group": false,
+    "enable-listing-counters": false,
+    "enable-ls-api-v2-staging-traffic": false,
+    "nwl-mvp-golive": true,
+    "enable-national-listings-ui-changes": false,
+    "feedbackform-detailpage-feature": false,
+    "see-1969-display-new-conditions": false,
+    "new-price-labels-translations": false,
+    "enable-noop-route-metric-collection": false,
+    "ocs-smyle-restore-checkout-session-list-page": true,
+    "ocs-smyle-restore-checkout-offline-session-list-page": true,
+    "ocs-smyle-concise-list-item": true,
+    "enable-ocs-smyle-financing-cta": true,
+    "enable-price-evaluation-ca": false,
+    "enable-queryparam-validation-in-sf": true,
+    "cpt-enable-resume-financing-listpage": false,
+    "enable-sase-fuse-dealer-canada": false,
+    "enable-tooltip-in-sase": false,
+    "enable-save-search-ca": false,
+    "pps-2894-enable-seals-for-multiple-models": false,
+    "enable-seo-eu-wide-count-for-de-make-model-pages": false,
+    "enable-seo-tools-debug": false,
+    "enable-smart-ads": true,
+    "ocs-smyle-enable-change-of-financing-direction": true,
+    "sp-trim-free-text-search-enforce-variation": false,
+    "enable-srp-mobile-masthead-ad": false,
+    "cs-enable-suggested-results-search": true,
+    "superdeal-rebranding": false,
+    "as24-search-funnel-enable-survey-placeholder": false,
+    "enable-trade-in-filter": false,
+    "ugaa-3963-trending-label-listing": true,
+    "enable-ttfb-data-dog-logging": false,
+    "enable-understitial-ad-size": true,
+    "ls-api-extra-logs": false,
+    "sp-enforce-make-drill-down-with-images": false,
+    "sp-enable-vkh-drill-down-scoped-search": false,
+    "execute-favorites-merge": false,
+    "fetch-dpv-statistics-from-ls-api": true,
+    "force-abtest-421-variation": false,
+    "force-abtest-486-variation-1": false,
+    "force-abtest-486-variation-2": false,
+    "force-abtest-547-560-variation-1": false,
+    "force-abtest-547-560-variation-2": false,
+    "force-abtest-561-variation-1": false,
+    "force-abtest-561-variation-2": false,
+    "force-abtest-632-variation-1": false,
+    "force-abtest-632-variation-2": false,
+    "force-abtest-791-variation-1": false,
+    "ugact-1081-navigation-redesign": true,
+    "leasing-list-page-italy": false,
+    "list-page-skeleton-loader": false,
+    "see-1939-new-vehicle-accident-filter": false,
+    "ommit-list-item-prevent-default-link": false,
+    "reserve-max-height-ads-mobile": false,
+    "rollout-decluttered-list-item": true,
+    "sfp-enable-hard-reload-on-invariant-next-js-error": true,
+    "sfp-822-use-list-page-url-parser": true,
+    "show-cnr-model-autosuggest": false,
+    "abtest-419-show-only-leasing-markt-inventory": false,
+    "enable-vkh-generated-listing-titles": false,
+    "web-search-mask-v3": true,
+    "showcar-tracking-enable": false,
+    "tracking-sdk-gtm-enable": false,
+    "ugaa-4148-enable-mmmv-query-format": true
+   },
+   "interlinking": [
+    {
+     "id": "custom-carroceria",
+     "groupName": "Carroceria",
+     "links": [
+      {
+       "url": "https://www.autoscout24.es/lst/bt_cabrio",
+       "anchorText": "Coches de segunda mano cabrio"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bt_coche-pequeno",
+       "anchorText": "Coches de segunda mano coche pequeño"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bt_coupe",
+       "anchorText": "Coches de segunda mano coupé"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bt_familiar",
+       "anchorText": "Coches de segunda mano familiar"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bt_furgoneta",
+       "anchorText": "Coches de segunda mano furgoneta"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bt_monovolumen",
+       "anchorText": "Coches de segunda mano monovolumen"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bt_sedan",
+       "anchorText": "Coches de segunda mano sedán"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bt_suv-4x4-pickup",
+       "anchorText": "Coches de segunda mano SUV/4x4/pickup"
+      }
+     ]
+    },
+    {
+     "id": "custom-combustible",
+     "groupName": "Combustible",
+     "links": [
+      {
+       "url": "https://www.autoscout24.es/lst/ft_diesel",
+       "anchorText": "Coches de segunda mano diésel"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ft_electrico",
+       "anchorText": "Coches de segunda mano eléctrico"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ft_electro-gasolina",
+       "anchorText": "Coches de segunda mano electro/gasolina"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ft_gasolina",
+       "anchorText": "Coches de segunda mano gasolina"
+      }
+     ]
+    },
+    {
+     "id": "custom-marcas",
+     "groupName": "Marcas",
+     "links": [
+      {
+       "url": "https://www.autoscout24.es/lst/abarth",
+       "anchorText": "Abarth"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ac",
+       "anchorText": "AC"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/aixam",
+       "anchorText": "Aixam"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/alfa-romeo",
+       "anchorText": "Alfa Romeo"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/alpina",
+       "anchorText": "Alpina"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/alpine",
+       "anchorText": "Alpine"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/aston-martin",
+       "anchorText": "Aston Martin"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/audi",
+       "anchorText": "Audi"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/austin-healey",
+       "anchorText": "Austin-Healey"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bentley",
+       "anchorText": "Bentley"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bestune",
+       "anchorText": "Bestune"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bmw",
+       "anchorText": "BMW"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/bugatti",
+       "anchorText": "Bugatti"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/buick",
+       "anchorText": "Buick"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/byd",
+       "anchorText": "BYD"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/cadillac",
+       "anchorText": "Cadillac"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/caravans-wohnm",
+       "anchorText": "Caravans-Wohnm"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/changan",
+       "anchorText": "Changan"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/chevrolet",
+       "anchorText": "Chevrolet"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/chrysler",
+       "anchorText": "Chrysler"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/citroen",
+       "anchorText": "Citroen"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/corvette",
+       "anchorText": "Corvette"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/cupra",
+       "anchorText": "CUPRA"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/dacia",
+       "anchorText": "Dacia"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/daewoo",
+       "anchorText": "Daewoo"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/de-tomaso",
+       "anchorText": "De Tomaso"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/dfsk",
+       "anchorText": "DFSK"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/dodge",
+       "anchorText": "Dodge"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/dongfeng",
+       "anchorText": "Dongfeng"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/dr-automobiles",
+       "anchorText": "DR Automobiles"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ds-automobiles",
+       "anchorText": "DS Automobiles"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ebro",
+       "anchorText": "Ebro"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/evo",
+       "anchorText": "EVO"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ferrari",
+       "anchorText": "Ferrari"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/fiat",
+       "anchorText": "Fiat"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ford",
+       "anchorText": "Ford"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/genesis",
+       "anchorText": "Genesis"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/gmc",
+       "anchorText": "GMC"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/honda",
+       "anchorText": "Honda"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/hummer",
+       "anchorText": "HUMMER"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/hyundai",
+       "anchorText": "Hyundai"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ineos",
+       "anchorText": "Ineos"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/infiniti",
+       "anchorText": "Infiniti"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/iveco",
+       "anchorText": "Iveco"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/jaecoo",
+       "anchorText": "Jaecoo"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/jaguar",
+       "anchorText": "Jaguar"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/jeep",
+       "anchorText": "Jeep"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/kia",
+       "anchorText": "Kia"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/lamborghini",
+       "anchorText": "Lamborghini"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/lancia",
+       "anchorText": "Lancia"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/land-rover",
+       "anchorText": "Land Rover"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/leapmotor",
+       "anchorText": "Leapmotor"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/lexus",
+       "anchorText": "Lexus"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ligier",
+       "anchorText": "Ligier"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/lincoln",
+       "anchorText": "Lincoln"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/livan",
+       "anchorText": "Livan"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/lotus",
+       "anchorText": "Lotus"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/lynk-and-co",
+       "anchorText": "Lynk & Co"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/mahindra",
+       "anchorText": "Mahindra"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/man",
+       "anchorText": "MAN"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/maserati",
+       "anchorText": "Maserati"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/maxus",
+       "anchorText": "Maxus"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/mazda",
+       "anchorText": "Mazda"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/mclaren",
+       "anchorText": "McLaren"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/mercedes-benz",
+       "anchorText": "Mercedes-Benz"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/mg",
+       "anchorText": "MG"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/microcar",
+       "anchorText": "Microcar"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/mini",
+       "anchorText": "MINI"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/mitsubishi",
+       "anchorText": "Mitsubishi"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/morgan",
+       "anchorText": "Morgan"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/nissan",
+       "anchorText": "Nissan"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/omoda",
+       "anchorText": "Omoda"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/opel",
+       "anchorText": "Opel"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/peugeot",
+       "anchorText": "Peugeot"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/polestar",
+       "anchorText": "Polestar"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/pontiac",
+       "anchorText": "Pontiac"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/porsche",
+       "anchorText": "Porsche"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ram",
+       "anchorText": "RAM"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/renault",
+       "anchorText": "Renault"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/rolls-royce",
+       "anchorText": "Rolls-Royce"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/rover",
+       "anchorText": "Rover"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/saab",
+       "anchorText": "Saab"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/santana",
+       "anchorText": "Santana"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/seat",
+       "anchorText": "SEAT"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/seres",
+       "anchorText": "Seres"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/silence",
+       "anchorText": "Silence"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/skoda",
+       "anchorText": "Skoda"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/smart",
+       "anchorText": "smart Smart"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/sportequipe",
+       "anchorText": "Sportequipe"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ssangyong",
+       "anchorText": "SsangYong"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/subaru",
+       "anchorText": "Subaru"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/suzuki",
+       "anchorText": "Suzuki"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/swm",
+       "anchorText": "SWM"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/tesla",
+       "anchorText": "Tesla"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/toyota",
+       "anchorText": "Toyota"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/triumph",
+       "anchorText": "Triumph"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/volkswagen",
+       "anchorText": "Volkswagen"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/volvo",
+       "anchorText": "Volvo"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/voyah",
+       "anchorText": "Voyah"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/xev",
+       "anchorText": "XEV"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/xpeng",
+       "anchorText": "Xpeng"
+      }
+     ]
+    },
+    {
+     "id": "custom-oferta",
+     "groupName": "Oferta",
+     "links": [
+      {
+       "url": "https://www.autoscout24.es/lst/ot_demostracion",
+       "anchorText": "Coches de segunda mano demostración"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ot_km0",
+       "anchorText": "Coches de segunda mano KM0"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ot_nuevo",
+       "anchorText": "Coches de segunda mano Coches nuevo"
+      },
+      {
+       "url": "https://www.autoscout24.es/lst/ot_ocasion",
+       "anchorText": "Coches de segunda mano Coches ocasión"
+      }
+     ]
+    }
+   ],
+   "listpageInventory": null,
+   "optimizelyResults": {
+    "abTest380MiaUpliftCounterfactualExperiment": null,
+    "abTest421As24Experts": null,
+    "abTest419ShowOnlyLeasingMarktInventory": null,
+    "abTest449RankerWithPositionDebiasedCTRFeature": null,
+    "abTest486CustomSearchButtonCaption": null,
+    "abTest525FilterCounters": null,
+    "abTest543FilterCounters": null,
+    "abTest547DeclutterListPageCard": null,
+    "abTest560DeclutterListPageCardIt": null,
+    "abTest632DeclutterListPageCardImpactOfCheck24": null,
+    "abTest561PersonalizedFilterRecommendationOnListPage": null,
+    "abTest580PersonalizedFilterRecommendationOnListPageBenl": null,
+    "abTest624DesktopPersonalizedFilterRecommendationOnListPageBenl": null,
+    "abTest621ExtendedModelFilter": null,
+    "abTest652MiaSelectionExperiment": null,
+    "abTest686ActiveUpliftManagementTestV30": null,
+    "abTest704MiaSelectionExperiment": null,
+    "abTest740ComparisonFeature": null,
+    "abTest819CompanionSearchDe": null,
+    "abTest739ActiveUpliftManagement": null,
+    "abTest806ModalExperienceV3": null,
+    "abTest808SocialLoginPrioritizationInSavedSearch": null,
+    "abTest817SocialLoginPrioritizationInSavedSearch": null,
+    "abTest809ModalExperienceV2It": null,
+    "abTest811ModalExperienceV3Ca": null,
+    "abTest797SmyleReturnRightBanner": null,
+    "abTest816NewBrandColourTest": null,
+    "abTest820NewBrandColourTest": null,
+    "abTest773ConditionalPriceBadgeDe": null,
+    "abTest791LpStageTexts": null
+   },
+   "isoCulture": "es-ES",
+   "pagePath": "/lst?cy=E&page=1&atype=C",
+   "collectWebVitals": false,
+   "isTradeInCampaign": false,
+   "resumeFinancing": null,
+   "deliverableTailTotalItems": 0,
+   "newTaxonomyAvailable": false,
+   "recommendedFiltersArgs": {
+    "vehicleType": "C",
+    "queryString": "atype=C&cy=E&desc=0&page=1&powertype=kw&pricetype=public&query_id=skflvel2lc&sort=standard&tier_rotation=true&ustate=N%2CU"
+   },
+   "marketplaceFeatureToggles": {
+    "currentMarketplace": {
+     "domain": "autoscout24",
+     "country": {
+      "iso": "es",
+      "tld": "es"
+     },
+     "language": {
+      "iso": "es"
+     },
+     "etldPlusOne": "autoscout24.es",
+     "slug": "AS_es_ES"
+    },
+    "pagePrefix": "lst",
+    "isTraderCaMarketplace": false,
+    "isOneMarketplace": false,
+    "useVkhTaxonomyTitle": false,
+    "showVkhGeneratedListingTitles": false,
+    "supportsAPathDetailUrl": false,
+    "footnotes": {
+     "fixedFootnotes": true,
+     "fuel": true,
+     "fuelFallback": true,
+     "fuelWithoutFallback": true,
+     "fuelDisclaimer": false,
+     "finalPrice": false,
+     "monthlyRate": false,
+     "insuranceNote": false,
+     "disclaimer": false
+    },
+    "hideAppBanner": false,
+    "adPlacements": {
+     "hideAds": false
+    },
+    "favoritesPage": {
+     "login": true,
+     "showMobileAppLink": false,
+     "enableOMSearchLink": false,
+     "showTransmissionType": false,
+     "hideFuelConsumption": false,
+     "triggerFinanceApiCall": false,
+     "showReducedTag": false
+    },
+    "shared": {
+     "conditionalPriceBadge": false,
+     "cmpConsentNotRequired": false,
+     "useConsentmanagerCanadaCMP": false,
+     "favoritesEnabled": true,
+     "useLmsLeadRouting": false,
+     "enableOmCombinedLeadsTracking": false,
+     "feedbackStickyButton": false,
+     "feedbackCard": false,
+     "legalDisclaimer": false,
+     "onlyRecommendationsDisclaimerHidden": false,
+     "priceEvaluation": true,
+     "isConversionTrackingOn": false,
+     "dealerOffer": false,
+     "fuse": true,
+     "anonymousFuse": false,
+     "anonymousSaveSearch": false,
+     "saveSearch": true,
+     "hidePriceEvaluationPopupAndFilter": false,
+     "showTraderReducedPrice": false,
+     "hideTraderSuperDealOverlayBadge": false,
+     "enableNewPriceLabel": false,
+     "showFavoriteButtonVehicleRecommender": false,
+     "useShowcarCardsOnDealerRecommender": false,
+     "enableProvinceCodeInLocation": false,
+     "hideRefineSearch": false,
+     "showDealbuilder": false,
+     "newOfferListItemLabel": false,
+     "trendingListing": false,
+     "dpvStatistics": false,
+     "msrpAndNewVehicle": false,
+     "cnrCategories": false,
+     "noPriceLabelEnabled": false,
+     "vehicleOverview": true,
+     "isKaisaCallTrackingEnabled": false
+    },
+    "filters": {
+     "geoLocatorButton": true,
+     "body": true,
+     "buyWithConfidence": true,
+     "defaultRadius100": false,
+     "isLocationMandatoryAndReordered": false,
+     "traderSortingKeys": false,
+     "sorting": {
+      "financeRate": false,
+      "leasingRate": false
+     },
+     "countries": true,
+     "superDeal": false,
+     "seller": true,
+     "isEngineTypeEnabled": false,
+     "isDriveTrainEnabled": false,
+     "provinceAndNationalBasedLocationSearch": false,
+     "traderVehicleCondition": false,
+     "isFreeTextPriceFilterEnabled": false,
+     "showModelTrimLabel": false,
+     "filterMakeModelChips": false,
+     "searchMask": {
+      "locationFilter": {
+       "isLocationMandatoryAndReordered": false
+      },
+      "priceFilter": {
+       "priceEvaluation": false,
+       "traderReducedPrice": false,
+       "superDeal": false,
+       "superDealText": false,
+       "superDealInfoLink": false,
+       "vatReportable": false,
+       "dollarPrice": false
+      },
+      "vehicleConditionFilter": {
+       "filterCounter": false,
+       "toggleOppositeNewUsed": false,
+       "supportsDamagedOption": false,
+       "supportsCpoOption": false
+      },
+      "environmentFilter": {
+       "emissionSticker": true
+      },
+      "exteriorColorAndPaintworkFilter": {
+       "paintworkFilter": true
+      },
+      "warrantyAndHistoryAndSealsFilter": {
+       "insuranceHuAu": false,
+       "accidentChip": false,
+       "seals": true,
+       "newAccidentFilter": false
+      },
+      "powerFilter": {
+       "newDriver": false,
+       "enableHPOnlyFilter": false
+      },
+      "fuelTypeFilter": {
+       "electricRange": false
+      },
+      "showEquipmentHelpText": false,
+      "shared": {
+       "frCaImperialUnits": false
+      }
+     }
+    },
+    "listItem": {
+     "showDistanceToListing": false,
+     "hideShareButton": false,
+     "alwaysRenderTitleAsLink": false,
+     "useSimplifiedVehicleDetails": false,
+     "showTraderJustListed": false,
+     "opensInNewTab": false
+    },
+    "listPage": {
+     "hideSavedSearchInRecommendations": false,
+     "socialLoginInSaveSearch": false,
+     "hideRecommendations": false,
+     "allowPersonalizationCookiesWithoutCMP": false,
+     "displayTraderSaveSearchIntegration": false,
+     "showModelSeoLinks": true,
+     "deliverablesInTail": true,
+     "saveSearchDoiCheckbox": true,
+     "isCustomListPageEnabled": false,
+     "simplifiedNoResultsLayout": false,
+     "hideContentBannerAndSkies": false,
+     "reduceListPageContentbannersHeight": false,
+     "enableDealerPage": false,
+     "enableHreflang": false,
+     "showCityInDealerInfoTitle": false,
+     "deleteUnknownParameter": false,
+     "sortAndPageSize": false,
+     "extendedAdSlotRepetition": false,
+     "supportsAskAiDesktopContentBannerSmallAdSizes": false,
+     "saseAccountCreationModal": false,
+     "displaySortTextOnMobile": false,
+     "useListPageUrlParser": false,
+     "seoToolsEnhancedTax": false
+    },
+    "detailsPage": {
+     "showBestPricedDealerBadge": false,
+     "dealerLink": false,
+     "dealerStageAreaLinkOut": true,
+     "enableAutomatch": false,
+     "enableAutomatchForPrivateAndGoLiteSellers": false,
+     "sendLeadsToAutomatchApi": false,
+     "showInfoPageLink": true,
+     "showImprintLink": true,
+     "showVehicleCondition": false,
+     "showTraderJustListed": false,
+     "showTraderCpo": false,
+     "showTraderDealerRecommendations": false,
+     "showOMPFraudReport": false,
+     "hideSMSPhoneNumbers": false,
+     "hideContactName": false,
+     "hideCustomerSince": false,
+     "contactHeading": true,
+     "contactSpeaksText": true,
+     "contactLanguagePills": false,
+     "enableTraderSeo": false,
+     "enableGalleryLeadForm": false,
+     "galleryMrRefreshEnabled": true,
+     "galleryMrRefreshNonEngagedEnabled": false,
+     "privacyAgreementCheckbox": true,
+     "showRatingsComponent": true,
+     "sellingIngress": true,
+     "enableBuyOrLeaseToggleInStage": false,
+     "showCylinderCapacity": false,
+     "isSimplifiedVehicleOverview": false,
+     "safeTrade": true,
+     "buyerInsights": false,
+     "basicPriceHistoryLink": false,
+     "extendedPriceHistoryLink": true,
+     "expandableDealerOpeningHours": false,
+     "singleLineDealerAddress": false,
+     "enablePriceAlertsSimilarListings": false,
+     "aiVehicleHighlights": false,
+     "showPriceDisclaimer": false,
+     "carfax": true
+    },
+    "showComparePageIntegrations": false,
+    "afterLeadPage": {
+     "showDealerTag": true,
+     "showDealerName": false,
+     "additionalCTA": false
+    }
+   },
+   "isCellphoneDevice": false,
+   "pagePrefix": "lst",
+   "trafficAnalysisResult": "ok",
+   "hasConsentCookie": false,
+   "isInitialRequest": true,
+   "canonicalOrigin": "https://www.autoscout24.es"
+  }
+ }
+}

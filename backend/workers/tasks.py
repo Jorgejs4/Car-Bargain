@@ -32,6 +32,9 @@ from app.services.vision import (
     analyze_image_file,
     get_vision_analyzer,
 )
+from scrapers.autoscout24.scraper import AutoScout24Scraper
+from scrapers.base.interfaces import BaseScraper
+from scrapers.coches_net.scraper import CochesNetScraper
 from scrapers.mobile_de.scraper import MobileDeScraper
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -40,28 +43,30 @@ from workers.celery_app import celery_app
 
 logger = logging.getLogger(__name__)
 
-_LOCK_KEY = "scraper:mobile_de:running"
-_LAST_RUN_KEY = "scraper:mobile_de:last_run"
+_LOCK_KEY_TEMPLATE = "scraper:{}:running"
+_LAST_RUN_KEY_TEMPLATE = "scraper:{}:last_run"
 
 
 def _redis() -> redis.Redis:
     return redis.from_url(settings.redis_url, socket_connect_timeout=2, socket_timeout=2)
 
 
-def _acquire_lock() -> bool:
-    """Adquiere el lock anti-solapamiento. Fail-open si Redis no está disponible."""
+def _acquire_lock(source: str) -> bool:
+    """Adquiere el lock anti-solapamiento por fuente. Fail-open si Redis no está disponible."""
     try:
-        acquired = _redis().set(_LOCK_KEY, "1", nx=True, ex=settings.scraper_lock_ttl_seconds)
+        acquired = _redis().set(
+            _LOCK_KEY_TEMPLATE.format(source), "1", nx=True, ex=settings.scraper_lock_ttl_seconds
+        )
         return bool(acquired)
     except redis.RedisError:
         logger.warning("Redis no disponible; se continúa sin lock")
         return True
 
 
-def _publish_last_run(summary: dict) -> None:
+def _publish_last_run(summary: dict, source: str) -> None:
     """Publica un resumen de la ejecución en Redis (observabilidad mínima). Fail-open."""
     try:
-        _redis().set(_LAST_RUN_KEY, json.dumps(summary), ex=7 * 24 * 3600)
+        _redis().set(_LAST_RUN_KEY_TEMPLATE.format(source), json.dumps(summary), ex=7 * 24 * 3600)
     except redis.RedisError:
         logger.warning("No se pudo publicar el resumen de ejecución en Redis")
 
@@ -93,16 +98,74 @@ def scrape_mobile_de(
     enqueue_image_downloads: bool = True,
 ) -> dict:
     """Scrapea mobile.de e ingesta los anuncios. Devuelve un resumen serializable."""
-    started = time.monotonic()
-    if not _acquire_lock():
-        logger.info("mobile_de: ya hay una ejecución en curso; se omite")
-        return {"source": "mobile_de", "skipped": True, "reason": "lock"}
+    return _run_scrape(
+        "mobile_de",
+        MobileDeScraper(),
+        max_pages=max_pages,
+        save_raw_response=save_raw_response,
+        enqueue_image_downloads=enqueue_image_downloads,
+    )
 
-    scraper = MobileDeScraper()
+
+@celery_app.task(
+    name="scrape.autoscout24",
+    autoretry_for=(httpx.HTTPError,),
+    retry_backoff=True,
+    retry_kwargs={"max_retries": 3},
+)
+def scrape_autoscout24(
+    max_pages: int = 1,
+    save_raw_response: bool = True,
+    enqueue_image_downloads: bool = True,
+) -> dict:
+    """Scrapea AutoScout24.es e ingesta los anuncios."""
+    return _run_scrape(
+        "autoscout24",
+        AutoScout24Scraper(),
+        max_pages=max_pages,
+        save_raw_response=save_raw_response,
+        enqueue_image_downloads=enqueue_image_downloads,
+    )
+
+
+@celery_app.task(
+    name="scrape.coches_net",
+    autoretry_for=(httpx.HTTPError,),
+    retry_backoff=True,
+    retry_kwargs={"max_retries": 3},
+)
+def scrape_coches_net(
+    max_pages: int = 1,
+    save_raw_response: bool = True,
+    enqueue_image_downloads: bool = True,
+) -> dict:
+    """Scrapea coches.net e ingesta los anuncios."""
+    return _run_scrape(
+        "coches_net",
+        CochesNetScraper(),
+        max_pages=max_pages,
+        save_raw_response=save_raw_response,
+        enqueue_image_downloads=enqueue_image_downloads,
+    )
+
+
+def _run_scrape(
+    source: str,
+    scraper: BaseScraper,
+    *,
+    max_pages: int,
+    save_raw_response: bool,
+    enqueue_image_downloads: bool,
+) -> dict:
+    """Ejecuta un scraper genérico: lock → fetch → ingesta → imágenes → resumen."""
+    started = time.monotonic()
+    if not _acquire_lock(source):
+        logger.info("%s: ya hay una ejecución en curso; se omite", source)
+        return {"source": source, "skipped": True, "reason": "lock"}
 
     def _save_raw(page: int, html: str) -> None:
         if save_raw_response:
-            save_raw(html, "mobile_de", f"srp_page_{page}.html")
+            save_raw(html, source, f"srp_page_{page}.html")
 
     listings = scraper.run(max_pages=max_pages, on_page=_save_raw)
 
@@ -122,14 +185,15 @@ def scrape_mobile_de(
 
     duration_ms = int((time.monotonic() - started) * 1000)
     summary = {
-        "source": "mobile_de",
+        "source": source,
         "listings": len(listings),
         "duration_ms": duration_ms,
         **asdict(result),
     }
     logger.info(
-        "mobile_de: %s anuncios (%s ms) | creados=%s actualizados=%s snapshots=%s "
+        "%s: %s anuncios (%s ms) | creados=%s actualizados=%s snapshots=%s "
         "eventos=%s omitidos=%s",
+        source,
         len(listings),
         duration_ms,
         result.listings_created,
@@ -138,7 +202,7 @@ def scrape_mobile_de(
         result.events_emitted,
         result.skipped,
     )
-    _publish_last_run(summary)
+    _publish_last_run(summary, source)
     return summary
 
 

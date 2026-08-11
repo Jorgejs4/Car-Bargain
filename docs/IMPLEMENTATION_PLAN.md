@@ -103,6 +103,11 @@ Cada fase termina verificable (tests pasan, servicios arrancan).
 - Tabla `price_predictions` (persistir valoraciones).
 - **Aceptación:** para un BMW 320d de DE, endpoint devuelve precio ES estimado con intervalo y confianza, corregido por estado.
 
+> **Estado real (agosto 2026):** scrapers live de **coches.net** y **AutoScout24 (ES)**
+> implementados, testeado el pipeline end-to-end e integrados en Celery/beat/API interna
+> (ver `docs/SCRAPERS.md`). **Pendiente:** valoración baseline (percentiles y
+> `price_predictions`) y corrección por `condition_bucket`.
+
 ## Fase 7 — Import Cost Engine + Deal Engine + Deal Score
 
 **Objetivo:** margen real tras todos los costes.
@@ -182,6 +187,10 @@ Endpoints:
 - Deploy a Oracle Cloud Always Free: Docker Compose en producción, GitHub Actions (lint/test/build), Nginx, HTTPS.
 - ClickHouse se evalúa solo si el volumen lo justifica (fuera del MVP).
 - **Aceptación:** MVP Alemania→España desplegado y scrapeando en producción.
+
+> **Estado real (agosto 2026):** **AutoScout24 (ES)** ya está implementado y
+> funcional en vivo (el mismo parser soporta `.de` cambiando `cy`). **Pendiente:**
+> confirmar AutoScout24 DE, Otomoto (PL) y el despliegue a Oracle Cloud.
 
 ---
 

@@ -2,6 +2,7 @@
 
 from types import SimpleNamespace
 
+import pytest
 from app.main import app
 from fastapi.testclient import TestClient
 from workers.celery_app import celery_app
@@ -66,3 +67,26 @@ def test_internal_trigger_defaults(monkeypatch) -> None:
         "save_raw_response": True,
         "enqueue_image_downloads": True,
     }
+
+
+@pytest.mark.parametrize(
+    ("path", "task_name"),
+    [
+        ("/internal/scrapers/autoscout24", "scrape.autoscout24"),
+        ("/internal/scrapers/coches-net", "scrape.coches_net"),
+    ],
+)
+def test_internal_triggers_new_scrapers(monkeypatch, path, task_name) -> None:
+    captured: dict = {}
+
+    def fake_send_task(name: str, kwargs=None):
+        captured["name"] = name
+        captured["kwargs"] = kwargs
+        return SimpleNamespace(id="task-new")
+
+    monkeypatch.setattr(celery_app, "send_task", fake_send_task)
+
+    response = client.post(path, headers={"X-Internal-Key": "dev-internal-key-change-me"})
+    assert response.status_code == 200
+    assert response.json()["status"] == "enqueued"
+    assert captured["name"] == task_name

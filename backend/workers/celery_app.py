@@ -21,6 +21,14 @@ celery_app.conf.beat_schedule = {
         "task": "scrape.mobile_de",
         "schedule": crontab(minute="*/15"),
     },
+    "scrape-autoscout24-every-15m": {
+        "task": "scrape.autoscout24",
+        "schedule": crontab(minute="*/15"),
+    },
+    "scrape-coches-net-every-15m": {
+        "task": "scrape.coches_net",
+        "schedule": crontab(minute="*/15"),
+    },
     "update-listing-status-every-5m": {
         "task": "status.update_listings",
         "schedule": crontab(minute="*/5"),

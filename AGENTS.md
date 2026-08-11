@@ -4,7 +4,7 @@
 
 - Documentación de diseño: `README.md` y `ARCHITECTURE.md` (en español). Referencia de producto/técnica; solapan mucho. Si difieren, `ARCHITECTURE.md` es la técnica.
 - `docs/IMPLEMENTATION_PLAN.md` — plan por fases, autorizado; incluye desvíos deliberados de los docs (detección de daños con CV desde el inicio, notificaciones con filtros de usuario).
-- **Backend en desarrollo (Fases 0-1, pipeline mobile.de de Fase 2, CV de Fase 3 —con torch instalado— y API REST de Fase 4 completados).** El frontend, `ml/` e `infrastructure/` aún no existen.
+- **Backend en desarrollo (Fases 0-1, pipeline mobile.de de Fase 2, CV de Fase 3 —con torch instalado—, API REST de Fase 4, vehicle matching de Fase 5, frontend de Fase 8, scrapers live de AutoScout24 y coches.net completados).** `ml/` e `infrastructure/` aún no existen. Consulta `docs/SCRAPERS.md` para el estado y guía de cada scraper.
 - Escribe toda documentación nueva en español.
 
 ## Comandos (Windows / PowerShell, Python 3.12)
@@ -21,8 +21,10 @@
 - Lint: `backend\.venv\Scripts\python.exe -m ruff check backend`
 - Scrape live one-shot (desde tu IP; devuelve 2 si mobile.de bloquea): `scripts\scrape_mobile_de_once.ps1 [--pages N]`
 - Scrape histórico (Wayback): `backend\.venv\Scripts\python.exe backend\scripts\scrape_mobile_de_wayback.py [--timestamp YYYYMMDDhhmmss]`
+- Guía de scrapers (estado y cómo construir cada uno): `docs/SCRAPERS.md`
 - Worker Celery (desde `backend/`): `.venv\Scripts\celery.exe -A workers.celery_app worker --loglevel=info`
 - Beat Celery (desde `backend/`): `.venv\Scripts\celery.exe -A workers.celery_app beat --loglevel=info`
+- Trigger manual de un scraper (requiere `X-Internal-Key`): `POST /internal/scrapers/{mobile-de|autoscout24|coches-net}` con `{"max_pages": N}`
 
 ## Convenciones
 
@@ -51,4 +53,5 @@
 - `backend/scrapers/` — uno por fuente; `base/` con el contrato común.
 - `backend/workers/` — Celery (`celery_app.py`).
 - `backend/migrations/` — Alembic.
-- `frontend/`, `ml/`, `infrastructure/` — aún no creados; no asumas que existen.
+- `frontend/` — Next.js (Fase 8, funcional).
+- `ml/`, `infrastructure/` — aún no creados; no asumas que existen.
