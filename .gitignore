@@ -18,6 +18,7 @@ raw/
 data/
 dist/
 build/
+logs/
 
 # Frontend
 node_modules/
