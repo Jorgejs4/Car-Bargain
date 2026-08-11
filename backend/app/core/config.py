@@ -29,6 +29,9 @@ class Settings(BaseSettings):
     # Clave compartida de los endpoints internos POST /internal/* (no públicos).
     internal_api_key: str = "dev-internal-key-change-me"
 
+    # Orígenes CORS permitidos para la API (dev: el frontend Next.js local).
+    cors_origins: list[str] = ["http://localhost:3000"]
+
     status_stale_after_hours: int = 6
     status_removed_after_hours: int = 48
     # JSON: {"mobile_de": {"stale_after_hours": 6, "removed_after_hours": 48}, ...}

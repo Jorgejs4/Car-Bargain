@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.health import router as health_router
 from app.api.routes.internal import router as internal_router
@@ -10,6 +11,16 @@ app = FastAPI(
     title=settings.app_name,
     version="0.2.0",
     description="API de detección de oportunidades de importación de vehículos Europa → España.",
+)
+
+# CORS: el frontend (Next.js en :3000) consume la API; en prod se restringe con la
+# variable `cors_origins` (p.ej. https://app.tudominio.com).
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(health_router)
