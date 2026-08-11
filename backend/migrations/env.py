@@ -1,5 +1,6 @@
 from logging.config import fileConfig
 
+import app.models  # noqa: F401  # registra los modelos en Base.metadata para autogenerate
 from alembic import context
 from app.core.config import settings
 from app.db.base import Base
@@ -23,6 +24,12 @@ target_metadata = Base.metadata
 config.set_main_option("sqlalchemy.url", settings.database_url)
 
 
+def include_object(obj, name, type_, reflected, compare_to) -> bool:
+    """Ignora objetos ya existentes en la BD que no están modelados
+    (tablas de PostGIS: spatial_ref_sys, tiger, topology, ...) para que
+    autogenerate no intente eliminarlos."""
+    return not (reflected and compare_to is None)
+
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
@@ -41,6 +48,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        include_object=include_object,
     )
 
     with context.begin_transaction():
@@ -62,7 +70,9 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection,
+            target_metadata=target_metadata,
+            include_object=include_object,
         )
 
         with context.begin_transaction():
