@@ -50,6 +50,9 @@ class Settings(BaseSettings):
     # Penalización de riesgo cuando el texto dice "sin accidentes" pero la foto muestra daño.
     contradiction_tolerance: float = 0.3
 
+    # Vehicle matching (Fase 5). Umbrales de confianza para cada estrategia.
+    match_fuzzy_threshold: float = 0.85  # confianza mínima para aceptar un match fuzzy
+
 
 @lru_cache
 def get_settings() -> Settings:

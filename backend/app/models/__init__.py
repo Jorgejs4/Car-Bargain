@@ -3,6 +3,7 @@ from app.models.listing_event import ListingEvent, ListingEventType
 from app.models.listing_snapshot import ListingSnapshot
 from app.models.photo_analysis import PhotoAnalysis
 from app.models.vehicle import Vehicle
+from app.models.vehicle_match import VehicleMatch
 
 __all__ = [
     "Listing",
@@ -12,4 +13,5 @@ __all__ = [
     "ListingStatus",
     "PhotoAnalysis",
     "Vehicle",
+    "VehicleMatch",
 ]

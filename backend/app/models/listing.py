@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from app.models.listing_snapshot import ListingSnapshot
     from app.models.photo_analysis import PhotoAnalysis
     from app.models.vehicle import Vehicle
+    from app.models.vehicle_match import VehicleMatch
 
 
 class ListingStatus(str, Enum):
@@ -85,3 +86,4 @@ class Listing(Base):
     photo_analyses: Mapped[list["PhotoAnalysis"]] = relationship(
         back_populates="listing", cascade="all, delete-orphan"
     )
+    vehicle_match: Mapped["VehicleMatch | None"] = relationship(back_populates="listing", uselist=False)

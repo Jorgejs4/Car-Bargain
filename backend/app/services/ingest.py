@@ -1,7 +1,8 @@
 """Ingesta de `NormalizedListing` en la base de datos (Fase 2).
 
 - Upsert de listings por identidad `(source, source_listing_id)`.
-- `find_or_create_vehicle` con clave exacta amplia (matching fino = Fase 4).
+- Vehicle matching normalizado (Fase 5): `match_vehicle` asigna/crea el vehículo
+  y conserva la traza en `vehicle_matches`.
 - Snapshots SIEMPRE append-only (nunca sobrescribir).
 - `condition_signals` de texto (lexicón DE/ES) en cada snapshot, con `confidence`+`source`.
 - Emite eventos `LISTED`, `PRICE_CHANGED`, `MILEAGE_CHANGED`, `DESCRIPTION_CHANGED`, `REAPPEARED`.
@@ -23,12 +24,11 @@ from app.models import (
     ListingEventType,
     ListingSnapshot,
     ListingStatus,
-    Vehicle,
+    VehicleMatch,
 )
+from app.services.vehicle_matching import match_vehicle
 
 logger = logging.getLogger(__name__)
-
-_POWER_TOLERANCE = 0.001
 
 # Idioma del lexicón según el país del anuncio (default alemán, el idioma dominante).
 _LANG_BY_COUNTRY = {"DE": "de", "AT": "de", "CH": "de", "ES": "es"}
@@ -52,41 +52,6 @@ class IngestResult:
     skipped: int = 0
     # Ids de los listings creados o actualizados en esta ejecución (para tareas posteriores).
     affected_listing_ids: list[int] = field(default_factory=list)
-
-
-def find_or_create_vehicle(session: Session, nl: NormalizedListing) -> Vehicle:
-    candidates = session.scalars(
-        select(Vehicle).where(
-            Vehicle.brand == nl.brand,
-            Vehicle.model == nl.model,
-            Vehicle.generation == nl.generation,
-            Vehicle.variant == nl.variant,
-            Vehicle.year == nl.year,
-            Vehicle.fuel == nl.fuel,
-            Vehicle.transmission == nl.transmission,
-        )
-    ).all()
-    for vehicle in candidates:
-        if (vehicle.power_kw is None and nl.power_kw is None) or (
-            vehicle.power_kw is not None
-            and nl.power_kw is not None
-            and abs(float(vehicle.power_kw) - nl.power_kw) < _POWER_TOLERANCE
-        ):
-            return vehicle
-    vehicle = Vehicle(
-        brand=nl.brand,
-        model=nl.model,
-        generation=nl.generation,
-        variant=nl.variant,
-        year=nl.year,
-        fuel=nl.fuel,
-        transmission=nl.transmission,
-        power_kw=nl.power_kw,
-        co2_g_km=nl.co2_g_km,
-    )
-    session.add(vehicle)
-    session.flush()
-    return vehicle
 
 
 def upsert_listing(session: Session, nl: NormalizedListing) -> tuple[Listing, bool, bool]:
@@ -201,11 +166,34 @@ def _emit_events(
     return len(events)
 
 
+def _record_match(session: Session, listing: Listing, result, nl: NormalizedListing) -> None:
+    """Upsert de la traza de matching en `vehicle_matches` (una fila por listing)."""
+    match = session.scalar(select(VehicleMatch).where(VehicleMatch.listing_id == listing.id))
+    if match is None:
+        match = VehicleMatch(listing_id=listing.id)
+        session.add(match)
+    match.vehicle_id = result.vehicle.id
+    match.strategy = result.strategy
+    match.confidence = result.confidence
+    match.normalized_value = result.normalized_value
+    match.raw_value = {
+        "brand": nl.brand,
+        "model": nl.model,
+        "generation": nl.generation,
+        "variant": nl.variant,
+        "fuel": nl.fuel,
+        "transmission": nl.transmission,
+    }
+    match.source = "vehicle_matching"
+    session.flush()
+
+
 def _ingest_one(session: Session, nl: NormalizedListing) -> tuple[Listing, bool, bool, int]:
     """Ingesta un anuncio. Devuelve `(listing, created, was_removed, events)`."""
     listing, created, was_removed = upsert_listing(session, nl)
-    vehicle = find_or_create_vehicle(session, nl)
-    listing.vehicle_id = vehicle.id
+    result = match_vehicle(session, nl)
+    listing.vehicle_id = result.vehicle.id
+    _record_match(session, listing, result, nl)
     prev_snapshot = _latest_snapshot(session, listing.id)
     _append_snapshot(session, listing, nl)
     events = _emit_events(session, listing, nl, prev_snapshot, created=created, was_removed=was_removed)
