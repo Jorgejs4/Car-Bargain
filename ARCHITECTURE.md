@@ -581,6 +581,84 @@ class NormalizedListing:
     scraped_at: datetime
 ```
 
+### 11.1 Estado real: mobile.de bloquea scraping directo
+
+Verificado el 2026-08-11 desde una IP de datacenter:
+
+- `suchen.mobile.de` (host donde vive el SRP con resultados) responde **403 "Zugriff
+  verweigert"** para cualquier UA (incluido Googlebot). También bloqueado por HTTP.
+- Los endpoints JSON de la SPA (`/api/...`) responden 401/403; `www.mobile.de/fahrzeuge/suche.html`
+  devuelve 200 pero **sin SSR de resultados** (`search.srp.data = None`): la SPA carga los
+  resultados desde `suchen.mobile.de`, bloqueado.
+- Conclusión: el bloqueo es **por IP a nivel de WAF**, no por UA/fingerprint. Para scraping
+  live se necesita una IP permitida (residencial) o un proxy configurado en `SCRAPER_PROXY`
+  (ver `app/core/config.py`). El scraper propaga el 403 con un mensaje claro en lugar de
+  silenciarlo.
+
+### 11.2 Verificación contra datos reales (Wayback Machine)
+
+El parser/mapper se verificaron contra un snapshot **real** de
+`suchen.mobile.de/fahrzeuge/search.html` (Wayback Machine, 2025-12-05), que reveló el
+schema actual, distinto del clásico:
+
+```text
+state.search.srp.data.searchResults.items   # lista de anuncios (mixta)
+  ├── ad / topAd / eyecatcherAd             # anuncios reales (tienen "id")
+  ├── page1Ads                              # contenedor: .items = anuncios (se aplana)
+  └── inlineAdvertising                     # banners publicitarios (se descartan)
+```
+
+Campos clave de un anuncio: `id`, `make`, `model`, `title`, `price.grossAmount`,
+`price.grossCurrency`, `relativeUrl`, `attr` (strings display en alemán: `fr` matriculación,
+`ml` km, `pw` kW, `ft` combustible, `tr` cambio, `cn` país, `loc` ciudad), `contactInfo`
+(`typeLocalized` para vendedor), `previewThumbnails`/`previewImage`.
+
+- `backend/tests/fixtures/mobile_de/search_page.html` es ese snapshot real (URLs de
+  web.archive.org limpiadas), con 24 anuncios.
+- El parser conserva fallback a la estructura antigua `searchResult.ads`.
+- `page1Ads` se aplana y `inlineAdvertising` se descarta en `parser.py`.
+
+### 11.3 Pipeline de Fase 2 (scraper mobile.de completo)
+
+- `scrapers/mobile_de/wayback.py` — fuente histórica vía Wayback Machine:
+  `list_snapshots` (CDX API) y `fetch_snapshot`; `run_latest(url)` devuelve
+  `NormalizedListing` con `scraped_at` = fecha del snapshot (no contamina la serie
+  histórica de precios). Script: `backend/scripts/scrape_mobile_de_wayback.py`.
+- `scrapers/base/condition.py` — `extract_condition_signals(text, lang, source)`:
+  lexicón DE/ES de señales de estado (accidente, daños cosméticos, óxido, repintado,
+  motor) con `confidence` + `source`; ausencia de palabras ⇒ `unknown` (nunca asumir
+  buen estado). El idioma se deriva del país del anuncio (`DE/AT/CH` → `de`,
+  `ES` → `es`).
+- `app/services/ingest.py` — `ingest_listings(session, listings)`:
+  - `upsert_listing` por `(source, source_listing_id)` (actualiza `last_seen_at`,
+    reactiva `REMOVED` → `ACTIVE` con evento `REAPPEARED`).
+  - `find_or_create_vehicle` con clave exacta amplia `(brand, model, generation,
+    variant, year, fuel, transmission, power_kw)`; el matching fino es Fase 4.
+  - Snapshot SIEMPRE append-only (con `condition_signals` de texto + `raw_data`).
+  - Eventos `LISTED`, `PRICE_CHANGED`, `MILEAGE_CHANGED`, `DESCRIPTION_CHANGED`.
+  - Cada anuncio se procesa en un savepoint: si uno falla solo se omite (`skipped`);
+    el resultado incluye los ids afectados para encolar tareas posteriores.
+- `workers/tasks.py`:
+  - `scrape.mobile_de` — scraper → raw → ingesta, con lock Redis
+    (`scraper:mobile_de:running`, TTL configurable) que omite ejecuciones solapadas,
+    retry (backoff) solo para errores transitorios de red (el 403 no se reintenta),
+    encola la descarga de imágenes y publica un resumen de ejecución en Redis
+    (`scraper:mobile_de:last_run`, observabilidad mínima).
+  - `images.download` — descarga `image_urls` del último snapshot a
+    `raw/<source>/images/<listing_id>/` + `manifest.json` (URL origen → ruta local);
+    sin reintentos (403/404 son permanentes), un fallo no bloquea al resto.
+  - `status.update_listings` — job de seguimiento de estado por ausencia.
+- `app/services/status.py` — `update_listing_statuses(session, source, now)`:
+  marca `STALE` (>= umbral de stale) y `REMOVED` (>= umbral de removed) según
+  `last_seen_at`, emitiendo `STATUS_CHANGED`/`REMOVED`. Nunca toca `SOLD` (una
+  desaparición no es una venta). Umbrales por fuente vía `STATUS_THRESHOLDS_JSON`
+  (JSON en `.env`) con fallback a `STATUS_STALE_AFTER_HOURS`/`STATUS_REMOVED_AFTER_HOURS`.
+- `app/services/raw_store.py` — raw (HTML e imágenes) en
+  `backend/data/raw/<source>/...` por defecto; opcional Cloudflare R2 (`r2_*` en
+  `.env`, requiere `boto3`). Nunca lanza (no rompe la ingesta).
+- Celery beat (en `workers/celery_app.py`): `scrape.mobile_de` cada 15 min y
+  `status.update_listings` cada 5 min.
+
 ---
 
 # 12. Fuente de datos raw

@@ -15,6 +15,7 @@ venv/
 
 # Datos y artefactos
 raw/
+data/
 dist/
 build/
 

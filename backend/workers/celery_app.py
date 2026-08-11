@@ -1,5 +1,6 @@
 from app.core.config import settings
 from celery import Celery
+from celery.schedules import crontab
 
 celery_app = Celery(
     "car_bargains",
@@ -14,5 +15,16 @@ celery_app.conf.update(
     timezone="Europe/Madrid",
     enable_utc=True,
 )
+
+celery_app.conf.beat_schedule = {
+    "scrape-mobile-de-every-15m": {
+        "task": "scrape.mobile_de",
+        "schedule": crontab(minute="*/15"),
+    },
+    "update-listing-status-every-5m": {
+        "task": "status.update_listings",
+        "schedule": crontab(minute="*/5"),
+    },
+}
 
 celery_app.autodiscover_tasks(["workers"])

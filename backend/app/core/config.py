@@ -28,6 +28,12 @@ class Settings(BaseSettings):
 
     status_stale_after_hours: int = 6
     status_removed_after_hours: int = 48
+    # JSON: {"mobile_de": {"stale_after_hours": 6, "removed_after_hours": 48}, ...}
+    # Sobrescribe los valores globales por fuente (umbrales configurables por fuente).
+    status_thresholds_json: str | None = None
+
+    # TTL del lock Redis anti-solapamiento del scraper (en segundos).
+    scraper_lock_ttl_seconds: int = 840
 
 
 @lru_cache

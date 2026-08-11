@@ -4,7 +4,7 @@
 
 - Documentación de diseño: `README.md` y `ARCHITECTURE.md` (en español). Referencia de producto/técnica; solapan mucho. Si difieren, `ARCHITECTURE.md` es la técnica.
 - `docs/IMPLEMENTATION_PLAN.md` — plan por fases, autorizado; incluye desvíos deliberados de los docs (detección de daños con CV desde el inicio, notificaciones con filtros de usuario).
-- **Backend en desarrollo (Fase 0 completada).** El frontend, `ml/` e `infrastructure/` aún no existen.
+- **Backend en desarrollo (Fases 0-1 y el pipeline mobile.de de la Fase 2 completados).** El frontend, `ml/` e `infrastructure/` aún no existen.
 - Escribe toda documentación nueva en español.
 
 ## Comandos (Windows / PowerShell, Python 3.12)
@@ -18,6 +18,10 @@
   - `prepend_sys_path = %(here)s` en `alembic.ini` (importa `app` desde cualquier CWD).
 - Tests (desde `backend/`): `.venv\Scripts\python.exe -m pytest tests -q`
 - Lint: `backend\.venv\Scripts\python.exe -m ruff check backend`
+- Scrape live one-shot (desde tu IP; devuelve 2 si mobile.de bloquea): `scripts\scrape_mobile_de_once.ps1 [--pages N]`
+- Scrape histórico (Wayback): `backend\.venv\Scripts\python.exe backend\scripts\scrape_mobile_de_wayback.py [--timestamp YYYYMMDDhhmmss]`
+- Worker Celery (desde `backend/`): `.venv\Scripts\celery.exe -A workers.celery_app worker --loglevel=info`
+- Beat Celery (desde `backend/`): `.venv\Scripts\celery.exe -A workers.celery_app beat --loglevel=info`
 
 ## Convenciones
 

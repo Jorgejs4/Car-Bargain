@@ -48,3 +48,17 @@ def db_session():
         session.close()
         transaction.rollback()
         connection.close()
+
+
+@pytest.fixture(autouse=True)
+def _clean_committed_data():
+    """Borra después de cada test los datos commiteados por tasks (sesión propia).
+
+    Los tests que ejecutan tasks Celery escriben con `SessionLocal().commit()`, que
+    escapa al rollback del `db_session`; sin esta limpieza contaminan al resto.
+    """
+    yield
+    from app.db.session import engine
+
+    with engine.begin() as conn:
+        conn.execute(text("TRUNCATE listing_events, listing_snapshots, listings, vehicles CASCADE"))
