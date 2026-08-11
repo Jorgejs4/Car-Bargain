@@ -1,5 +1,4 @@
 from datetime import datetime
-from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -10,7 +9,7 @@ class ListingSnapshotRead(BaseModel):
     id: int
     listing_id: int
     scraped_at: datetime
-    price: Decimal | None
+    price: float | None
     currency: str | None
     mileage: int | None
     title: str | None

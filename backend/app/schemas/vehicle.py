@@ -1,5 +1,4 @@
 from datetime import date, datetime
-from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -14,9 +13,9 @@ class VehicleBase(BaseModel):
     fuel: str | None = None
     transmission: str | None = None
     drivetrain: str | None = None
-    power_kw: Decimal | None = None
+    power_kw: float | None = None
     engine_cc: int | None = None
-    co2_g_km: Decimal | None = None
+    co2_g_km: float | None = None
     body_type: str | None = None
 
 

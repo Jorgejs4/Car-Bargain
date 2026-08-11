@@ -682,6 +682,25 @@ Campos clave de un anuncio: `id`, `make`, `model`, `title`, `price.grossAmount`,
 - **CV nunca es el modelo principal de valoración**: solo alimenta riesgo/`needs_review`
   y, más adelante, el descuento por estado del modelo de precio (invariante del dominio).
 
+### 11.5 API REST (Fase 4)
+
+- `app/api/routes/listings.py` — `GET /api/v1/listings` (+filtros `brand`, `model`,
+  `country`, `price_min/max`, `mileage_max`, `year_min`, `fuel`, `transmission`,
+  `seller_type`, `source`, `needs_review`), paginado (`Page` genérico); por defecto
+  solo `status='ACTIVE'` (regla: no mezclar live con histórico). Precio/km se filtran
+  sobre el último snapshot.
+- `GET /api/v1/listings/active` (atajo), `GET /api/v1/listings/{id}` (detalle con
+  vehículo, serie de snapshots, eventos, `photo_analyses`, `condition_signals`,
+  `needs_review`).
+- `app/api/routes/vehicles.py` — `GET /api/v1/vehicles/{id}` (con sus listings ACTIVE),
+  `/vehicles/{id}/history` (serie append-only por anuncio), `/vehicles/{id}/market`
+  (percentiles P10/P50/P90, min/max/mean sobre listings ACTIVE).
+- `app/api/routes/internal.py` — `POST /internal/scrapers/mobile-de` protegido con
+  header `X-Internal-Key` (compara `internal_api_key` de la config, timing-safe);
+  encola `scrape.mobile_de` vía Celery. No expuesto al público.
+- `app/services/listings_query.py` — consultas de solo lectura; `Decimal` de la DB se
+  expone como `float` en la frontera de la API (los schemas son la frontera).
+
 ---
 
 # 12. Fuente de datos raw

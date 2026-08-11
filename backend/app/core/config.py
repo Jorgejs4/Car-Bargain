@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     r2_bucket: str | None = None
     scraper_proxy: str | None = None
 
+    # Clave compartida de los endpoints internos POST /internal/* (no públicos).
+    internal_api_key: str = "dev-internal-key-change-me"
+
     status_stale_after_hours: int = 6
     status_removed_after_hours: int = 48
     # JSON: {"mobile_de": {"stale_after_hours": 6, "removed_after_hours": 48}, ...}

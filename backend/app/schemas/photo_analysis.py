@@ -1,5 +1,4 @@
 from datetime import datetime
-from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -20,7 +19,7 @@ class PhotoAnalysisRead(BaseModel):
     image_url: str
     local_path: str | None
     label: str | None
-    probability: Decimal | None
+    probability: float | None
     model_version: str | None
     analyzed_at: datetime
     created_at: datetime

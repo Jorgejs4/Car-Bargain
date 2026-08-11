@@ -1,0 +1,4 @@
+# Ruff (linter de Python). Sin `select` explícito: se usan las reglas por defecto.
+# B008: `Depends()`/`Query()` en defaults de parámetros es el patrón estándar de FastAPI.
+[lint]
+ignore = ["B008"]

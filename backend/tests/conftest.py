@@ -50,6 +50,22 @@ def db_session():
         connection.close()
 
 
+@pytest.fixture()
+def committed_session():
+    """Sesión con commits reales, visible para el TestClient de la API.
+
+    `db_session` usa savepoints (el commit no persiste para otras conexiones);
+    la limpieza la hace el autouse `_clean_committed_data`.
+    """
+    from app.db.session import SessionLocal
+
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 @pytest.fixture(autouse=True)
 def _clean_committed_data():
     """Borra después de cada test los datos commiteados por tasks (sesión propia).

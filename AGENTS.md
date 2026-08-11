@@ -4,7 +4,7 @@
 
 - Documentación de diseño: `README.md` y `ARCHITECTURE.md` (en español). Referencia de producto/técnica; solapan mucho. Si difieren, `ARCHITECTURE.md` es la técnica.
 - `docs/IMPLEMENTATION_PLAN.md` — plan por fases, autorizado; incluye desvíos deliberados de los docs (detección de daños con CV desde el inicio, notificaciones con filtros de usuario).
-- **Backend en desarrollo (Fases 0-1 y el pipeline mobile.de de la Fase 2 completados; CV de Fase 3 implementado con degradación sin torch).** El frontend, `ml/` e `infrastructure/` aún no existen.
+- **Backend en desarrollo (Fases 0-1, pipeline mobile.de de Fase 2, CV de Fase 3 —con torch instalado— y API REST de Fase 4 completados).** El frontend, `ml/` e `infrastructure/` aún no existen.
 - Escribe toda documentación nueva en español.
 
 ## Comandos (Windows / PowerShell, Python 3.12)
