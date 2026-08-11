@@ -25,6 +25,10 @@ celery_app.conf.beat_schedule = {
         "task": "status.update_listings",
         "schedule": crontab(minute="*/5"),
     },
+    "analyze-pending-images-every-15m": {
+        "task": "images.analyze_pending",
+        "schedule": crontab(minute="*/15"),
+    },
 }
 
 celery_app.autodiscover_tasks(["workers"])

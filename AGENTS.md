@@ -4,12 +4,13 @@
 
 - Documentación de diseño: `README.md` y `ARCHITECTURE.md` (en español). Referencia de producto/técnica; solapan mucho. Si difieren, `ARCHITECTURE.md` es la técnica.
 - `docs/IMPLEMENTATION_PLAN.md` — plan por fases, autorizado; incluye desvíos deliberados de los docs (detección de daños con CV desde el inicio, notificaciones con filtros de usuario).
-- **Backend en desarrollo (Fases 0-1 y el pipeline mobile.de de la Fase 2 completados).** El frontend, `ml/` e `infrastructure/` aún no existen.
+- **Backend en desarrollo (Fases 0-1 y el pipeline mobile.de de la Fase 2 completados; CV de Fase 3 implementado con degradación sin torch).** El frontend, `ml/` e `infrastructure/` aún no existen.
 - Escribe toda documentación nueva en español.
 
 ## Comandos (Windows / PowerShell, Python 3.12)
 
 - Setup (una vez): `scripts\setup.ps1` — crea `backend\.venv` (Python 3.12), instala deps, copia `.env.example` → `.env`, instala navegador Playwright.
+- Deps CV (opcional, Fase 3): `backend\.venv\Scripts\pip.exe install -r backend\requirements-cv.txt` (torch + open_clip; sin ellas `images.analyze` degrada con `cv_unavailable`).
 - Dev: `scripts\dev.ps1` — levanta Docker (PostgreSQL+PostGIS en :5432, Redis en :6379), migra y arranca uvicorn en :8000.
 - Uvicorn manual: desde `backend/`: `.venv\Scripts\python.exe -m uvicorn app.main:app --reload`
 - Migraciones (desde la raíz del repo):

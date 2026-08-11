@@ -1,9 +1,20 @@
 from datetime import datetime
+from decimal import Decimal
 from enum import Enum
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, String, Text, UniqueConstraint, func
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    ForeignKey,
+    Numeric,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy import Enum as SqlEnum
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -11,6 +22,7 @@ from app.db.base import Base
 if TYPE_CHECKING:
     from app.models.listing_event import ListingEvent
     from app.models.listing_snapshot import ListingSnapshot
+    from app.models.photo_analysis import PhotoAnalysis
     from app.models.vehicle import Vehicle
 
 
@@ -53,6 +65,11 @@ class Listing(Base):
         index=True,
     )
 
+    # Agregado de daño visual (CV, Fase 3): photo_damage_prob / has_visible_damage / damage_types.
+    photo_signals: Mapped[dict | None] = mapped_column(JSONB)
+    needs_review: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    risk_score: Mapped[Decimal | None] = mapped_column(Numeric(4, 3))
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
@@ -63,5 +80,8 @@ class Listing(Base):
         back_populates="listing", cascade="all, delete-orphan"
     )
     events: Mapped[list["ListingEvent"]] = relationship(
+        back_populates="listing", cascade="all, delete-orphan"
+    )
+    photo_analyses: Mapped[list["PhotoAnalysis"]] = relationship(
         back_populates="listing", cascade="all, delete-orphan"
     )

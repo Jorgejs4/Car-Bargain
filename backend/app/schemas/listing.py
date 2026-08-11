@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,5 +19,8 @@ class ListingRead(BaseModel):
     first_seen_at: datetime
     last_seen_at: datetime | None
     status: ListingStatus
+    photo_signals: dict | None
+    needs_review: bool
+    risk_score: Decimal | None
     created_at: datetime
     updated_at: datetime

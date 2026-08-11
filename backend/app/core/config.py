@@ -35,6 +35,15 @@ class Settings(BaseSettings):
     # TTL del lock Redis anti-solapamiento del scraper (en segundos).
     scraper_lock_ttl_seconds: int = 840
 
+    # Detección de daños visuales (CV, Fase 3).
+    cv_enabled: bool = True
+    cv_model_name: str = "ViT-B-32"
+    cv_pretrained: str = "laion400m_e32"
+    # Probabilidad mínima para considerar daño visible en una foto.
+    damage_prob_min: float = 0.5
+    # Penalización de riesgo cuando el texto dice "sin accidentes" pero la foto muestra daño.
+    contradiction_tolerance: float = 0.3
+
 
 @lru_cache
 def get_settings() -> Settings:

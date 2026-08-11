@@ -1,7 +1,10 @@
-"""Tasks Celery del pipeline de scraping (Fase 2).
+"""Tasks Celery del pipeline de scraping y análisis (Fases 2-3).
 
-- `scrape_mobile_de`: scraper -> raw HTML -> ingesta -> enqueue de imágenes.
+- `scrape.mobile_de`: scraper -> raw HTML -> ingesta -> enqueue de imágenes.
 - `download_listing_images`: imágenes del último snapshot a `raw/<source>/images/<listing_id>/`.
+- `analyze_listing_images`: daño visual por foto (CLIP zero-shot) -> `photo_analyses` +
+  agregación en `listing.photo_signals` + `needs_review`/`risk_score`.
+- `analyze_pending_listings`: re-encola análisis para listings sin analizar (robustez).
 - `update_listing_status`: marca STALE/REMOVED por ausencia (umbrales por fuente).
 - Lock Redis anti-solapamiento y observabilidad mínima por ejecución.
 """
@@ -10,17 +13,25 @@ import json
 import logging
 import time
 from dataclasses import asdict
-from pathlib import Path
-from urllib.parse import urlparse
+from datetime import datetime, timezone
+from decimal import Decimal
 
 import httpx
 import redis
 from app.core.config import settings
 from app.db.session import SessionLocal
-from app.models import Listing, ListingSnapshot
+from app.models import Listing, ListingSnapshot, ListingStatus, PhotoAnalysis
+from app.schemas.photo_analysis import PhotoAnalysisResult
 from app.services.ingest import ingest_listings
-from app.services.raw_store import save_image, save_manifest, save_raw
+from app.services.listing_images import ensure_local_images
+from app.services.photo_analysis import aggregate_photo_signals, evaluate_damage_risk
+from app.services.raw_store import save_raw
 from app.services.status import update_listing_statuses
+from app.services.vision import (
+    VisionUnavailableError,
+    analyze_image_file,
+    get_vision_analyzer,
+)
 from scrapers.mobile_de.scraper import MobileDeScraper
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -31,8 +42,6 @@ logger = logging.getLogger(__name__)
 
 _LOCK_KEY = "scraper:mobile_de:running"
 _LAST_RUN_KEY = "scraper:mobile_de:last_run"
-
-_IMAGE_SUFFIXES = {"jpg", "jpeg", "png", "webp", "gif", "avif"}
 
 
 def _redis() -> redis.Redis:
@@ -66,20 +75,10 @@ def _latest_snapshot(session: Session, listing_id: int) -> ListingSnapshot | Non
     )
 
 
-def _guess_extension(url: str, response: httpx.Response) -> str:
-    content_type = response.headers.get("content-type", "").lower().split("/")[-1].split(";")[0]
-    if content_type in _IMAGE_SUFFIXES:
-        return "jpg" if content_type == "jpeg" else content_type
-    suffix = Path(urlparse(url).path).suffix.lower().lstrip(".")
-    return suffix if suffix in _IMAGE_SUFFIXES else "jpg"
-
-
-def _image_client() -> httpx.Client:
-    return httpx.Client(
-        follow_redirects=True,
-        timeout=30.0,
-        headers={"User-Agent": MobileDeScraper.user_agent},
-    )
+def _enqueue_analyze(listing_id: int) -> None:
+    """Encola el análisis CV del listing si está habilitado."""
+    if settings.cv_enabled:
+        analyze_listing_images.delay(listing_id)
 
 
 @celery_app.task(
@@ -147,8 +146,8 @@ def scrape_mobile_de(
 def download_listing_images(listing_id: int) -> dict:
     """Descarga las imágenes del último snapshot a `raw/<source>/images/<listing_id>/`.
 
-    Escribe un `manifest.json` con el resultado por URL. Sin reintentos: los errores
-    (403/404/5xx) se registran como fallidos y no bloquean al resto.
+    Al terminar encola el análisis CV (`images.analyze`). Sin reintentos: los errores
+    (403/404/5xx) se registran en el manifest y no bloquean al resto.
     """
     db = SessionLocal()
     try:
@@ -167,49 +166,157 @@ def download_listing_images(listing_id: int) -> dict:
     if not urls:
         return {"listing_id": listing_id, "status": "no_images", "downloaded": 0, "failed": 0}
 
-    downloaded, failed = 0, 0
-    results: list[dict] = []
-    with _image_client() as client:
-        for index, url in enumerate(urls, start=1):
-            try:
-                response = client.get(url)
-                response.raise_for_status()
-                ext = _guess_extension(url, response)
-                location = save_image(
-                    response.content, source, source_listing_id, f"{index:02d}.{ext}"
-                )
-                if location is None:
-                    raise RuntimeError("fallo al guardar la imagen")
-                downloaded += 1
-                results.append({"source_url": url, "local_path": location, "status": "ok"})
-            except (httpx.HTTPError, RuntimeError) as exc:
-                failed += 1
-                results.append(
-                    {"source_url": url, "local_path": None, "status": "failed", "error": str(exc)}
-                )
-
-    manifest = {
-        "listing_id": listing_id,
-        "source_listing_id": source_listing_id,
-        "downloaded": downloaded,
-        "failed": failed,
-        "images": results,
-    }
-    save_manifest(source, source_listing_id, manifest)
+    result = ensure_local_images(source, source_listing_id, urls)
     logger.info(
-        "images: listing %s (%s) -> %s descargadas, %s fallidas",
+        "images.download: listing %s (%s) -> %s descargadas, %s fallidas",
         listing_id,
         source_listing_id,
-        downloaded,
-        failed,
+        result["downloaded"],
+        result["failed"],
     )
+    _enqueue_analyze(listing_id)
     return {
         "listing_id": listing_id,
         "source": source,
         "status": "done",
-        "downloaded": downloaded,
-        "failed": failed,
+        "downloaded": result["downloaded"],
+        "failed": result["failed"],
     }
+
+
+@celery_app.task(name="images.analyze")
+def analyze_listing_images(listing_id: int) -> dict:
+    """Analiza las fotos del último snapshot (CLIP zero-shot) y actualiza el listing."""
+    if not settings.cv_enabled:
+        return {"listing_id": listing_id, "status": "cv_disabled", "analyzed": 0, "failed": 0}
+    try:
+        analyzer = get_vision_analyzer()
+    except VisionUnavailableError as exc:
+        logger.info("CV no disponible para listing %s: %s", listing_id, exc)
+        return {"listing_id": listing_id, "status": "cv_unavailable", "analyzed": 0, "failed": 0}
+
+    db = SessionLocal()
+    try:
+        listing = db.get(Listing, listing_id)
+        if listing is None:
+            return {"listing_id": listing_id, "status": "not_found", "analyzed": 0, "failed": 0}
+        snapshot = _latest_snapshot(db, listing.id)
+        if snapshot is None:
+            return {"listing_id": listing_id, "status": "no_snapshot", "analyzed": 0, "failed": 0}
+        urls = list((snapshot.raw_data or {}).get("image_urls") or [])
+        source = listing.source
+        source_listing_id = listing.source_listing_id
+    finally:
+        db.close()
+
+    if not urls:
+        return {"listing_id": listing_id, "status": "no_images", "analyzed": 0, "failed": 0}
+
+    local = ensure_local_images(source, source_listing_id, urls)
+    paths_by_url = {image["url"]: image["local_path"] for image in local["images"]}
+
+    results_by_url: dict[str, PhotoAnalysisResult] = {}
+    failed = 0
+    for url, image_path in paths_by_url.items():
+        try:
+            results_by_url[url] = analyze_image_file(analyzer, image_path)
+        except Exception as exc:  # noqa: BLE001  # un fallo de análisis no tumba al resto
+            failed += 1
+            logger.warning("Análisis CV fallido para %s: %s", url, exc)
+
+    analyses = list(results_by_url.values())
+    photo_signals = aggregate_photo_signals(analyses)
+
+    db = SessionLocal()
+    try:
+        now = datetime.now(timezone.utc)
+        for url, result in results_by_url.items():
+            row = db.scalar(
+                select(PhotoAnalysis).where(
+                    PhotoAnalysis.listing_id == listing_id,
+                    PhotoAnalysis.image_url == url,
+                )
+            )
+            if row is None:
+                db.add(
+                    PhotoAnalysis(
+                        listing_id=listing_id,
+                        image_url=url,
+                        local_path=paths_by_url[url],
+                        label=result.label,
+                        probability=Decimal(str(result.probability)),
+                        model_version=result.model_version,
+                        analyzed_at=now,
+                    )
+                )
+            else:
+                row.local_path = paths_by_url[url]
+                row.label = result.label
+                row.probability = Decimal(str(result.probability))
+                row.model_version = result.model_version
+                row.analyzed_at = now
+
+        latest = _latest_snapshot(db, listing_id)
+        text_signals = latest.condition_signals if latest is not None else None
+        risk, needs_review = evaluate_damage_risk(photo_signals, text_signals)
+
+        listing = db.get(Listing, listing_id)
+        if listing is not None:
+            listing.photo_signals = photo_signals
+            listing.risk_score = Decimal(str(risk))
+            listing.needs_review = needs_review
+
+        db.commit()
+        logger.info(
+            "images.analyze: listing %s -> %s fotos, %s fallidas, damage=%s, needs_review=%s",
+            listing_id,
+            len(analyses),
+            failed,
+            bool(photo_signals and photo_signals["has_visible_damage"]),
+            needs_review,
+        )
+        return {
+            "listing_id": listing_id,
+            "source": source,
+            "status": "done",
+            "analyzed": len(analyses),
+            "failed": failed,
+            "has_visible_damage": bool(photo_signals and photo_signals["has_visible_damage"]),
+            "needs_review": needs_review,
+            "risk_score": risk,
+        }
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
+
+
+@celery_app.task(name="images.analyze_pending")
+def analyze_pending_listings(limit: int = 50) -> dict:
+    """Re-encola el análisis CV de listings ACTIVE sin ninguna `photo_analysis`."""
+    if not settings.cv_enabled:
+        return {"status": "cv_disabled", "enqueued": 0}
+    try:
+        get_vision_analyzer()
+    except VisionUnavailableError:
+        return {"status": "cv_unavailable", "enqueued": 0}
+
+    db = SessionLocal()
+    try:
+        candidates = db.scalars(
+            select(Listing)
+            .outerjoin(PhotoAnalysis, PhotoAnalysis.listing_id == Listing.id)
+            .where(Listing.status == ListingStatus.ACTIVE, PhotoAnalysis.id.is_(None))
+            .limit(limit)
+        ).all()
+    finally:
+        db.close()
+
+    for listing in candidates:
+        _enqueue_analyze(listing.id)
+    logger.info("images.analyze_pending: %s listings encolados", len(candidates))
+    return {"status": "enqueued", "enqueued": len(candidates)}
 
 
 @celery_app.task(name="status.update_listings")

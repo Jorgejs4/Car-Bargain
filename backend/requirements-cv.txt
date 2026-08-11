@@ -1,0 +1,9 @@
+# Deps del motor de daños visuales (Fase 3, CV). Instalar aparte para no engordar
+# el entorno base:
+#   backend\.venv\Scripts\pip.exe install -r backend\requirements-cv.txt
+#
+# Sin estas dependencias el pipeline funciona: la tarea `images.analyze` degrada
+# con `cv_unavailable` en lugar de fallar.
+torch>=2.2
+open_clip_torch>=2.24
+pillow>=10.0

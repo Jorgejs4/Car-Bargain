@@ -61,4 +61,6 @@ def _clean_committed_data():
     from app.db.session import engine
 
     with engine.begin() as conn:
-        conn.execute(text("TRUNCATE listing_events, listing_snapshots, listings, vehicles CASCADE"))
+        conn.execute(
+            text("TRUNCATE photo_analyses, listing_events, listing_snapshots, listings, vehicles CASCADE")
+        )

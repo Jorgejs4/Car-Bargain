@@ -153,12 +153,16 @@ def test_download_listing_images_task(monkeypatch, tmp_path) -> None:
         }
     )
     monkeypatch.setattr("app.services.raw_store._DEFAULT_ROOT", tmp_path)
+    monkeypatch.setattr(tasks, "_enqueue_analyze", lambda *a, **k: None)
 
     def handler(request: httpx.Request) -> httpx.Response:
         content_type = "image/png" if request.url.path.endswith(".png") else "image/jpeg"
         return httpx.Response(200, content=b"\x00\x01fake-image", headers={"content-type": content_type})
 
-    monkeypatch.setattr(tasks, "_image_client", lambda: httpx.Client(transport=httpx.MockTransport(handler)))
+    monkeypatch.setattr(
+        "app.services.listing_images._image_client",
+        lambda: httpx.Client(transport=httpx.MockTransport(handler)),
+    )
 
     result = tasks.download_listing_images(listing_id)
 
@@ -174,6 +178,27 @@ def test_download_listing_images_task(monkeypatch, tmp_path) -> None:
     assert len(__import__("json").loads(manifest.read_text(encoding="utf-8"))["images"]) == 2
 
 
+def test_download_listing_images_enqueues_analyze(monkeypatch, tmp_path) -> None:
+    from workers import tasks
+
+    listing_id = _make_committed_listing({"image_urls": ["https://pictures.mobile.de/1"]})
+    monkeypatch.setattr("app.services.raw_store._DEFAULT_ROOT", tmp_path)
+    enqueued: list[int] = []
+    monkeypatch.setattr(tasks, "_enqueue_analyze", lambda lid: enqueued.append(lid))
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, content=b"x", headers={"content-type": "image/jpeg"})
+
+    monkeypatch.setattr(
+        "app.services.listing_images._image_client",
+        lambda: httpx.Client(transport=httpx.MockTransport(handler)),
+    )
+
+    tasks.download_listing_images(listing_id)
+
+    assert enqueued == [listing_id]
+
+
 def test_download_listing_images_reports_failures(monkeypatch, tmp_path) -> None:
     from workers import tasks
 
@@ -181,11 +206,15 @@ def test_download_listing_images_reports_failures(monkeypatch, tmp_path) -> None
         {"image_urls": ["https://pictures.mobile.de/1", "https://pictures.mobile.de/2"]}
     )
     monkeypatch.setattr("app.services.raw_store._DEFAULT_ROOT", tmp_path)
+    monkeypatch.setattr(tasks, "_enqueue_analyze", lambda *a, **k: None)
 
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(403 if request.url.path.endswith("/2") else 200, content=b"data")
 
-    monkeypatch.setattr(tasks, "_image_client", lambda: httpx.Client(transport=httpx.MockTransport(handler)))
+    monkeypatch.setattr(
+        "app.services.listing_images._image_client",
+        lambda: httpx.Client(transport=httpx.MockTransport(handler)),
+    )
 
     result = tasks.download_listing_images(listing_id)
 
@@ -238,3 +267,218 @@ def test_update_listing_status_task() -> None:
         event_types = set(db.scalars(select(ListingEvent.event_type)))
         assert "REMOVED" in event_types
         assert "STATUS_CHANGED" in event_types
+
+
+class _FakeAnalyzer:
+    model_version = "fake/1.0"
+
+    def __init__(self, results: list[tuple[str, float]]) -> None:
+        self._results = results
+        self._index = 0
+
+    def classify(self, image_path: str):
+        from app.schemas.photo_analysis import PhotoAnalysisResult
+
+        label, probability = self._results[self._index % len(self._results)]
+        self._index += 1
+        return PhotoAnalysisResult(label=label, probability=probability, model_version=self.model_version)
+
+
+def _make_committed_listing_with_images(tmp_path, urls: list[str]) -> int:
+    """Crea listing + snapshot con imágenes locales + manifest en tmp_path."""
+    import json as _json
+
+    listing_id = _make_committed_listing({"image_urls": urls})
+    image_dir = tmp_path / "mobile_de" / "images" / "IMG-001"
+    image_dir.mkdir(parents=True, exist_ok=True)
+    paths: dict[str, str] = {}
+    for index, url in enumerate(urls, start=1):
+        image_file = image_dir / f"{index:02d}.jpg"
+        image_file.write_bytes(b"fake-image-bytes")
+        paths[url] = str(image_file)
+    (image_dir / "manifest.json").write_text(
+        _json.dumps(
+            {
+                "images": [
+                    {"source_url": url, "local_path": path, "status": "ok"} for url, path in paths.items()
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    return listing_id
+
+
+def test_analyze_listing_images_task(monkeypatch, tmp_path) -> None:
+    from workers import tasks
+
+    urls = ["https://pictures.mobile.de/1", "https://pictures.mobile.de/2"]
+    listing_id = _make_committed_listing_with_images(tmp_path, urls)
+    monkeypatch.setattr("app.services.raw_store._DEFAULT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        tasks,
+        "get_vision_analyzer",
+        lambda: _FakeAnalyzer([("sin daños", 0.9), ("abolladura", 0.8)]),
+    )
+
+    result = tasks.analyze_listing_images(listing_id)
+
+    assert result["status"] == "done"
+    assert result["analyzed"] == 2
+    assert result["failed"] == 0
+    assert result["has_visible_damage"] is True
+    assert result["needs_review"] is False
+
+    from app.db.session import engine
+    from app.models import Listing, PhotoAnalysis
+
+    with Session(engine) as db:
+        analyses = db.scalars(select(PhotoAnalysis).where(PhotoAnalysis.listing_id == listing_id)).all()
+        assert len(analyses) == 2
+        labels = {a.label for a in analyses}
+        assert labels == {"sin daños", "abolladura"}
+
+        listing = db.get(Listing, listing_id)
+        assert listing.photo_signals["has_visible_damage"] is True
+        assert listing.photo_signals["damage_types"] == ["abolladura"]
+        assert listing.photo_signals["photo_damage_prob"] == 0.8
+        assert listing.needs_review is False
+        assert listing.risk_score is not None
+
+
+def test_analyze_listing_images_text_photo_contradiction(monkeypatch, tmp_path) -> None:
+    from datetime import datetime, timezone
+
+    from app.db.session import engine
+    from app.models import Listing, ListingSnapshot
+    from workers import tasks
+
+    listing_id = _make_committed_listing({"image_urls": ["https://pictures.mobile.de/1"]})
+    monkeypatch.setattr("app.services.raw_store._DEFAULT_ROOT", tmp_path)
+    with Session(engine) as db:
+        listing = db.get(Listing, listing_id)
+        listing.photo_signals = None
+        listing.needs_review = False
+        listing.risk_score = None
+        db.add(
+            ListingSnapshot(
+                listing_id=listing_id,
+                scraped_at=datetime.now(timezone.utc),
+                price=10000.0,
+                condition_signals={
+                    "accident_free": True,
+                    "has_accident": False,
+                    "has_cosmetic_damage": False,
+                    "has_rust": False,
+                    "has_engine_issue": False,
+                    "text_contradiction": False,
+                },
+                raw_data={"image_urls": ["https://pictures.mobile.de/1"]},
+            )
+        )
+        db.commit()
+
+    image_dir = tmp_path / "mobile_de" / "images" / "IMG-001"
+    image_dir.mkdir(parents=True, exist_ok=True)
+    (image_dir / "01.jpg").write_bytes(b"data")
+    import json as _json
+
+    (image_dir / "manifest.json").write_text(
+        _json.dumps(
+            {
+                "images": [
+                    {
+                        "source_url": "https://pictures.mobile.de/1",
+                        "local_path": str(image_dir / "01.jpg"),
+                        "status": "ok",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(
+        tasks, "get_vision_analyzer", lambda: _FakeAnalyzer([("óxido", 0.9)])
+    )
+
+    result = tasks.analyze_listing_images(listing_id)
+
+    assert result["needs_review"] is True
+    assert result["risk_score"] == 1.0
+
+    with Session(engine) as db:
+        listing = db.get(Listing, listing_id)
+        assert listing.needs_review is True
+        assert listing.photo_signals["has_visible_damage"] is True
+
+
+def test_analyze_listing_images_cv_unavailable(monkeypatch, tmp_path) -> None:
+    from workers import tasks
+
+    listing_id = _make_committed_listing({"image_urls": ["https://pictures.mobile.de/1"]})
+    monkeypatch.setattr("app.services.raw_store._DEFAULT_ROOT", tmp_path)
+    monkeypatch.setattr(
+        tasks,
+        "get_vision_analyzer",
+        lambda: (_ for _ in ()).throw(tasks.VisionUnavailableError("no torch")),
+    )
+
+    result = tasks.analyze_listing_images(listing_id)
+
+    assert result["status"] == "cv_unavailable"
+
+
+def test_analyze_pending_listings_enqueues_only_unanalyzed(monkeypatch, tmp_path) -> None:
+    from datetime import datetime, timezone
+
+    from app.db.session import engine
+    from app.models import Listing, ListingStatus, PhotoAnalysis
+    from workers import tasks
+
+    def _listing(sid: str) -> int:
+        with Session(engine) as db:
+            listing = Listing(
+                source="mobile_de",
+                source_listing_id=sid,
+                first_seen_at=datetime.now(timezone.utc),
+                status=ListingStatus.ACTIVE,
+            )
+            db.add(listing)
+            db.flush()
+            db.add(
+                ListingSnapshot(
+                    listing_id=listing.id,
+                    scraped_at=datetime.now(timezone.utc),
+                    price=10000.0,
+                    raw_data={"image_urls": ["https://pictures.mobile.de/1"]},
+                )
+            )
+            db.commit()
+            return listing.id
+
+    id_a = _listing("P-1")
+    id_b = _listing("P-2")
+    analyzed_id = _listing("P-3")
+
+    with Session(engine) as db:
+        db.add(
+            PhotoAnalysis(
+                listing_id=analyzed_id,
+                image_url="https://pictures.mobile.de/1",
+                label="sin daños",
+                probability=0.9,
+                analyzed_at=datetime.now(timezone.utc),
+            )
+        )
+        db.commit()
+
+    monkeypatch.setattr(tasks, "get_vision_analyzer", lambda: object())
+    enqueued: list[int] = []
+    monkeypatch.setattr(tasks, "_enqueue_analyze", lambda lid: enqueued.append(lid))
+
+    result = tasks.analyze_pending_listings(limit=50)
+
+    assert result["enqueued"] == 2
+    assert sorted(enqueued) == sorted([id_a, id_b])
+    assert analyzed_id not in enqueued

@@ -659,6 +659,29 @@ Campos clave de un anuncio: `id`, `make`, `model`, `title`, `price.grossAmount`,
 - Celery beat (en `workers/celery_app.py`): `scrape.mobile_de` cada 15 min y
   `status.update_listings` cada 5 min.
 
+### 11.4 Detección de daños visuales (Fase 3, CV)
+
+- Motor **CLIP zero-shot** (`app/services/vision.py`, open_clip + torch CPU): clasifica
+  cada foto en `sin daños / roces / abolladura / óxido / cristal roto / repintado`
+  con probabilidad (softmax sobre prompts). Sin dataset de entrenamiento; YOLO
+  fine-tune queda como evolución futura. Imports perezosos: si `torch`/`open_clip`
+  no están instalados (`backend/requirements-cv.txt`), la tarea degrada con
+  `cv_unavailable` sin romper el pipeline.
+- `app/services/listing_images.py` — `ensure_local_images(source, listing_id, urls)`:
+  reutilizable por descarga y análisis; idempotente vía `manifest.json`.
+- `photo_analyses` (tabla nueva): resultado por foto con `label`, `probability`,
+  `model_version`, `analyzed_at`; único por `(listing_id, image_url)`.
+- `app/services/photo_analysis.py` — agregación por anuncio → `listings.photo_signals`
+  (`photo_damage_prob`, `has_visible_damage`, `damage_types`, `analyzed_images`) y
+  `evaluate_damage_risk` → `risk_score` (0..1) + `needs_review`. La contradicción
+  texto/foto (ej. "unfallfrei" + foto dañada) sube el riesgo (tolerancia configurable)
+  y marca revisión manual. Umbrales: `DAMAGE_PROB_MIN` (0.5), `CONTRADICTION_TOLERANCE` (0.3).
+- Tasks Celery: `images.analyze` (análisis + actualización del listing) y
+  `images.analyze_pending` (re-encola listings ACTIVE sin analizar, robustez). Beat
+  lo ejecuta cada 15 min. `images.download` encola el análisis al terminar.
+- **CV nunca es el modelo principal de valoración**: solo alimenta riesgo/`needs_review`
+  y, más adelante, el descuento por estado del modelo de precio (invariante del dominio).
+
 ---
 
 # 12. Fuente de datos raw
