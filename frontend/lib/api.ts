@@ -102,6 +102,19 @@ export interface ListingDetail extends ListingListItem {
   snapshots: ListingSnapshotRead[];
   events: ListingEventRead[];
   photo_analyses: PhotoAnalysisRead[];
+  import_breakdown: ImportBreakdown | null;
+  market: MarketStats | null;
+}
+
+export interface ImportBreakdown {
+  source_country: string;
+  transport_cost: number;
+  registration_tax: number;
+  itv_inspection: number;
+  registration_fees: number;
+  total_import_cost: number;
+  total_cost_es: number;
+  rules_version: string;
 }
 
 export interface PricePoint {

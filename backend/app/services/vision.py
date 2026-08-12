@@ -28,6 +28,16 @@ _PROMPTS = [
     "a photo of a car with freshly repainted bodywork, color mismatch",
 ]
 
+# Clasificación de escena: exterior / interior / motor / otro.
+_SCENE_LABELS = ["exterior", "interior", "motor", "otro"]
+
+_SCENE_PROMPTS = [
+    "a photo showing the exterior body of a car, full body or side profile",
+    "a photo showing the interior of a car: dashboard, seats, steering wheel, door panel",
+    "a photo showing the engine bay, motor or mechanical parts of a car",
+    "a photo showing something else: a wheel closeup, trunk, documents, logo",
+]
+
 
 class VisionUnavailableError(RuntimeError):
     """El motor CV no está disponible (torch/open_clip no instalados o error de carga)."""
@@ -84,6 +94,28 @@ class VisionAnalyzer:
             probability=float(logits[top]),
             model_version=self.model_version,
         )
+
+    def classify_scene(self, image_path: str) -> tuple[str, float]:
+        """Clasifica la escena: exterior, interior, motor o otro.
+
+        Solo las fotos clasificadas como 'exterior' deben pasar al detector de
+        daños; las interiores y de motor no son relevantes para el estado de la
+        carrocería.
+        """
+        import torch
+        from PIL import Image
+
+        image = Image.open(image_path).convert("RGB")
+        inputs = self._preprocess(image).unsqueeze(0).to(self._device)
+        texts = self._tokenizer(_SCENE_PROMPTS).to(self._device)
+
+        with torch.no_grad():
+            image_features = self._model.encode_image(inputs)
+            text_features = self._model.encode_text(texts)
+            logits = (image_features @ text_features.T).softmax(dim=-1)[0]
+
+        top = int(logits.argmax(dim=-1))
+        return _SCENE_LABELS[top], float(logits[top])
 
 
 @lru_cache(maxsize=1)

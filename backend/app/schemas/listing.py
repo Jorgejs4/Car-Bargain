@@ -80,3 +80,5 @@ class ListingDetail(ListingListItem):
     snapshots: list[ListingSnapshotRead]
     events: list[ListingEventRead]
     photo_analyses: list[PhotoAnalysisRead]
+    import_breakdown: dict | None = None
+    market: dict | None = None

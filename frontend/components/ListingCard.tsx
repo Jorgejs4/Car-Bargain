@@ -45,55 +45,24 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
         <span className="text-xl font-bold">
           {formatPrice(listing.price, listing.currency)}
         </span>
-        <span className="text-xs text-neutral-500">{listing.source}</span>
+        {listing.bargain_score != null && (
+          <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${listing.bargain_score > 0 ? "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"}`}>
+            {listing.bargain_score > 0 ? "+" : ""}{(listing.bargain_score * 100).toFixed(0)}%
+          </span>
+        )}
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2">
+      {listing.country && listing.country !== "ES" && listing.total_cost_es != null && (
+        <div className="mt-0.5 text-xs text-amber-600 dark:text-amber-400">
+          {listing.total_cost_es.toLocaleString("es-ES")}€ total en España
+        </div>
+      )}
+
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
         {listing.is_historical && <HistoricalBadge />}
         {hasDamage && analyzedImages > 0 && <DamageBadge />}
         {listing.needs_review && <ReviewBadge />}
       </div>
-
-      {listing.risk_score != null && (
-        <div className="mt-3">
-          <div className="flex justify-between text-xs text-neutral-500">
-            <span>Riesgo</span>
-            <span>{listing.risk_score.toFixed(3)}</span>
-          </div>
-          <div className="mt-1 h-1.5 rounded-full bg-neutral-200 dark:bg-neutral-700">
-            <div
-              className="h-1.5 rounded-full bg-blue-600"
-              style={{ width: `${Math.min(100, listing.risk_score * 100)}%` }}
-            />
-          </div>
-        </div>
-      )}
-
-      {listing.bargain_score != null && (
-        <div className="mt-2">
-          <div className="flex justify-between text-xs font-medium">
-            <span className={listing.bargain_score > 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}>
-              {listing.bargain_score > 0 ? "Chollo" : "No chollo"}
-            </span>
-            <span className="text-neutral-500">{(listing.bargain_score * 100).toFixed(0)}%</span>
-          </div>
-          <div className="mt-1 h-1.5 rounded-full bg-neutral-200 dark:bg-neutral-700">
-            <div
-              className={`h-1.5 rounded-full ${listing.bargain_score > 0 ? "bg-green-500" : "bg-red-400"}`}
-              style={{ width: `${Math.min(100, Math.abs(listing.bargain_score * 100) + 30)}%` }}
-            />
-          </div>
-        </div>
-      )}
-
-      {listing.country && listing.country !== "ES" && listing.estimated_import_cost != null && (
-        <div className="mt-1 text-xs text-amber-600 dark:text-amber-400">
-          +{listing.estimated_import_cost.toLocaleString("es-ES")}€ importacion
-          {listing.total_cost_es != null && (
-            <> = {listing.total_cost_es.toLocaleString("es-ES")}€ total</>
-          )}
-        </div>
-      )}
     </Link>
   );
 }

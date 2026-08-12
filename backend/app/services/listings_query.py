@@ -248,6 +248,32 @@ def get_listing_detail(session: Session, listing_id: int) -> dict | None:
         PhotoAnalysisRead.model_validate(p).model_dump()
         for p in sorted(listing.photo_analyses, key=lambda p: p.created_at)
     ]
+
+    # Import breakdown para listings no-ES
+    from app.engines.import_costs import estimate_for_listing
+
+    if listing.country and listing.country != "ES" and latest and latest.price:
+        estimate = estimate_for_listing(
+            source_country=listing.country,
+            price_eur=float(latest.price),
+            co2_g_km=listing.vehicle.co2_g_km if listing.vehicle else None,
+        )
+        data["import_breakdown"] = {
+            "source_country": estimate.source_country,
+            "transport_cost": estimate.transport_cost,
+            "registration_tax": estimate.registration_tax,
+            "itv_inspection": estimate.itv_inspection,
+            "registration_fees": estimate.registration_fees,
+            "total_import_cost": estimate.total_import_cost,
+            "total_cost_es": float(latest.price) + estimate.total_import_cost,
+            "rules_version": estimate.rules_version,
+        }
+
+    # Estadísticas de mercado del vehículo
+    if listing.vehicle_id is not None:
+        market = vehicle_market(session, listing.vehicle_id)
+        data["market"] = market
+
     return data
 
 

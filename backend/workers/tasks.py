@@ -283,22 +283,36 @@ def analyze_listing_images(listing_id: int) -> dict:
     local = ensure_local_images(source, source_listing_id, urls)
     paths_by_url = {image["url"]: image["local_path"] for image in local["images"]}
 
-    results_by_url: dict[str, PhotoAnalysisResult] = {}
+    # Fase 3: pre-filtro de escena. Solo las fotos exteriores pasan al detector
+    # de daños; las interiores, motor y otras se guardan con la escena detectada.
+    damage_results: dict[str, PhotoAnalysisResult] = {}
+    scene_results: dict[str, str] = {}
+    skipped_scenes = 0
     failed = 0
+
     for url, image_path in paths_by_url.items():
         try:
-            results_by_url[url] = analyze_image_file(analyzer, image_path)
-        except Exception as exc:  # noqa: BLE001  # un fallo de análisis no tumba al resto
+            # Primero clasificar escena (exterior/interior/motor/otro)
+            scene, _scene_prob = analyzer.classify_scene(image_path)
+
+            if scene == "exterior":
+                # Solo exteriores → detector de daños
+                damage_results[url] = analyze_image_file(analyzer, image_path)
+            else:
+                scene_results[url] = scene
+                skipped_scenes += 1
+        except Exception as exc:  # noqa: BLE001
             failed += 1
             logger.warning("Análisis CV fallido para %s: %s", url, exc)
 
-    analyses = list(results_by_url.values())
+    analyses = list(damage_results.values())
     photo_signals = aggregate_photo_signals(analyses)
 
     db = SessionLocal()
     try:
         now = datetime.now(timezone.utc)
-        for url, result in results_by_url.items():
+
+        def _upsert_analysis(url: str, label: str, prob: float) -> None:
             row = db.scalar(
                 select(PhotoAnalysis).where(
                     PhotoAnalysis.listing_id == listing_id,
@@ -311,18 +325,24 @@ def analyze_listing_images(listing_id: int) -> dict:
                         listing_id=listing_id,
                         image_url=url,
                         local_path=paths_by_url[url],
-                        label=result.label,
-                        probability=Decimal(str(result.probability)),
-                        model_version=result.model_version,
+                        label=label,
+                        probability=Decimal(str(prob)),
+                        model_version=analyzer.model_version,
                         analyzed_at=now,
                     )
                 )
             else:
                 row.local_path = paths_by_url[url]
-                row.label = result.label
-                row.probability = Decimal(str(result.probability))
-                row.model_version = result.model_version
+                row.label = label
+                row.probability = Decimal(str(prob))
+                row.model_version = analyzer.model_version
                 row.analyzed_at = now
+
+        for url, result in damage_results.items():
+            _upsert_analysis(url, result.label, result.probability)
+
+        for url, scene in scene_results.items():
+            _upsert_analysis(url, f"escena_{scene}", 1.0)
 
         latest = _latest_snapshot(db, listing_id)
         text_signals = latest.condition_signals if latest is not None else None
@@ -336,9 +356,10 @@ def analyze_listing_images(listing_id: int) -> dict:
 
         db.commit()
         logger.info(
-            "images.analyze: listing %s -> %s fotos, %s fallidas, damage=%s, needs_review=%s",
+            "images.analyze: listing %s -> %s fotos exterior, %s escenas saltadas, %s fallidas, damage=%s, needs_review=%s",
             listing_id,
             len(analyses),
+            skipped_scenes,
             failed,
             bool(photo_signals and photo_signals["has_visible_damage"]),
             needs_review,
@@ -348,6 +369,7 @@ def analyze_listing_images(listing_id: int) -> dict:
             "source": source,
             "status": "done",
             "analyzed": len(analyses),
+            "skipped_scenes": skipped_scenes,
             "failed": failed,
             "has_visible_damage": bool(photo_signals and photo_signals["has_visible_damage"]),
             "needs_review": needs_review,

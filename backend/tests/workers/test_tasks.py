@@ -351,6 +351,9 @@ class _FakeAnalyzer:
         self._results = results
         self._index = 0
 
+    def classify_scene(self, image_path: str):
+        return "exterior", 1.0
+
     def classify(self, image_path: str):
         from app.schemas.photo_analysis import PhotoAnalysisResult
 

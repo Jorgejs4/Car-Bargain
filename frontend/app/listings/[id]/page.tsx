@@ -120,6 +120,12 @@ export default async function ListingPage({
           </p>
         </div>
         <div>
+          <p className="text-xs text-neutral-500">Margen aprox.</p>
+          <p className={`text-2xl font-bold ${listing.bargain_score != null && listing.bargain_score > 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}`}>
+            {listing.bargain_score != null ? `${listing.bargain_score > 0 ? "+" : ""}${(listing.bargain_score * 100).toFixed(0)}%` : "—"}
+          </p>
+        </div>
+        <div>
           <p className="text-xs text-neutral-500">Kilometraje</p>
           <p className="text-xl font-semibold">{fmtKm(listing.mileage)}</p>
         </div>
@@ -128,10 +134,6 @@ export default async function ListingPage({
           <p className="text-xl font-semibold">
             {listing.risk_score != null ? listing.risk_score.toFixed(3) : "—"}
           </p>
-        </div>
-        <div>
-          <p className="text-xs text-neutral-500">Primera vez visto</p>
-          <p className="text-sm font-semibold">{fmtDate(listing.first_seen_at)}</p>
         </div>
       </div>
 
@@ -271,6 +273,49 @@ export default async function ListingPage({
             <p className="text-sm text-neutral-500">Sin eventos registrados.</p>
           )}
         </Section>
+      <Section title="Mercado del modelo">
+          {listing.market ? (
+            <div className="space-y-0.5">
+              <SignalRow label="Unidades en venta" value={listing.market.count} />
+              <SignalRow label="Precio mínimo" value={fmtMoney(listing.market.min_price, listing.market.currency)} />
+              <SignalRow label="Mediana (P50)" value={fmtMoney(listing.market.p50, listing.market.currency)} />
+              <SignalRow label="Precio máximo" value={fmtMoney(listing.market.max_price, listing.market.currency)} />
+              <SignalRow label="Media" value={fmtMoney(listing.market.mean_price, listing.market.currency)} />
+              {listing.price != null && listing.market.p50 != null && (
+                <SignalRow
+                  label="vs mediana"
+                  value={<span className={(listing.price < listing.market.p50) ? "text-green-600" : "text-red-500"}>
+                    {listing.price < listing.market.p50 ? "↓" : "↑"} {Math.abs(((listing.price - listing.market.p50) / listing.market.p50 * 100)).toFixed(0)}%
+                  </span>}
+                />
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-neutral-500">Sin datos de mercado.</p>
+          )}
+        </Section>
+
+        {listing.import_breakdown && (
+          <Section title="Coste de importación a España">
+            <div className="space-y-0.5">
+              <SignalRow label="País origen" value={listing.import_breakdown.source_country} />
+              <SignalRow label="Transporte" value={fmtMoney(listing.import_breakdown.transport_cost, "EUR")} />
+              <SignalRow label="Impuesto matriculación" value={fmtMoney(listing.import_breakdown.registration_tax, "EUR")} />
+              <SignalRow label="ITV / inspección" value={fmtMoney(listing.import_breakdown.itv_inspection, "EUR")} />
+              <SignalRow label="Gestoría / tasas" value={fmtMoney(listing.import_breakdown.registration_fees, "EUR")} />
+              <SignalRow
+                label="Total importación"
+                value={<span className="font-bold text-amber-600">{fmtMoney(listing.import_breakdown.total_import_cost, "EUR")}</span>}
+              />
+              <SignalRow
+                label="Precio total en España"
+                value={<span className="font-bold text-blue-600">{fmtMoney(listing.import_breakdown.total_cost_es, "EUR")}</span>}
+              />
+              <SignalRow label="Reglas" value={listing.import_breakdown.rules_version} />
+            </div>
+          </Section>
+        )}
+
       </div>
 
       <Section title="Análisis por imagen">
