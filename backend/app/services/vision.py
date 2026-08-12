@@ -20,22 +20,23 @@ logger = logging.getLogger(__name__)
 LABELS = ["sin daños", "roces", "abolladura", "óxido", "cristal roto", "repintado"]
 
 _PROMPTS = [
-    "a photo of a car in perfect condition, no damage, clean bodywork",
-    "a photo of a car with scratches and light scuffs on the paint",
-    "a photo of a car with a dented or deformed body panel",
-    "a photo of a car with rust or corrosion on the body",
-    "a photo of a car with a broken, cracked or missing window",
-    "a photo of a car with freshly repainted bodywork, color mismatch",
+    "a photo of a used car with clean undamaged bodywork, no dents no scratches no rust",
+    "a photo of a car with clearly visible scratches, scuffs or key marks on the paint",
+    "a photo of a car with a large visible dent, bent or deformed body panel",
+    "a photo of a car with noticeable rust spots, bubbling paint or corrosion on metal",
+    "a photo of a car with shattered, cracked or completely broken window glass",
+    "a photo of a car with obvious paint mismatch, different color panel or fresh repaint overspray",
 ]
 
-# Clasificación de escena: exterior / interior / motor / otro.
-_SCENE_LABELS = ["exterior", "interior", "motor", "otro"]
+# Clasificación de escena: exterior / interior / motor / documento concesionario / otro.
+_SCENE_LABELS = ["exterior", "interior", "motor", "documento", "otro"]
 
 _SCENE_PROMPTS = [
-    "a photo showing the exterior body of a car, full body or side profile",
-    "a photo showing the interior of a car: dashboard, seats, steering wheel, door panel",
-    "a photo showing the engine bay, motor or mechanical parts of a car",
-    "a photo showing something else: a wheel closeup, trunk, documents, logo",
+    "a photo of the outside of a car showing the body, doors, hood, trunk, roof or side profile",
+    "a photo inside a car showing dashboard, seats, steering wheel, pedals, gear lever, screens or door panels",
+    "a photo of a car engine bay, open hood showing motor, belts, battery or mechanical components",
+    "a photo of a document, rating badge, dealership sign, text, logo, stamp, certificate or screenshot",
+    "a photo of a car wheel, tire, headlight, taillight, trunk interior, fuel cap or other car detail",
 ]
 
 

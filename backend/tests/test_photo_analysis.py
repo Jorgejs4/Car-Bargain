@@ -12,13 +12,22 @@ def test_aggregate_none_without_analyses() -> None:
 
 
 def test_aggregate_no_damage_detected() -> None:
-    signals = aggregate_photo_signals([_result("sin daños", 0.95), _result("sin daños", 0.88)])
+    signals = aggregate_photo_signals([_result("sin daños", 0.95), _result("sin daños", 0.88), _result("sin daños", 0.9)])
 
     assert signals is not None
     assert signals["has_visible_damage"] is False
     assert signals["damage_types"] == []
     assert signals["photo_damage_prob"] == 0.0
-    assert signals["analyzed_images"] == 2
+    assert signals["analyzed_images"] == 3
+
+
+def test_single_damage_not_enough() -> None:
+    """Una sola foto con daño no marca el coche como dañado (evita falsos positivos)."""
+    signals = aggregate_photo_signals(
+        [_result("sin daños", 0.9), _result("óxido", 0.8)]
+    )
+    assert signals["has_visible_damage"] is False
+    assert signals["damaged_images"] == 1
 
 
 def test_aggregate_with_damage() -> None:
@@ -47,10 +56,10 @@ def test_risk_zero_without_evidence() -> None:
 
 
 def test_risk_from_photo_damage() -> None:
-    signals = aggregate_photo_signals([_result("abolladura", 0.8)])
+    signals = aggregate_photo_signals([_result("abolladura", 0.8), _result("roces", 0.75)])
     risk, needs_review = evaluate_damage_risk(signals, None)
 
-    assert risk == 0.7  # 0.5 base + 0.2 por tipo de daño
+    assert risk == 0.9  # 0.5 base + 0.2*2 tipos de daño = 0.9
     assert needs_review is False
 
 
@@ -64,13 +73,13 @@ def test_risk_from_text_damage() -> None:
 
 def test_contradiction_photo_damages_and_text_says_clean(monkeypatch) -> None:
     monkeypatch.setattr(settings, "contradiction_tolerance", 0.3)
-    photo = aggregate_photo_signals([_result("óxido", 0.9)])
+    photo = aggregate_photo_signals([_result("óxido", 0.9), _result("roces", 0.7)])
     text = {"accident_free": True, "has_accident": False, "text_contradiction": False}
 
     risk, needs_review = evaluate_damage_risk(photo, text)
 
     assert needs_review is True
-    assert risk == 1.0  # 0.5 + 0.2 + 0.3 (tope 1.0)
+    assert risk == 1.0  # 0.5 + 0.2*2 + 0.3 = 1.2 → tope 1.0
 
 
 def test_text_contradiction_marks_review(monkeypatch) -> None:

@@ -396,7 +396,7 @@ def test_analyze_listing_images_task(monkeypatch, tmp_path) -> None:
     monkeypatch.setattr(
         tasks,
         "get_vision_analyzer",
-        lambda: _FakeAnalyzer([("sin daños", 0.9), ("abolladura", 0.8)]),
+        lambda: _FakeAnalyzer([("abolladura", 0.8), ("roces", 0.75)]),
     )
 
     result = tasks.analyze_listing_images(listing_id)
@@ -414,11 +414,11 @@ def test_analyze_listing_images_task(monkeypatch, tmp_path) -> None:
         analyses = db.scalars(select(PhotoAnalysis).where(PhotoAnalysis.listing_id == listing_id)).all()
         assert len(analyses) == 2
         labels = {a.label for a in analyses}
-        assert labels == {"sin daños", "abolladura"}
+        assert labels == {"abolladura", "roces"}
 
         listing = db.get(Listing, listing_id)
         assert listing.photo_signals["has_visible_damage"] is True
-        assert listing.photo_signals["damage_types"] == ["abolladura"]
+        assert set(listing.photo_signals["damage_types"]) == {"abolladura", "roces"}
         assert listing.photo_signals["photo_damage_prob"] == 0.8
         assert listing.needs_review is False
         assert listing.risk_score is not None
@@ -431,7 +431,9 @@ def test_analyze_listing_images_text_photo_contradiction(monkeypatch, tmp_path) 
     from app.models import Listing, ListingSnapshot
     from workers import tasks
 
-    listing_id = _make_committed_listing({"image_urls": ["https://pictures.mobile.de/1"]})
+    listing_id = _make_committed_listing_with_images(
+        tmp_path, ["https://pictures.mobile.de/1", "https://pictures.mobile.de/2"]
+    )
     monkeypatch.setattr("app.services.raw_store._DEFAULT_ROOT", tmp_path)
     with Session(engine) as db:
         listing = db.get(Listing, listing_id)
@@ -451,33 +453,13 @@ def test_analyze_listing_images_text_photo_contradiction(monkeypatch, tmp_path) 
                     "has_engine_issue": False,
                     "text_contradiction": False,
                 },
-                raw_data={"image_urls": ["https://pictures.mobile.de/1"]},
+                raw_data={"image_urls": ["https://pictures.mobile.de/1", "https://pictures.mobile.de/2"]},
             )
         )
         db.commit()
 
-    image_dir = tmp_path / "mobile_de" / "images" / "IMG-001"
-    image_dir.mkdir(parents=True, exist_ok=True)
-    (image_dir / "01.jpg").write_bytes(b"data")
-    import json as _json
-
-    (image_dir / "manifest.json").write_text(
-        _json.dumps(
-            {
-                "images": [
-                    {
-                        "source_url": "https://pictures.mobile.de/1",
-                        "local_path": str(image_dir / "01.jpg"),
-                        "status": "ok",
-                    }
-                ]
-            }
-        ),
-        encoding="utf-8",
-    )
-
     monkeypatch.setattr(
-        tasks, "get_vision_analyzer", lambda: _FakeAnalyzer([("óxido", 0.9)])
+        tasks, "get_vision_analyzer", lambda: _FakeAnalyzer([("óxido", 0.9), ("roces", 0.8)])
     )
 
     result = tasks.analyze_listing_images(listing_id)

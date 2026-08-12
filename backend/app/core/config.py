@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     cv_model_name: str = "ViT-B-32"
     cv_pretrained: str = "laion400m_e32"
     # Probabilidad mínima para considerar daño visible en una foto.
-    damage_prob_min: float = 0.5
+    damage_prob_min: float = 0.65
     # Penalización de riesgo cuando el texto dice "sin accidentes" pero la foto muestra daño.
     contradiction_tolerance: float = 0.3
 

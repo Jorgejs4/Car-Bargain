@@ -12,17 +12,25 @@ from app.core.config import settings
 from app.schemas.photo_analysis import PhotoAnalysisResult
 
 _NO_DAMAGE_LABEL = "sin daños"
+_MIN_DAMAGE_PHOTOS = 2  # mínimo de fotos con daño para marcar has_visible_damage
 
 
 def aggregate_photo_signals(analyses: list[PhotoAnalysisResult]) -> dict | None:
-    """Agrega los resultados por foto en un único dict para `listings.photo_signals`."""
+    """Agrega los resultados por foto en un único dict para `listings.photo_signals`.
+
+    Solo marca `has_visible_damage=True` cuando al menos `_MIN_DAMAGE_PHOTOS`
+    fotos distintas superan el umbral de probabilidad. Esto evita que un único
+    falso positivo (reflejo mal clasificado como "cristal roto") contamine
+    todo el anuncio.
+    """
     if not analyses:
         return None
 
     damaged = [
-        a for a in analyses if a.label != _NO_DAMAGE_LABEL and a.probability >= settings.damage_prob_min
+        a for a in analyses
+        if a.label != _NO_DAMAGE_LABEL and a.probability >= settings.damage_prob_min
     ]
-    has_visible_damage = bool(damaged)
+    has_visible_damage = len(damaged) >= _MIN_DAMAGE_PHOTOS
     damage_types = sorted({a.label for a in damaged})
     damaged_probs = [a.probability for a in damaged]
     photo_damage_prob = max(damaged_probs) if damaged_probs else 0.0
@@ -32,6 +40,7 @@ def aggregate_photo_signals(analyses: list[PhotoAnalysisResult]) -> dict | None:
         "has_visible_damage": has_visible_damage,
         "damage_types": damage_types,
         "analyzed_images": len(analyses),
+        "damaged_images": len(damaged),
     }
 
 
