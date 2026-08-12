@@ -44,6 +44,10 @@ celery_app.conf.beat_schedule = {
         "task": "score.bargains",
         "schedule": crontab(minute="1,16,31,46"),
     },
+    "import-costs-every-30m": {
+        "task": "import.costs",
+        "schedule": crontab(minute="*/30"),
+    },
 }
 
 celery_app.autodiscover_tasks(["workers"])

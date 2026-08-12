@@ -13,9 +13,10 @@ const REGIONS = [
   { value: "EU", label: "Europa" },
 ];
 const SORT_OPTIONS = [
-  { value: "last_seen-desc", label: "Mas recientes" },
+  { value: "bargain-desc", label: "Mejor ganga" },
   { value: "price-asc", label: "Precio bajo" },
   { value: "price-desc", label: "Precio alto" },
+  { value: "total_cost-asc", label: "Precio total bajo" },
   { value: "mileage-asc", label: "Menos KM" },
   { value: "mileage-desc", label: "Mas KM" },
   { value: "year-desc", label: "Mas nuevos" },

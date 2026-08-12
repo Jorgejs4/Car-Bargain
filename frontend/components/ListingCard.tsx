@@ -85,6 +85,15 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
           </div>
         </div>
       )}
+
+      {listing.country && listing.country !== "ES" && listing.estimated_import_cost != null && (
+        <div className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+          +{listing.estimated_import_cost.toLocaleString("es-ES")}€ importacion
+          {listing.total_cost_es != null && (
+            <> = {listing.total_cost_es.toLocaleString("es-ES")}€ total</>
+          )}
+        </div>
+      )}
     </Link>
   );
 }

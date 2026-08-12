@@ -35,6 +35,8 @@ export interface ListingListItem {
   needs_review: boolean;
   risk_score: number | null;
   bargain_score: number | null;
+  estimated_import_cost: number | null;
+  total_cost_es: number | null;
   first_seen_at: string;
   last_seen_at: string | null;
 }

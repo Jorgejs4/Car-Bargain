@@ -27,6 +27,9 @@ class ListingRead(BaseModel):
     needs_review: bool
     risk_score: float | None
     bargain_score: float | None
+    estimated_import_cost: float | None
+    total_cost_es: float | None
+
     created_at: datetime
     updated_at: datetime
 
@@ -62,6 +65,8 @@ class ListingListItem(BaseModel):
     needs_review: bool
     risk_score: float | None
     bargain_score: float | None
+    estimated_import_cost: float | None
+    total_cost_es: float | None
 
     first_seen_at: datetime
     last_seen_at: datetime | None

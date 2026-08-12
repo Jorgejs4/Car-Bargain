@@ -20,8 +20,9 @@ import httpx
 import redis
 from app.core.config import settings
 from app.db.session import SessionLocal
+from app.engines.import_costs import estimate_for_listing
 from app.engines.valuation import score_all
-from app.models import Listing, ListingSnapshot, ListingStatus, PhotoAnalysis
+from app.models import Listing, ListingSnapshot, ListingStatus, PhotoAnalysis, Vehicle
 from app.schemas.photo_analysis import PhotoAnalysisResult
 from app.services.ingest import ingest_listings
 from app.services.listing_images import ensure_local_images
@@ -438,6 +439,59 @@ def score_bargains() -> dict:
             duration_ms,
         )
         return {"duration_ms": duration_ms, **result}
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
+
+
+@celery_app.task(name="import.costs")
+def compute_import_costs() -> dict:
+    """Calcula el coste de importación a España para listings no-ES.
+
+    Para cada listing ACTIVE no histórico con país != ES: estima impuesto
+    de matriculación, transporte, ITV y gestoría, y guarda el total.
+    """
+    started = time.monotonic()
+    db = SessionLocal()
+    try:
+        listings = db.scalars(
+            select(Listing).where(
+                Listing.status == ListingStatus.ACTIVE,
+                Listing.is_historical.is_(False),
+                Listing.country != "ES",
+            )
+        ).all()
+
+        computed = 0
+        for li in listings:
+            snap = db.scalar(
+                select(ListingSnapshot)
+                .where(ListingSnapshot.listing_id == li.id)
+                .order_by(ListingSnapshot.scraped_at.desc())
+                .limit(1)
+            )
+            if snap is None or snap.price is None:
+                continue
+
+            vehicle = db.get(Vehicle, li.vehicle_id) if li.vehicle_id else None
+            co2 = vehicle.co2_g_km if vehicle else None
+
+            estimate = estimate_for_listing(
+                source_country=li.country or "DE",
+                price_eur=float(snap.price),
+                co2_g_km=co2,
+            )
+
+            li.estimated_import_cost = estimate.total_import_cost
+            li.total_cost_es = float(snap.price) + estimate.total_import_cost
+            computed += 1
+
+        db.commit()
+        duration_ms = int((time.monotonic() - started) * 1000)
+        logger.info("import.costs: %s listings (%s ms)", computed, duration_ms)
+        return {"computed": computed, "duration_ms": duration_ms}
     except Exception:
         db.rollback()
         raise

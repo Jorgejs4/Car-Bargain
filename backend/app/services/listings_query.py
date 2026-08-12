@@ -27,6 +27,7 @@ _SORT_COLUMNS = {
     "year": lambda latest: Vehicle.year,
     "last_seen": lambda latest: Listing.last_seen_at,
     "bargain": lambda latest: Listing.bargain_score,
+    "total_cost": lambda latest: Listing.total_cost_es,
 }
 
 
@@ -142,6 +143,8 @@ def _item(
         "needs_review": listing.needs_review,
         "risk_score": listing.risk_score,
         "bargain_score": listing.bargain_score,
+        "estimated_import_cost": listing.estimated_import_cost,
+        "total_cost_es": listing.total_cost_es,
         "first_seen_at": listing.first_seen_at,
         "last_seen_at": listing.last_seen_at,
     }

@@ -81,6 +81,10 @@ class Listing(Base):
     # considerando precio, km, año y daños. Null si aún no se ha calculado.
     bargain_score: Mapped[float | None] = mapped_column(index=True)
 
+    # Fase 7: coste estimado de importación a España y precio total puesto en ES.
+    estimated_import_cost: Mapped[float | None] = mapped_column()
+    total_cost_es: Mapped[float | None] = mapped_column(index=True)
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
