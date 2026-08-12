@@ -35,6 +35,8 @@ export interface ListingListItem {
   needs_review: boolean;
   risk_score: number | null;
   bargain_score: number | null;
+  absolute_margin: number | null;
+  predicted_price: number | null;
   estimated_import_cost: number | null;
   total_cost_es: number | null;
   first_seen_at: string;
@@ -175,6 +177,7 @@ export interface ListingFilters {
   source?: string;
   needs_review?: boolean;
   min_bargain_score?: number;
+  min_absolute_margin?: number;
   sort_by?: string;
   sort_order?: string;
 }

@@ -202,10 +202,13 @@ def score_all(session: Session) -> dict:
         if predicted is None or predicted == 0:
             continue
         actual = row["price"]
-        score = (predicted - actual) / predicted
+        rel_margin = (predicted - actual) / predicted
+        abs_margin = predicted - actual
         listing = session.get(Listing, listing_id)
         if listing is not None:
-            listing.bargain_score = round(score, 6)
+            listing.bargain_score = round(rel_margin, 6)
+            listing.absolute_margin = round(abs_margin, 2)
+            listing.predicted_price = round(predicted, 2)
             scored += 1
 
     # R²

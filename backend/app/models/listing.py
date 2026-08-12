@@ -81,6 +81,10 @@ class Listing(Base):
     # considerando precio, km, año y daños. Null si aún no se ha calculado.
     bargain_score: Mapped[float | None] = mapped_column(index=True)
 
+    # Margen absoluto en € (predicho - real) y precio predicho por el modelo.
+    absolute_margin: Mapped[float | None] = mapped_column()
+    predicted_price: Mapped[float | None] = mapped_column()
+
     # Fase 7: coste estimado de importación a España y precio total puesto en ES.
     estimated_import_cost: Mapped[float | None] = mapped_column()
     total_cost_es: Mapped[float | None] = mapped_column(index=True)

@@ -10,8 +10,8 @@ function num(v: string | string[] | undefined): number | undefined {
 }
 
 function parseFilters(searchParams: Record<string, string | string[] | undefined>): ListingFilters {
-  const sortParam = typeof searchParams.sort === "string" ? searchParams.sort : "bargain-desc";
-  const [sort_by, sort_order] = sortParam.includes("-") ? sortParam.split("-", 2) : ["bargain", "desc"];
+  const sortParam = typeof searchParams.sort === "string" ? searchParams.sort : "absolute_margin-desc";
+  const [sort_by, sort_order] = sortParam.includes("-") ? sortParam.split("-", 2) : ["absolute_margin", "desc"];
   return {
     page: num(searchParams.page) ?? 1,
     brand: typeof searchParams.brand === "string" ? searchParams.brand || undefined : undefined,
@@ -31,6 +31,8 @@ function parseFilters(searchParams: Record<string, string | string[] | undefined
     sort_order: sort_order,
     min_bargain_score:
       searchParams.min_bargain_score === "0" ? 0 : undefined,
+    min_absolute_margin:
+      num(searchParams.min_absolute_margin),
     needs_review:
       searchParams.needs_review === "true" ? true : undefined,
   };

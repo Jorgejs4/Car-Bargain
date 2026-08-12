@@ -13,7 +13,8 @@ const REGIONS = [
   { value: "EU", label: "Europa" },
 ];
 const SORT_OPTIONS = [
-  { value: "bargain-desc", label: "Mejor ganga" },
+  { value: "bargain-desc", label: "Mejor ganga %" },
+  { value: "absolute_margin-desc", label: "Mayor ahorro EUR" },
   { value: "price-asc", label: "Precio bajo" },
   { value: "price-desc", label: "Precio alto" },
   { value: "total_cost-asc", label: "Precio total bajo" },
@@ -37,9 +38,10 @@ export function FilterFormInner() {
   const [transmission, setTransmission] = useState(searchParams.get("transmission") ?? "");
   const [sellerType, setSellerType] = useState(searchParams.get("seller_type") ?? "");
   const [region, setRegion] = useState(searchParams.get("region") ?? "");
-  const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "bargain-desc");
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "absolute_margin-desc");
   const [needsReview, setNeedsReview] = useState(searchParams.get("needs_review") === "true");
   const [onlyBargains, setOnlyBargains] = useState(searchParams.get("min_bargain_score") !== null);
+  const [minAbsMargin, setMinAbsMargin] = useState(searchParams.get("min_absolute_margin") ?? "");
 
   const [brands, setBrands] = useState<string[]>([]);
   const [models, setModels] = useState<string[]>([]);
@@ -71,6 +73,7 @@ export function FilterFormInner() {
     set("sort", sortBy);
     if (needsReview) params.set("needs_review", "true");
     if (onlyBargains) params.set("min_bargain_score", "0");
+    if (minAbsMargin) params.set("min_absolute_margin", minAbsMargin);
     const qs = params.toString();
     const path = window.location.pathname;
     router.push(qs ? `${path}?${qs}` : path);
@@ -79,8 +82,8 @@ export function FilterFormInner() {
   function reset() {
     setBrand(""); setModel(""); setPriceMin(""); setPriceMax("");
     setMileageMax(""); setYearMin(""); setFuel(""); setTransmission("");
-    setSellerType(""); setRegion(""); setSortBy("bargain-desc");
-    setNeedsReview(false); setOnlyBargains(false); setModels([]);
+    setSellerType(""); setRegion(""); setSortBy("absolute_margin-desc");
+    setNeedsReview(false); setOnlyBargains(false); setMinAbsMargin(""); setModels([]);
     router.push(window.location.pathname);
   }
 
@@ -151,6 +154,10 @@ export function FilterFormInner() {
         <label className="flex items-center gap-2 text-xs font-medium text-neutral-500">
           <input type="checkbox" className="h-4 w-4 accent-green-600" checked={onlyBargains} onChange={(e) => setOnlyBargains(e.target.checked)} />
           Solo gangas
+        </label>
+        <label className="flex items-center gap-2 text-xs font-medium text-neutral-500">
+          Ahorro min.
+          <input className={inputCls + " w-24"} type="number" min={0} value={minAbsMargin} onChange={(e) => setMinAbsMargin(e.target.value)} placeholder="500€" />
         </label>
       </div>
       <div className="mt-3 flex gap-2">

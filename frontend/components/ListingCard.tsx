@@ -45,9 +45,14 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
         <span className="text-xl font-bold">
           {formatPrice(listing.price, listing.currency)}
         </span>
-        {listing.bargain_score != null && (
-          <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${listing.bargain_score > 0 ? "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"}`}>
-            {listing.bargain_score > 0 ? "+" : ""}{(listing.bargain_score * 100).toFixed(0)}%
+        {listing.absolute_margin != null && listing.absolute_margin !== 0 && (
+          <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${listing.absolute_margin > 0 ? "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"}`}>
+            {listing.absolute_margin > 0 ? "-" : "+"}{Math.abs(listing.absolute_margin).toLocaleString("es-ES")}€
+          </span>
+        )}
+        {listing.bargain_score != null && listing.bargain_score !== 0 && (
+          <span className="text-xs text-neutral-500">
+            {(listing.bargain_score * 100).toFixed(0)}%
           </span>
         )}
       </div>

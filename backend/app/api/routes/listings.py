@@ -33,6 +33,7 @@ def listing_filters(
     source: str | None = Query(None, description="Fuente (ej. mobile_de)"),
     region: str | None = Query(None, description="Región: ES (España) o EU (resto de Europa)"),
     min_bargain_score: float | None = Query(None, description="Score de oportunidad mínimo (positivo = ganga)"),
+    min_absolute_margin: float | None = Query(None, description="Margen absoluto mínimo en € (ahorro estimado)"),
     is_historical: bool | None = Query(None, description="Solo históricos (Wayback) o solo live; por defecto se filtran históricos en ACTIVE"),
     needs_review: bool | None = Query(None, description="Filtrar por revisión manual pendiente"),
 ) -> dict:
@@ -50,6 +51,7 @@ def listing_filters(
         "source": source,
         "region": region,
         "min_bargain_score": min_bargain_score,
+        "min_absolute_margin": min_absolute_margin,
         "is_historical": is_historical,
         "needs_review": needs_review,
     }
