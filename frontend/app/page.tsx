@@ -10,6 +10,8 @@ function num(v: string | string[] | undefined): number | undefined {
 }
 
 function parseFilters(searchParams: Record<string, string | string[] | undefined>): ListingFilters {
+  const sortParam = typeof searchParams.sort === "string" ? searchParams.sort : "bargain-desc";
+  const [sort_by, sort_order] = sortParam.includes("-") ? sortParam.split("-", 2) : ["bargain", "desc"];
   return {
     page: num(searchParams.page) ?? 1,
     brand: typeof searchParams.brand === "string" ? searchParams.brand || undefined : undefined,
@@ -23,6 +25,12 @@ function parseFilters(searchParams: Record<string, string | string[] | undefined
       typeof searchParams.transmission === "string" ? searchParams.transmission || undefined : undefined,
     seller_type:
       typeof searchParams.seller_type === "string" ? searchParams.seller_type || undefined : undefined,
+    region:
+      typeof searchParams.region === "string" ? searchParams.region || undefined : undefined,
+    sort_by: sort_by,
+    sort_order: sort_order,
+    min_bargain_score:
+      searchParams.min_bargain_score === "0" ? 0 : undefined,
     needs_review:
       searchParams.needs_review === "true" ? true : undefined,
   };
@@ -55,9 +63,9 @@ export default async function Home({
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
       <div>
-        <h1 className="text-2xl font-bold">Anuncios de coches</h1>
+        <h1 className="text-2xl font-bold">Gangas detectadas</h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          {data.total} anuncios activos · página {data.page} de {Math.max(1, data.pages)}
+          {data.total} anuncios · ordenados por mejor oportunidad · página {data.page} de {Math.max(1, data.pages)}
         </p>
       </div>
 

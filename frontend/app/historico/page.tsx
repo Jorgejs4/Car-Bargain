@@ -1,6 +1,49 @@
 import Link from "next/link";
 import { fetchHistoricalListings, type ListingFilters } from "@/lib/api";
 import { ListingCard } from "@/components/ListingCard";
+import FilterForm from "@/components/FilterForm";
+
+function num(v: string | string[] | undefined): number | undefined {
+  if (typeof v !== "string" || v === "") return undefined;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+function parseFilters(
+  searchParams: Record<string, string | string[] | undefined>
+): ListingFilters {
+  const sortParam = typeof searchParams.sort === "string" ? searchParams.sort : "last_seen-desc";
+  const [sort_by, sort_order] = sortParam.includes("-") ? sortParam.split("-", 2) : ["last_seen", "desc"];
+  return {
+    page: num(searchParams.page) ?? 1,
+    page_size: 24,
+    brand: typeof searchParams.brand === "string" ? searchParams.brand || undefined : undefined,
+    model: typeof searchParams.model === "string" ? searchParams.model || undefined : undefined,
+    price_min: num(searchParams.price_min),
+    price_max: num(searchParams.price_max),
+    mileage_max: num(searchParams.mileage_max),
+    year_min: num(searchParams.year_min),
+    fuel: typeof searchParams.fuel === "string" ? searchParams.fuel || undefined : undefined,
+    transmission: typeof searchParams.transmission === "string" ? searchParams.transmission || undefined : undefined,
+    seller_type: typeof searchParams.seller_type === "string" ? searchParams.seller_type || undefined : undefined,
+    region: typeof searchParams.region === "string" ? searchParams.region || undefined : undefined,
+    sort_by: sort_by,
+    sort_order: sort_order,
+  };
+}
+
+function buildPageUrl(
+  page: number,
+  searchParams: Record<string, string | string[] | undefined>
+): string {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(searchParams)) {
+    if (key === "page" || typeof value !== "string") continue;
+    if (value) params.set(key, value);
+  }
+  params.set("page", String(page));
+  return `/historico?${params.toString()}`;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -10,30 +53,25 @@ export default async function HistoricoPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const resolved = await searchParams;
-  const page = Math.max(1, Number(resolved.page) || 1);
-  const filters: ListingFilters = { page, page_size: 24 };
+  const filters = parseFilters(resolved);
   const data = await fetchHistoricalListings(filters);
-
-  function buildPageUrl(nextPage: number): string {
-    const params = new URLSearchParams();
-    params.set("page", String(nextPage));
-    return `/historico?${params.toString()}`;
-  }
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
       <div>
-        <h1 className="text-2xl font-bold">Histórico de ofertas</h1>
+        <h1 className="text-2xl font-bold">Historico de ofertas</h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
           Todas las ofertas vistas (activas, caducadas y archivadas) ·{" "}
-          {data.total} anuncios · página {data.page} de{" "}
+          {data.total} anuncios · pagina {data.page} de{" "}
           {Math.max(1, data.pages)}
         </p>
       </div>
 
+      <FilterForm />
+
       {data.items.length === 0 ? (
         <p className="rounded-xl border border-dashed border-neutral-300 p-8 text-center text-neutral-500 dark:border-neutral-700">
-          No hay ofertas en el histórico.
+          No hay ofertas en el historico.
         </p>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -47,7 +85,7 @@ export default async function HistoricoPage({
         <nav className="flex items-center justify-center gap-2">
           {data.page > 1 && (
             <Link
-              href={buildPageUrl(data.page - 1)}
+              href={buildPageUrl(data.page - 1, resolved)}
               className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
             >
               ← Anterior
@@ -58,7 +96,7 @@ export default async function HistoricoPage({
           </span>
           {data.page < data.pages && (
             <Link
-              href={buildPageUrl(data.page + 1)}
+              href={buildPageUrl(data.page + 1, resolved)}
               className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
             >
               Siguiente →

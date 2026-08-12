@@ -34,6 +34,7 @@ export interface ListingListItem {
   photo_signals: Record<string, unknown> | null;
   needs_review: boolean;
   risk_score: number | null;
+  bargain_score: number | null;
   first_seen_at: string;
   last_seen_at: string | null;
 }
@@ -148,6 +149,7 @@ export interface ListingFilters {
   brand?: string;
   model?: string;
   country?: string;
+  region?: string;
   price_min?: number;
   price_max?: number;
   mileage_max?: number;
@@ -157,6 +159,9 @@ export interface ListingFilters {
   seller_type?: string;
   source?: string;
   needs_review?: boolean;
+  min_bargain_score?: number;
+  sort_by?: string;
+  sort_order?: string;
 }
 
 export const API_BASE_URL =
@@ -240,4 +245,17 @@ export async function fetchVehicleMarket(
   signal?: AbortSignal
 ): Promise<MarketStats> {
   return getJson<MarketStats>(`/api/v1/vehicles/${id}/market`, signal);
+}
+
+export async function fetchBrands(
+  signal?: AbortSignal
+): Promise<string[]> {
+  return getJson<string[]>("/api/v1/vehicles/brands", signal);
+}
+
+export async function fetchModels(
+  brand: string,
+  signal?: AbortSignal
+): Promise<string[]> {
+  return getJson<string[]>(`/api/v1/vehicles/models?brand=${encodeURIComponent(brand)}`, signal);
 }

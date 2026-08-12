@@ -68,6 +68,23 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
           </div>
         </div>
       )}
+
+      {listing.bargain_score != null && (
+        <div className="mt-2">
+          <div className="flex justify-between text-xs font-medium">
+            <span className={listing.bargain_score > 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}>
+              {listing.bargain_score > 0 ? "Chollo" : "No chollo"}
+            </span>
+            <span className="text-neutral-500">{(listing.bargain_score * 100).toFixed(0)}%</span>
+          </div>
+          <div className="mt-1 h-1.5 rounded-full bg-neutral-200 dark:bg-neutral-700">
+            <div
+              className={`h-1.5 rounded-full ${listing.bargain_score > 0 ? "bg-green-500" : "bg-red-400"}`}
+              style={{ width: `${Math.min(100, Math.abs(listing.bargain_score * 100) + 30)}%` }}
+            />
+          </div>
+        </div>
+      )}
     </Link>
   );
 }
