@@ -58,6 +58,12 @@ class Listing(Base):
     first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
+    # True si el anuncio proviene de una fuente histórica (p. ej. Wayback Machine),
+    # no del scrape en vivo. Los históricos nunca aparecen en el panel de activos.
+    is_historical: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false", index=True
+    )
+
     status: Mapped[ListingStatus] = mapped_column(
         SqlEnum(ListingStatus, native_enum=False, length=30, create_constraint=True),
         nullable=False,

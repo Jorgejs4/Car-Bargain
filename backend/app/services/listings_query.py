@@ -49,6 +49,7 @@ def _build_conditions(
     source=None,
     needs_review=None,
     vehicle_id=None,
+    is_historical=None,
 ):
     conditions = []
     if vehicle_id is not None:
@@ -77,6 +78,11 @@ def _build_conditions(
         conditions.append(Listing.status == status)
     if source:
         conditions.append(Listing.source == source)
+    if is_historical is not None:
+        conditions.append(Listing.is_historical.is_(is_historical))
+    elif status == ListingStatus.ACTIVE:
+        # Regla del dashboard: los anuncios activos nunca mezclan datos históricos.
+        conditions.append(Listing.is_historical.is_(False))
     if needs_review is not None:
         conditions.append(Listing.needs_review == needs_review)
     return conditions
@@ -101,6 +107,7 @@ def _item(
         "seller_type": listing.seller_type,
         "country": listing.country,
         "status": listing.status,
+        "is_historical": listing.is_historical,
         "brand": vehicle.brand if vehicle else None,
         "model": vehicle.model if vehicle else None,
         "generation": vehicle.generation if vehicle else None,
@@ -131,8 +138,9 @@ def list_listings(
 ) -> tuple[list[dict], int]:
     """Devuelve `(items, total)` de listings filtrados y paginados.
 
-    Por defecto solo `status='ACTIVE'` (regla del dashboard); pasar
-    `status=None` para incluir cualquier estado.
+    Por defecto solo `status='ACTIVE'` y excluye históricos (regla del
+    dashboard: no mezclar datos live con históricos). Pasar `status=None` para
+    incluir cualquier estado, o `is_historical=True` para el archivo histórico.
     """
     latest = _latest_snapshots_subquery()
     base = (

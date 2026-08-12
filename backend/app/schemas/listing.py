@@ -21,6 +21,7 @@ class ListingRead(BaseModel):
     country: str | None
     first_seen_at: datetime
     last_seen_at: datetime | None
+    is_historical: bool = False
     status: ListingStatus
     photo_signals: dict | None
     needs_review: bool
@@ -39,6 +40,7 @@ class ListingListItem(BaseModel):
     seller_type: str | None
     country: str | None
     status: ListingStatus
+    is_historical: bool = False
 
     brand: str | None
     model: str | None

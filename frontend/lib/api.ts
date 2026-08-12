@@ -17,6 +17,7 @@ export interface ListingListItem {
   seller_type: string | null;
   country: string | null;
   status: ListingStatus;
+  is_historical: boolean;
   brand: string | null;
   model: string | null;
   generation: string | null;
@@ -199,6 +200,16 @@ export async function fetchListings(
 ): Promise<Page<ListingListItem>> {
   return getJson<Page<ListingListItem>>(
     `/api/v1/listings${buildQuery(filters)}`,
+    signal
+  );
+}
+
+export async function fetchHistoricalListings(
+  filters: ListingFilters = {},
+  signal?: AbortSignal
+): Promise<Page<ListingListItem>> {
+  return getJson<Page<ListingListItem>>(
+    `/api/v1/listings/historical${buildQuery(filters)}`,
     signal
   );
 }

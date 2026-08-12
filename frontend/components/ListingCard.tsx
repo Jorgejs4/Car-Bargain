@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ListingListItem } from "@/lib/api";
-import { DamageBadge, ReviewBadge, StatusBadge } from "@/components/Badge";
+import { DamageBadge, HistoricalBadge, ReviewBadge, StatusBadge } from "@/components/Badge";
 
 function formatPrice(price: number | null, currency: string | null): string {
   if (price == null) return "—";
@@ -49,6 +49,7 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
+        {listing.is_historical && <HistoricalBadge />}
         {hasDamage && analyzedImages > 0 && <DamageBadge />}
         {listing.needs_review && <ReviewBadge />}
       </div>

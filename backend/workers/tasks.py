@@ -371,7 +371,11 @@ def analyze_pending_listings(limit: int = 50) -> dict:
         candidates = db.scalars(
             select(Listing)
             .outerjoin(PhotoAnalysis, PhotoAnalysis.listing_id == Listing.id)
-            .where(Listing.status == ListingStatus.ACTIVE, PhotoAnalysis.id.is_(None))
+            .where(
+                Listing.status == ListingStatus.ACTIVE,
+                Listing.is_historical.is_(False),
+                PhotoAnalysis.id.is_(None),
+            )
             .limit(limit)
         ).all()
     finally:

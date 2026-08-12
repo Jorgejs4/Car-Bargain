@@ -34,6 +34,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <Link href="/" className="hover:text-neutral-900 dark:hover:text-neutral-100">
                 Anuncios
               </Link>
+              <Link href="/historico" className="hover:text-neutral-900 dark:hover:text-neutral-100">
+                Histórico
+              </Link>
               <Link href="/health" className="hover:text-neutral-900 dark:hover:text-neutral-100">
                 Salud
               </Link>

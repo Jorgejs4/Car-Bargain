@@ -41,4 +41,8 @@ class NormalizedListing(BaseModel):
 
     image_urls: list[str] = Field(default_factory=list)
 
+    # True si los datos provienen de una fuente histórica (p. ej. Wayback Machine),
+    # no del scrape en vivo. Los históricos nunca entran en el panel de activos.
+    is_historical: bool = False
+
     scraped_at: datetime

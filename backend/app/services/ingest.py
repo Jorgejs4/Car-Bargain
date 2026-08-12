@@ -79,7 +79,9 @@ def upsert_listing(session: Session, nl: NormalizedListing) -> tuple[Listing, bo
             country=nl.country,
             first_seen_at=nl.scraped_at,
             last_seen_at=nl.scraped_at,
-            status=ListingStatus.ACTIVE,
+            is_historical=nl.is_historical,
+            # Los anuncios históricos (Wayback) no son ofertas vivas: nacen REMOVED.
+            status=ListingStatus.REMOVED if nl.is_historical else ListingStatus.ACTIVE,
         )
         session.add(listing)
         session.flush()
@@ -90,7 +92,11 @@ def upsert_listing(session: Session, nl: NormalizedListing) -> tuple[Listing, bo
     listing.seller_type = nl.seller_type
     listing.country = nl.country
     listing.last_seen_at = nl.scraped_at
-    if prev_status in (ListingStatus.REMOVED, ListingStatus.STALE):
+    if nl.is_historical:
+        # Un anuncio que reaparece en un snapshot histórico sigue siendo histórico:
+        # nunca vuelve a ACTIVE.
+        listing.is_historical = True
+    if prev_status in (ListingStatus.REMOVED, ListingStatus.STALE) and not nl.is_historical:
         listing.status = ListingStatus.ACTIVE
     return listing, False, prev_status
 
@@ -140,9 +146,9 @@ def _emit_events(
     prev_status: ListingStatus | None,
 ) -> int:
     events: list[tuple[ListingEventType, dict | None, dict | None]] = []
-    if prev_status == ListingStatus.REMOVED:
+    if prev_status == ListingStatus.REMOVED and not nl.is_historical:
         events.append((ListingEventType.REAPPEARED, None, {"status": ListingStatus.ACTIVE.value}))
-    elif prev_status == ListingStatus.STALE:
+    elif prev_status == ListingStatus.STALE and not nl.is_historical:
         events.append(
             (
                 ListingEventType.STATUS_CHANGED,
@@ -150,7 +156,7 @@ def _emit_events(
                 {"status": ListingStatus.ACTIVE.value},
             )
         )
-    elif created:
+    elif created and not nl.is_historical:
         events.append((ListingEventType.LISTED, None, {"price": str(nl.price)}))
     elif prev_snapshot is not None:
         if prev_snapshot.price != nl.price:
@@ -223,7 +229,7 @@ def _ingest_one(session: Session, nl: NormalizedListing) -> tuple[Listing, bool,
     events = _emit_events(
         session, listing, nl, prev_snapshot, created=created, prev_status=prev_status
     )
-    changed = (
+    changed = not nl.is_historical and (
         created
         or prev_status in (ListingStatus.REMOVED, ListingStatus.STALE)
         or events > 0

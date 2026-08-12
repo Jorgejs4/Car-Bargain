@@ -166,3 +166,58 @@ def test_listing_detail(committed_session) -> None:
 
 def test_listing_detail_404(committed_session) -> None:
     assert client.get("/api/v1/listings/999999").status_code == 404
+
+
+def test_active_default_excludes_historical(committed_session) -> None:
+    _seed_one(committed_session, listing_kwargs={"source_listing_id": "L1", "status": ListingStatus.ACTIVE})
+    _seed_one(
+        committed_session,
+        vehicle_kwargs={"brand": "Audi", "model": "A4"},
+        listing_kwargs={"source_listing_id": "L2", "status": ListingStatus.ACTIVE, "is_historical": True},
+    )
+
+    response = client.get("/api/v1/listings")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["total"] == 1
+    assert body["items"][0]["source_listing_id"] == "L1"
+    assert body["items"][0]["is_historical"] is False
+
+
+def test_historical_endpoint_returns_everything(committed_session) -> None:
+    _seed_one(committed_session, listing_kwargs={"source_listing_id": "L1", "status": ListingStatus.ACTIVE})
+    _seed_one(
+        committed_session,
+        vehicle_kwargs={"brand": "Audi", "model": "A4"},
+        listing_kwargs={"source_listing_id": "L2", "status": ListingStatus.REMOVED, "is_historical": True},
+    )
+    _seed_one(
+        committed_session,
+        vehicle_kwargs={"brand": "Seat", "model": "Ibiza"},
+        listing_kwargs={"source_listing_id": "L3", "status": ListingStatus.SOLD},
+    )
+
+    response = client.get("/api/v1/listings/historical")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["total"] == 3
+    statuses = {item["status"] for item in body["items"]}
+    assert statuses == {"ACTIVE", "REMOVED", "SOLD"}
+    assert any(item["is_historical"] for item in body["items"])
+
+
+def test_is_historical_filter_explicit(committed_session) -> None:
+    _seed_one(committed_session, listing_kwargs={"source_listing_id": "L1", "status": ListingStatus.ACTIVE})
+    _seed_one(
+        committed_session,
+        vehicle_kwargs={"brand": "Audi", "model": "A4"},
+        listing_kwargs={"source_listing_id": "L2", "status": ListingStatus.ACTIVE, "is_historical": True},
+    )
+
+    only_hist = client.get("/api/v1/listings", params={"is_historical": "true"}).json()
+    assert only_hist["total"] == 1
+    assert only_hist["items"][0]["is_historical"] is True
+
+    only_live = client.get("/api/v1/listings", params={"is_historical": "false"}).json()
+    assert only_live["total"] == 1
+    assert only_live["items"][0]["is_historical"] is False

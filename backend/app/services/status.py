@@ -52,14 +52,21 @@ def thresholds_for(source: str | None) -> dict[str, int]:
 def update_listing_statuses(
     session: Session, *, source: str | None = None, now: datetime | None = None
 ) -> StatusResult:
-    """Marca STALE/REMOVED según `last_seen_at`. Nunca toca SOLD ni vuelve a ACTIVE."""
+    """Marca STALE/REMOVED según `last_seen_at`. Nunca toca SOLD ni vuelve a ACTIVE.
+
+    Ignora los listings históricos (Wayback): su ausencia es el estado natural de
+    archivo y no deben cambiar de estado automáticamente.
+    """
     now = now or datetime.now(timezone.utc)
     result = StatusResult()
     thresholds = thresholds_for(source)
     stale_delta = timedelta(hours=thresholds["stale_after_hours"])
     removed_delta = timedelta(hours=thresholds["removed_after_hours"])
 
-    query = select(Listing).where(Listing.status.in_([ListingStatus.ACTIVE, ListingStatus.STALE]))
+    query = select(Listing).where(
+        Listing.status.in_([ListingStatus.ACTIVE, ListingStatus.STALE]),
+        Listing.is_historical.is_(False),
+    )
     if source:
         query = query.where(Listing.source == source)
 

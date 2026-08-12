@@ -5,7 +5,8 @@ Fase 2 (datos históricos de precios) y actúa como "canario" de cambios de sche
 si `parser` deja de reconocer un snapshot reciente, algo cambió en la fuente.
 
 El `scraped_at` de los `NormalizedListing` se fija a la fecha del snapshot, no a
-"ahora", para no contaminar la serie histórica de precios.
+"ahora", para no contaminar la serie histórica de precios. Los listings se marcan
+`is_historical=True` para que nunca aparezcan en el panel de anuncios activos.
 """
 
 import logging
@@ -116,5 +117,7 @@ class MobileDeHistoricalScraper:
                 logger.warning("Anuncio %s de mobile_de (wayback) descartado: %s", record.get("id"), exc)
                 continue
             image_urls = [_WAYBACK_URL_PREFIX.sub("", url) for url in listing.image_urls]
-            listings.append(listing.model_copy(update={"image_urls": image_urls}))
+            listings.append(
+                listing.model_copy(update={"image_urls": image_urls, "is_historical": True})
+            )
         return listings
