@@ -280,3 +280,55 @@ export async function fetchModels(
 ): Promise<string[]> {
   return getJson<string[]>(`/api/v1/vehicles/models?brand=${encodeURIComponent(brand)}`, signal);
 }
+
+export interface AlertPreferences {
+  id?: number;
+  user_key?: string;
+  max_purchase_price: number | null;
+  max_total_cost: number | null;
+  min_profit: number | null;
+  min_roi: number | null;
+  min_bargain_score: number | null;
+  max_risk_score: number | null;
+  brands: string[] | null;
+  fuel: string | null;
+  transmission: string | null;
+  max_mileage: number | null;
+  year_min: number | null;
+  region: string | null;
+  notify_web: boolean;
+  notify_email: boolean;
+}
+
+export async function fetchPreferences(signal?: AbortSignal): Promise<AlertPreferences> {
+  return getJson<AlertPreferences>("/api/v1/users/me/preferences", signal);
+}
+
+export async function savePreferences(payload: AlertPreferences): Promise<AlertPreferences> {
+  return getJson<AlertPreferences>("/api/v1/users/me/preferences", {
+    method: "PUT",
+    body: JSON.stringify(payload),
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+export async function evaluateAlerts(): Promise<{checked: number; matched: number; notified: number; deduped: number}> {
+  return getJson("/api/v1/users/me/preferences/evaluate", { method: "POST" });
+}
+
+export interface NotificationItem {
+  id: number;
+  listing_id: number;
+  title: string;
+  body: Record<string, unknown> | null;
+  status: string;
+  created_at: string;
+}
+
+export async function fetchNotifications(unread = false): Promise<NotificationItem[]> {
+  return getJson<NotificationItem[]>(`/api/v1/users/me/notifications?unread=${unread}`);
+}
+
+export async function markNotificationRead(id: number): Promise<void> {
+  await getJson(`/api/v1/users/me/notifications/${id}/read`, { method: "POST" });
+}

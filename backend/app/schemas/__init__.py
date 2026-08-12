@@ -1,3 +1,4 @@
+from app.schemas.alert import AlertPreferenceBase, AlertPreferenceRead, NotificationRead
 from app.schemas.listing import (
     ListingDetail,
     ListingListItem,
@@ -12,6 +13,8 @@ from app.schemas.vehicle import VehicleCreate, VehicleRead
 from app.schemas.vehicle_detail import MarketStats, VehicleDetail, VehicleHistoryEntry
 
 __all__ = [
+    "AlertPreferenceBase",
+    "AlertPreferenceRead",
     "ListingDetail",
     "ListingEventRead",
     "ListingEventType",
@@ -20,6 +23,7 @@ __all__ = [
     "ListingSnapshotRead",
     "ListingStatus",
     "MarketStats",
+    "NotificationRead",
     "Page",
     "PhotoAnalysisRead",
     "PhotoAnalysisResult",

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +32,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Link href="/" className="text-lg font-bold tracking-tight">
               Car<span className="text-blue-600">Bargains</span>
             </Link>
-            <nav className="flex items-center gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+<nav className="flex items-center gap-4 text-sm text-neutral-600 dark:text-neutral-400">
               <Link href="/" className="hover:text-neutral-900 dark:hover:text-neutral-100">
-                Anuncios
+                Activos
               </Link>
               <Link href="/historico" className="hover:text-neutral-900 dark:hover:text-neutral-100">
                 Histórico
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <Link href="/health" className="hover:text-neutral-900 dark:hover:text-neutral-100">
                 Salud
               </Link>
+              <NotificationBell />
             </nav>
           </div>
         </header>

@@ -120,10 +120,15 @@ export default async function ListingPage({
           </p>
         </div>
         <div>
-          <p className="text-xs text-neutral-500">Margen aprox.</p>
-          <p className={`text-2xl font-bold ${listing.bargain_score != null && listing.bargain_score > 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}`}>
-            {listing.bargain_score != null ? `${listing.bargain_score > 0 ? "+" : ""}${(listing.bargain_score * 100).toFixed(0)}%` : "—"}
+          <p className="text-xs text-neutral-500">Margen absoluto</p>
+          <p className={`text-2xl font-bold ${listing.absolute_margin != null && listing.absolute_margin > 0 ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}`}>
+            {listing.absolute_margin != null ? `${listing.absolute_margin > 0 ? "+" : ""}${listing.absolute_margin.toLocaleString("es-ES")}€` : "—"}
           </p>
+          {listing.bargain_score != null && (
+            <p className="text-xs text-neutral-500">
+              ({(listing.bargain_score * 100).toFixed(1)}% vs precio predicho)
+            </p>
+          )}
         </div>
         <div>
           <p className="text-xs text-neutral-500">Kilometraje</p>

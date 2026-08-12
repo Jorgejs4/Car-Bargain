@@ -52,6 +52,10 @@ celery_app.conf.beat_schedule = {
         "task": "score.cross_border",
         "schedule": crontab(minute="2,34"),
     },
+    "alerts-every-35m": {
+        "task": "alerts.evaluate",
+        "schedule": crontab(minute="5,40"),
+    },
 }
 
 celery_app.autodiscover_tasks(["workers"])

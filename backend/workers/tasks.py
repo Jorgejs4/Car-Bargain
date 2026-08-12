@@ -24,6 +24,7 @@ from app.engines.import_costs import estimate_for_listing
 from app.engines.valuation import score_all
 from app.models import Listing, ListingSnapshot, ListingStatus, PhotoAnalysis, Vehicle
 from app.schemas.photo_analysis import PhotoAnalysisResult
+from app.services.alerts import evaluate_alerts
 from app.services.ingest import ingest_listings
 from app.services.listing_images import ensure_local_images
 from app.services.photo_analysis import aggregate_photo_signals, evaluate_damage_risk
@@ -559,6 +560,37 @@ def score_cross_border() -> dict:
         duration_ms = int((time.monotonic() - started) * 1000)
         logger.info("score.cross_border: %s listings (%s ms)", scored, duration_ms)
         return {"scored": scored, "duration_ms": duration_ms}
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
+
+
+@celery_app.task(name="alerts.evaluate")
+def evaluate_alerts_task() -> dict:
+    """Fase 10: genera notificaciones para listings que cumplen las preferencias."""
+    started = time.monotonic()
+    db = SessionLocal()
+    try:
+        result = evaluate_alerts(db)
+        db.commit()
+        duration_ms = int((time.monotonic() - started) * 1000)
+        logger.info(
+            "alerts.evaluate: revisados=%s matched=%s notificados=%s dedup=%s (%s ms)",
+            result.checked,
+            result.matched,
+            result.notified,
+            result.deduped,
+            duration_ms,
+        )
+        return {
+            "checked": result.checked,
+            "matched": result.matched,
+            "notified": result.notified,
+            "deduped": result.deduped,
+            "duration_ms": duration_ms,
+        }
     except Exception:
         db.rollback()
         raise
