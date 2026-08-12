@@ -5,7 +5,7 @@
   y conserva la traza en `vehicle_matches`.
 - Snapshots SIEMPRE append-only (nunca sobrescribir).
 - `condition_signals` de texto (lexicón DE/ES) en cada snapshot, con `confidence`+`source`.
-- Emite eventos `LISTED`, `PRICE_CHANGED`, `MILEAGE_CHANGED`, `DESCRIPTION_CHANGED`, `REAPPEARED`.
+- Emite eventos `LISTED`, `PRICE_CHANGED`, `MILEAGE_CHANGED`, `DESCRIPTION_CHANGED`, `REAPPEARED`, `STATUS_CHANGED`.
 
 El commit lo decide el llamador (task Celery / script); aquí solo se flushea.
 """
@@ -52,10 +52,18 @@ class IngestResult:
     skipped: int = 0
     # Ids de los listings creados o actualizados en esta ejecución (para tareas posteriores).
     affected_listing_ids: list[int] = field(default_factory=list)
+    # Ids de listings nuevos o con cambios reales (precio/km/título/imágenes/estado).
+    # Los ya vistos e idénticos no entran aquí: se saltan descarga de imágenes y CV.
+    changed_listing_ids: list[int] = field(default_factory=list)
 
 
-def upsert_listing(session: Session, nl: NormalizedListing) -> tuple[Listing, bool, bool]:
-    """Crea o actualiza un listing. Devuelve `(listing, created, was_removed)`."""
+def upsert_listing(session: Session, nl: NormalizedListing) -> tuple[Listing, bool, ListingStatus | None]:
+    """Crea o actualiza un listing. Devuelve `(listing, created, prev_status)`.
+
+    `prev_status` es el estado previo si el listing ya existía (`None` si es
+    nuevo). Reaparecer desde `STALE` o `REMOVED` reactiva a `ACTIVE`; desde
+    `SOLD` no (la venta es terminal y requiere intervención manual).
+    """
     listing = session.scalar(
         select(Listing).where(
             Listing.source == nl.source,
@@ -75,16 +83,16 @@ def upsert_listing(session: Session, nl: NormalizedListing) -> tuple[Listing, bo
         )
         session.add(listing)
         session.flush()
-        return listing, True, False
+        return listing, True, None
 
-    was_removed = listing.status == ListingStatus.REMOVED
+    prev_status = listing.status
     listing.url = nl.url
     listing.seller_type = nl.seller_type
     listing.country = nl.country
     listing.last_seen_at = nl.scraped_at
-    if was_removed:
+    if prev_status in (ListingStatus.REMOVED, ListingStatus.STALE):
         listing.status = ListingStatus.ACTIVE
-    return listing, False, was_removed
+    return listing, False, prev_status
 
 
 def _latest_snapshot(session: Session, listing_id: int) -> ListingSnapshot | None:
@@ -114,6 +122,14 @@ def _append_snapshot(session: Session, listing: Listing, nl: NormalizedListing) 
     )
 
 
+def _image_urls_changed(prev_snapshot: ListingSnapshot | None, nl: NormalizedListing) -> bool:
+    """True si la lista de imágenes del snapshot previo difiere de la actual."""
+    if prev_snapshot is None:
+        return False
+    prev_urls = set((prev_snapshot.raw_data or {}).get("image_urls") or [])
+    return set(nl.image_urls) != prev_urls
+
+
 def _emit_events(
     session: Session,
     listing: Listing,
@@ -121,11 +137,19 @@ def _emit_events(
     prev_snapshot: ListingSnapshot | None,
     *,
     created: bool,
-    was_removed: bool,
+    prev_status: ListingStatus | None,
 ) -> int:
     events: list[tuple[ListingEventType, dict | None, dict | None]] = []
-    if was_removed:
+    if prev_status == ListingStatus.REMOVED:
         events.append((ListingEventType.REAPPEARED, None, {"status": ListingStatus.ACTIVE.value}))
+    elif prev_status == ListingStatus.STALE:
+        events.append(
+            (
+                ListingEventType.STATUS_CHANGED,
+                {"status": ListingStatus.STALE.value},
+                {"status": ListingStatus.ACTIVE.value},
+            )
+        )
     elif created:
         events.append((ListingEventType.LISTED, None, {"price": str(nl.price)}))
     elif prev_snapshot is not None:
@@ -188,16 +212,24 @@ def _record_match(session: Session, listing: Listing, result, nl: NormalizedList
     session.flush()
 
 
-def _ingest_one(session: Session, nl: NormalizedListing) -> tuple[Listing, bool, bool, int]:
-    """Ingesta un anuncio. Devuelve `(listing, created, was_removed, events)`."""
-    listing, created, was_removed = upsert_listing(session, nl)
+def _ingest_one(session: Session, nl: NormalizedListing) -> tuple[Listing, bool, ListingStatus | None, int, bool]:
+    """Ingesta un anuncio. Devuelve `(listing, created, prev_status, events, changed)`."""
+    listing, created, prev_status = upsert_listing(session, nl)
     result = match_vehicle(session, nl)
     listing.vehicle_id = result.vehicle.id
     _record_match(session, listing, result, nl)
     prev_snapshot = _latest_snapshot(session, listing.id)
     _append_snapshot(session, listing, nl)
-    events = _emit_events(session, listing, nl, prev_snapshot, created=created, was_removed=was_removed)
-    return listing, created, was_removed, events
+    events = _emit_events(
+        session, listing, nl, prev_snapshot, created=created, prev_status=prev_status
+    )
+    changed = (
+        created
+        or prev_status in (ListingStatus.REMOVED, ListingStatus.STALE)
+        or events > 0
+        or _image_urls_changed(prev_snapshot, nl)
+    )
+    return listing, created, prev_status, events, changed
 
 
 def ingest_listings(session: Session, listings: list[NormalizedListing]) -> IngestResult:
@@ -205,18 +237,18 @@ def ingest_listings(session: Session, listings: list[NormalizedListing]) -> Inge
     for nl in listings:
         try:
             with session.begin_nested():
-                listing, created, was_removed, events = _ingest_one(session, nl)
+                listing, created, _prev_status, events, changed = _ingest_one(session, nl)
         except Exception:
             logger.exception("Fallo al ingestar anuncio %s/%s", nl.source, nl.source_listing_id)
             result.skipped += 1
             continue
         if created:
             result.listings_created += 1
-        elif was_removed:
-            result.listings_updated += 1
         else:
             result.listings_updated += 1
         result.affected_listing_ids.append(listing.id)
+        if changed:
+            result.changed_listing_ids.append(listing.id)
         result.snapshots_appended += 1
         result.events_emitted += events
     return result

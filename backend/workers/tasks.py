@@ -180,7 +180,7 @@ def _run_scrape(
         db.close()
 
     if enqueue_image_downloads:
-        for listing_id in result.affected_listing_ids:
+        for listing_id in result.changed_listing_ids:
             download_listing_images.delay(listing_id)
 
     duration_ms = int((time.monotonic() - started) * 1000)

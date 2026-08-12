@@ -132,6 +132,46 @@ def test_reappeared_removed_listing_is_reactivated(db_session) -> None:
     assert event.event_type == ListingEventType.REAPPEARED
 
 
+def test_stale_listing_is_reactivated_with_status_changed_event(db_session) -> None:
+    stale = Listing(
+        source="mobile_de",
+        source_listing_id="1001",
+        first_seen_at=datetime.now(timezone.utc),
+        status=ListingStatus.STALE,
+    )
+    db_session.add(stale)
+    db_session.commit()
+
+    result = ingest_listings(db_session, [_make_nl()])
+    db_session.commit()
+
+    listing = db_session.scalar(select(Listing).where(Listing.source == "mobile_de"))
+    assert listing.status == ListingStatus.ACTIVE
+    assert result.listings_updated == 1
+
+    event = db_session.scalar(select(ListingEvent).order_by(ListingEvent.id.desc()))
+    assert event.event_type == ListingEventType.STATUS_CHANGED
+    assert event.old_value == {"status": "STALE"}
+    assert event.new_value == {"status": "ACTIVE"}
+
+
+def test_sold_listing_is_not_reactivated_by_reappearance(db_session) -> None:
+    sold = Listing(
+        source="mobile_de",
+        source_listing_id="1001",
+        first_seen_at=datetime.now(timezone.utc),
+        status=ListingStatus.SOLD,
+    )
+    db_session.add(sold)
+    db_session.commit()
+
+    ingest_listings(db_session, [_make_nl()])
+    db_session.commit()
+
+    listing = db_session.scalar(select(Listing).where(Listing.source == "mobile_de"))
+    assert listing.status == ListingStatus.SOLD
+
+
 def test_vehicle_shared_by_same_key_and_distinct_by_power(db_session) -> None:
     a = _make_nl(source_listing_id="1", power_kw=100.0)
     b = _make_nl(source_listing_id="2", power_kw=100.0)
@@ -222,3 +262,55 @@ def test_ingest_collects_affected_listing_ids(db_session) -> None:
 
     assert len(result.affected_listing_ids) == 2
     assert len(set(result.affected_listing_ids)) == 2
+
+
+def test_ingest_changed_listing_ids_new_listings(db_session) -> None:
+    result = ingest_listings(db_session, [_make_nl()])
+    db_session.commit()
+    assert len(result.changed_listing_ids) == 1
+
+
+def test_ingest_changed_listing_ids_empty_when_identical(db_session) -> None:
+    first = _make_nl(
+        source_listing_id="1", scraped_at=datetime(2026, 8, 1, tzinfo=timezone.utc),
+        image_urls=["https://img.example/1.jpg"],
+    )
+    second = _make_nl(
+        source_listing_id="1", scraped_at=datetime(2026, 8, 2, tzinfo=timezone.utc),
+        image_urls=["https://img.example/1.jpg"],
+    )
+    ingest_listings(db_session, [first])
+    result = ingest_listings(db_session, [second])
+    db_session.commit()
+    assert len(result.affected_listing_ids) == 1
+    assert result.changed_listing_ids == []
+
+
+def test_ingest_changed_listing_ids_on_image_change(db_session) -> None:
+    first = _make_nl(
+        source_listing_id="1", scraped_at=datetime(2026, 8, 1, tzinfo=timezone.utc),
+        image_urls=["https://img.example/1.jpg"],
+    )
+    second = _make_nl(
+        source_listing_id="1", scraped_at=datetime(2026, 8, 2, tzinfo=timezone.utc),
+        image_urls=["https://img.example/1.jpg", "https://img.example/2.jpg"],
+    )
+    ingest_listings(db_session, [first])
+    result = ingest_listings(db_session, [second])
+    db_session.commit()
+    assert len(result.changed_listing_ids) == 1
+
+
+def test_ingest_changed_listing_ids_on_stale_reactivation(db_session) -> None:
+    stale = Listing(
+        source="mobile_de",
+        source_listing_id="1001",
+        first_seen_at=datetime.now(timezone.utc),
+        status=ListingStatus.STALE,
+    )
+    db_session.add(stale)
+    db_session.commit()
+
+    result = ingest_listings(db_session, [_make_nl()])
+    db_session.commit()
+    assert len(result.changed_listing_ids) == 1
