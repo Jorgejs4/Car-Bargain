@@ -48,6 +48,10 @@ celery_app.conf.beat_schedule = {
         "task": "import.costs",
         "schedule": crontab(minute="*/30"),
     },
+    "cross-border-every-32m": {
+        "task": "score.cross_border",
+        "schedule": crontab(minute="2,34"),
+    },
 }
 
 celery_app.autodiscover_tasks(["workers"])

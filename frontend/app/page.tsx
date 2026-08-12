@@ -10,8 +10,8 @@ function num(v: string | string[] | undefined): number | undefined {
 }
 
 function parseFilters(searchParams: Record<string, string | string[] | undefined>): ListingFilters {
-  const sortParam = typeof searchParams.sort === "string" ? searchParams.sort : "absolute_margin-desc";
-  const [sort_by, sort_order] = sortParam.includes("-") ? sortParam.split("-", 2) : ["absolute_margin", "desc"];
+  const sortParam = typeof searchParams.sort === "string" ? searchParams.sort : "cross_border-desc";
+  const [sort_by, sort_order] = sortParam.includes("-") ? sortParam.split("-", 2) : ["cross_border", "desc"];
   return {
     page: num(searchParams.page) ?? 1,
     brand: typeof searchParams.brand === "string" ? searchParams.brand || undefined : undefined,

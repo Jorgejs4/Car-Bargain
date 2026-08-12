@@ -29,6 +29,8 @@ class ListingRead(BaseModel):
     bargain_score: float | None
     absolute_margin: float | None
     predicted_price: float | None
+    cross_border_margin: float | None
+    cross_border_score: float | None
     estimated_import_cost: float | None
     total_cost_es: float | None
 
@@ -69,6 +71,8 @@ class ListingListItem(BaseModel):
     bargain_score: float | None
     absolute_margin: float | None
     predicted_price: float | None
+    cross_border_margin: float | None
+    cross_border_score: float | None
     estimated_import_cost: float | None
     total_cost_es: float | None
 

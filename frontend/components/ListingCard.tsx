@@ -57,9 +57,17 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
         )}
       </div>
 
-      {listing.country && listing.country !== "ES" && listing.total_cost_es != null && (
-        <div className="mt-0.5 text-xs text-amber-600 dark:text-amber-400">
-          {listing.total_cost_es.toLocaleString("es-ES")}€ total en España
+{listing.country && listing.country !== "ES" && listing.total_cost_es != null && (
+        <div className="mt-0.5 text-xs">
+          {listing.cross_border_margin != null && listing.cross_border_margin > 0 ? (
+            <span className="text-green-600 dark:text-green-400">
+              Ahorro neto: {listing.cross_border_margin.toLocaleString("es-ES")}EUR tras importacion
+            </span>
+          ) : (
+            <span className="text-amber-600 dark:text-amber-400">
+              {listing.total_cost_es.toLocaleString("es-ES")}EUR total en Espana
+            </span>
+          )}
         </div>
       )}
 

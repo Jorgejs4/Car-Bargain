@@ -28,6 +28,7 @@ _SORT_COLUMNS = {
     "last_seen": lambda latest: Listing.last_seen_at,
     "bargain": lambda latest: Listing.bargain_score,
     "absolute_margin": lambda latest: Listing.absolute_margin,
+    "cross_border": lambda latest: Listing.cross_border_margin,
     "total_cost": lambda latest: Listing.total_cost_es,
 }
 
@@ -63,6 +64,7 @@ def _build_conditions(
     is_historical=None,
     min_bargain_score=None,
     min_absolute_margin=None,
+    min_cross_border_margin=None,
 ):
     conditions = []
     if vehicle_id is not None:
@@ -107,6 +109,8 @@ def _build_conditions(
         conditions.append(Listing.bargain_score >= min_bargain_score)
     if min_absolute_margin is not None:
         conditions.append(Listing.absolute_margin >= min_absolute_margin)
+    if min_cross_border_margin is not None:
+        conditions.append(Listing.cross_border_margin >= min_cross_border_margin)
     return conditions
 
 
@@ -149,6 +153,8 @@ def _item(
         "bargain_score": listing.bargain_score,
         "absolute_margin": listing.absolute_margin,
         "predicted_price": listing.predicted_price,
+        "cross_border_margin": listing.cross_border_margin,
+        "cross_border_score": listing.cross_border_score,
         "estimated_import_cost": listing.estimated_import_cost,
         "total_cost_es": listing.total_cost_es,
         "first_seen_at": listing.first_seen_at,

@@ -519,3 +519,48 @@ def compute_import_costs() -> dict:
         raise
     finally:
         db.close()
+
+
+@celery_app.task(name="score.cross_border")
+def score_cross_border() -> dict:
+    """Fase 9: margen cross-border descontando costes de importación.
+
+    Para cada listing ACTIVE no histórico:
+      cross_border_margin = absolute_margin - estimated_import_cost
+      cross_border_score  = cross_border_margin / predicted_price
+
+    Un cross_border_margin positivo significa que incluso después de pagar
+    la importación, el coche sigue por debajo del valor de mercado predicho.
+    """
+    started = time.monotonic()
+    db = SessionLocal()
+    try:
+        listings = db.scalars(
+            select(Listing).where(
+                Listing.status == ListingStatus.ACTIVE,
+                Listing.is_historical.is_(False),
+            )
+        ).all()
+
+        scored = 0
+        for li in listings:
+            am = li.absolute_margin
+            pp = li.predicted_price
+            imp = li.estimated_import_cost or 0.0
+            if am is None or pp is None or pp == 0:
+                continue
+
+            cbm = am - imp
+            li.cross_border_margin = round(cbm, 2)
+            li.cross_border_score = round(cbm / pp, 6)
+            scored += 1
+
+        db.commit()
+        duration_ms = int((time.monotonic() - started) * 1000)
+        logger.info("score.cross_border: %s listings (%s ms)", scored, duration_ms)
+        return {"scored": scored, "duration_ms": duration_ms}
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()

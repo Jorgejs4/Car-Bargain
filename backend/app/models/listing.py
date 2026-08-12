@@ -85,6 +85,11 @@ class Listing(Base):
     absolute_margin: Mapped[float | None] = mapped_column()
     predicted_price: Mapped[float | None] = mapped_column()
 
+    # Fase 9: margen cross-border (€) y score (%) descontando costes de importación.
+    # Positivo = incluso importándolo, el precio total está por debajo del valor de mercado.
+    cross_border_margin: Mapped[float | None] = mapped_column(index=True)
+    cross_border_score: Mapped[float | None] = mapped_column()
+
     # Fase 7: coste estimado de importación a España y precio total puesto en ES.
     estimated_import_cost: Mapped[float | None] = mapped_column()
     total_cost_es: Mapped[float | None] = mapped_column(index=True)

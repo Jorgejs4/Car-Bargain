@@ -13,6 +13,7 @@ const REGIONS = [
   { value: "EU", label: "Europa" },
 ];
 const SORT_OPTIONS = [
+  { value: "cross_border-desc", label: "Mejor cross-border EUR" },
   { value: "bargain-desc", label: "Mejor ganga %" },
   { value: "absolute_margin-desc", label: "Mayor ahorro EUR" },
   { value: "price-asc", label: "Precio bajo" },
@@ -38,7 +39,7 @@ export function FilterFormInner() {
   const [transmission, setTransmission] = useState(searchParams.get("transmission") ?? "");
   const [sellerType, setSellerType] = useState(searchParams.get("seller_type") ?? "");
   const [region, setRegion] = useState(searchParams.get("region") ?? "");
-  const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "absolute_margin-desc");
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "cross_border-desc");
   const [needsReview, setNeedsReview] = useState(searchParams.get("needs_review") === "true");
   const [onlyBargains, setOnlyBargains] = useState(searchParams.get("min_bargain_score") !== null);
   const [minAbsMargin, setMinAbsMargin] = useState(searchParams.get("min_absolute_margin") ?? "");
@@ -82,7 +83,7 @@ export function FilterFormInner() {
   function reset() {
     setBrand(""); setModel(""); setPriceMin(""); setPriceMax("");
     setMileageMax(""); setYearMin(""); setFuel(""); setTransmission("");
-    setSellerType(""); setRegion(""); setSortBy("absolute_margin-desc");
+    setSellerType(""); setRegion(""); setSortBy("cross_border-desc");
     setNeedsReview(false); setOnlyBargains(false); setMinAbsMargin(""); setModels([]);
     router.push(window.location.pathname);
   }

@@ -1,15 +1,18 @@
-"""Motor de valoración: predicción de precio justo por regresión lineal.
+"""Motor de valoración: predicción de precio justo en dos etapas.
 
-Fase 6: en lugar del simple ranking P50, este motor entrena un modelo de
-regresión lineal multivariable con los listings ACTIVE y predice cuál
-*debería* ser el precio de cada coche dados su año, km, combustible, cambio,
-marca y estado visual (daños CV).
+Fase 6 v2: en lugar de una regresión ciega a la marca, primero se calcula un
+precio base por marca (mediana de los precios de esa marca en el mercado). La
+regresión lineal modela solo la desviación respecto a ese precio base según
+año, km, combustible, cambio y daños.
 
-El `bargain_score` final es (precio_predicho - precio_real) / precio_predicho:
-positivo → está más barato de lo que el modelo espera → posible ganga.
+Esto evita que un Smart y un Mercedes con el mismo año/km reciban la misma
+predicción: el Smart parte de ~15 k€ y el Mercedes de ~40 k€.
+
+El `bargain_score` final es (precio_predicho - precio_real) / precio_predicho.
 """
 
 import logging
+from collections import defaultdict
 from datetime import datetime, timezone
 
 import numpy as np
@@ -20,12 +23,21 @@ from app.models import Listing, ListingSnapshot, ListingStatus, Vehicle
 
 logger = logging.getLogger(__name__)
 
-# Combustibles que el modelo distingue (el resto colapsa a "other").
 _FUEL_FEATURES = ["petrol", "diesel", "electric", "hybrid", "lpg", "cng", "hydrogen"]
+_NUMERIC_FEATURE_COUNT = 2  # year, mileage_km
+
+
+def _median(values: list[float]) -> float:
+    if not values:
+        return 0.0
+    s = sorted(values)
+    n = len(s)
+    if n % 2 == 1:
+        return s[n // 2]
+    return (s[n // 2 - 1] + s[n // 2]) / 2.0
 
 
 def _fit_linear(X: np.ndarray, y: np.ndarray) -> np.ndarray:
-    """Min-cuadrados: resuelve X·θ = y."""
     return np.linalg.lstsq(X, y, rcond=None)[0]
 
 
@@ -37,13 +49,12 @@ def _r2_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     return 1.0 - ss_res / ss_tot
 
 
-_NUMERIC_FEATURE_COUNT = 2  # year, mileage_km (primeras columnas)
-
-
 class ValuationModel:
-    """Predice el precio justo de un coche a partir de sus características."""
+    """Modelo en dos etapas: baseline por marca + regresión sobre residuos."""
 
     def __init__(self):
+        self.brand_baseline: dict[str, float] = {}
+        self.default_baseline: float = 0.0
         self.coefs: np.ndarray | None = None
         self.feature_names: list[str] = []
         self.X_mean: np.ndarray | None = None
@@ -51,55 +62,63 @@ class ValuationModel:
         self.trained_at: datetime | None = None
 
     def _build_features(self, row: dict) -> list[float]:
-        """Convierte una fila (snapshot + vehicle + listing) en vector de features."""
         f: list[float] = []
         self.feature_names = ["year", "mileage_km"]
 
-        # Numéricas (se normalizan por el llamador)
         f.append(float(row.get("year", 0) or 0))
         f.append(float(row.get("mileage", 0) or 0))
 
-        # Combustible one-hot
         fuel = (row.get("fuel") or "").lower()
         for feat in _FUEL_FEATURES:
             self.feature_names.append(f"fuel_{feat}")
             f.append(1.0 if fuel == feat else 0.0)
 
-        # Cambio one-hot
         trans = (row.get("transmission") or "").lower()
         for t in ["manual", "automatic"]:
             self.feature_names.append(f"transmission_{t}")
             f.append(1.0 if trans == t else 0.0)
 
-        # Daño visible (CV)
         has_damage = bool((row.get("photo_signals") or {}).get("has_visible_damage"))
         self.feature_names.append("has_damage")
         f.append(1.0 if has_damage else 0.0)
 
-        # Intercept
         self.feature_names.append("intercept")
         f.append(1.0)
-
         return f
 
-    def fit(self, rows: list[dict]) -> bool:
-        """Entrena el modelo de regresión con las filas dadas.
+    def _compute_baselines(self, rows: list[dict]) -> dict[str, float]:
+        """Mediana de precio por marca (normalizada a minúsculas)."""
+        by_brand: dict[str, list[float]] = defaultdict(list)
+        for r in rows:
+            brand = (r.get("brand") or "").strip().lower()
+            if brand:
+                by_brand[brand].append(r["price"])
+        baselines = {}
+        for brand, prices in by_brand.items():
+            baselines[brand] = _median(prices)
+        all_prices = [r["price"] for r in rows]
+        self.default_baseline = _median(all_prices) if all_prices else 0.0
+        return baselines
 
-        Cada fila debe tener: price, year, mileage, fuel, transmission,
-        photo_signals, brand.
-        Retorna False si no hay datos suficientes.
-        """
+    def fit(self, rows: list[dict]) -> bool:
         if len(rows) < 10:
             logger.warning("ValuationModel.fit: solo %d filas, se necesitan ≥10", len(rows))
             return False
 
-        # Construir matriz de features y vector de precios
-        raw_features = [self._build_features(r) for r in rows]
-        X_raw = np.array(raw_features, dtype=np.float64)
-        y = np.array([float(r["price"]) for r in rows], dtype=np.float64)
+        self.brand_baseline = self._compute_baselines(rows)
 
-        # Normalizar solo las features numéricas (año, km); las categóricas
-        # (one-hot) y el intercept se dejan en su escala original.
+        # Construir features y target como residuo sobre el baseline de marca
+        raw_features = []
+        residuals = []
+        for r in rows:
+            brand = (r.get("brand") or "").strip().lower()
+            baseline = self.brand_baseline.get(brand, self.default_baseline)
+            raw_features.append(self._build_features(r))
+            residuals.append(r["price"] - baseline)
+
+        X_raw = np.array(raw_features, dtype=np.float64)
+        y = np.array(residuals, dtype=np.float64)
+
         self.X_mean = np.zeros(X_raw.shape[1])
         self.X_std = np.ones(X_raw.shape[1])
         X = X_raw.copy()
@@ -114,25 +133,37 @@ class ValuationModel:
         self.coefs = _fit_linear(X, y)
         self.trained_at = datetime.now(timezone.utc)
 
-        y_pred = X @ self.coefs
-        r2 = _r2_score(y, y_pred)
+        # Reconstruir predicciones completas para calcular R²
+        y_pred_full = np.array([self._full_predict(r) or 0.0 for r in rows])
+        y_full = np.array([r["price"] for r in rows])
+        r2 = _r2_score(y_full, y_pred_full)
+
         logger.info(
-            "ValuationModel entrenado: %d filas, %d features, R²=%.3f",
+            "ValuationModel entrenado: %d filas, %d marcas, %d features, R²=%.3f",
             len(rows),
+            len(self.brand_baseline),
             len(self.feature_names),
             r2,
         )
         return True
 
-    def predict(self, row: dict) -> float | None:
-        """Predice el precio justo para una fila. None si el modelo no está entrenado."""
-        if self.coefs is None or self.X_mean is None or self.X_std is None:
+    def _full_predict(self, row: dict) -> float | None:
+        """Predicción completa: baseline marca + modelo residual."""
+        if self.coefs is None:
             return None
+        brand = (row.get("brand") or "").strip().lower()
+        baseline = self.brand_baseline.get(brand, self.default_baseline)
+
         raw = np.array(self._build_features(row), dtype=np.float64)
         x = raw.copy()
         for j in range(min(_NUMERIC_FEATURE_COUNT, x.shape[0])):
             x[j] = (raw[j] - self.X_mean[j]) / self.X_std[j]
-        return max(0.0, float(x @ self.coefs))
+
+        residual = float(x @ self.coefs)
+        return max(500.0, baseline + residual)
+
+    def predict(self, row: dict) -> float | None:
+        return self._full_predict(row)
 
 
 _model: ValuationModel | None = None
@@ -180,10 +211,6 @@ def fetch_training_rows(session: Session) -> list[dict]:
 
 
 def score_all(session: Session) -> dict:
-    """Entrena el modelo y puntúa todos los listings ACTIVE no históricos.
-
-    Retorna {"trained": bool, "scored": int, "r2": float | None, "duration_ms": int}.
-    """
     import time
 
     started = time.monotonic()
@@ -194,7 +221,6 @@ def score_all(session: Session) -> dict:
     if not trained:
         return {"trained": False, "scored": 0, "r2": None, "duration_ms": 0}
 
-    # Predecir y puntuar cada listing
     scored = 0
     for row in rows:
         listing_id = row["listing_id"]
@@ -211,7 +237,6 @@ def score_all(session: Session) -> dict:
             listing.predicted_price = round(predicted, 2)
             scored += 1
 
-    # R²
     y = np.array([float(r["price"]) for r in rows])
     y_pred = np.array([model.predict(r) or 0.0 for r in rows])
     r2 = _r2_score(y, y_pred)
