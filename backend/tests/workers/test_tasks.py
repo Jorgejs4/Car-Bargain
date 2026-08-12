@@ -140,7 +140,7 @@ def test_scrape_autoscout24_task_ingests(monkeypatch) -> None:
     result = tasks.scrape_autoscout24(max_pages=1, enqueue_image_downloads=False)
 
     assert result["source"] == "autoscout24"
-    assert result["listings"] == 2
+    assert result["listings"] == 16  # 8 países EU × 2 listings del fixture
     assert result["listings_created"] == 2
 
     from app.db.session import engine

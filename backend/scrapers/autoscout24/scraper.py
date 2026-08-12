@@ -1,11 +1,16 @@
-"""Scraper de AutoScout24 (ES): fetch del SRP → parser → mapper.
+"""Scraper de AutoScout24: fetch del SRP → parser → mapper.
 
-A diferencia de mobile.de, AutoScout24.es responde 200 a peticiones HTTP simples
-(verificado en vivo 2026-08), pero usa Akamai Bot Manager y puede bloquear ante
-ráfagas. Se propaga el error de fetch (403) sin silenciarlo.
+AutoScout24 responde 200 a peticiones HTTP simples (verificado en vivo 2026-08),
+pero usa Akamai Bot Manager y puede bloquear ante ráfagas. La URL base acepta
+el parámetro `cy` para filtrar por país europeo (E=ES, D=DE, F=FR, I=IT, etc.).
+Se propaga el error de fetch (403) sin silenciarlo.
+
+Para evitar bloqueos se impone un delay entre países (respetuoso con el rate
+limit de Akamai) y se itera página a página por país.
 """
 
 import logging
+import time
 import urllib.parse
 from collections.abc import Callable
 
@@ -20,6 +25,20 @@ logger = logging.getLogger(__name__)
 
 SEARCH_URL = "https://www.autoscout24.es/lst"
 
+# Países de la UE que scrapeamos (cy= parámetro, dominio Accept-Language).
+EU_COUNTRIES: list[tuple[str, str]] = [
+    ("ES", "es-ES"),
+    ("DE", "de-DE"),
+    ("FR", "fr-FR"),
+    ("IT", "it-IT"),
+    ("NL", "nl-NL"),
+    ("BE", "nl-BE"),
+    ("AT", "de-AT"),
+    ("LU", "fr-LU"),
+]
+
+_COUNTRY_DELAY_SECONDS = 5.0
+
 _DEFAULT_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -31,7 +50,12 @@ _DEFAULT_HEADERS = {
 
 
 class AutoScout24Scraper(BaseScraper):
-    """Orquesta la recolección de anuncios de AutoScout24.es."""
+    """Orquesta la recolección de anuncios de AutoScout24.
+
+    Admite múltiples países con barrido gradual: 1 página por país cada
+    ciclo de beat (por defecto 15 min), delay de 5 s entre países para
+    no activar el rate limit de Akamai.
+    """
 
     source = "autoscout24"
 
@@ -43,6 +67,7 @@ class AutoScout24Scraper(BaseScraper):
         client: httpx.Client | None = None,
         proxy: str | None = None,
         timeout: float = 30.0,
+        country_delay: float = _COUNTRY_DELAY_SECONDS,
     ) -> None:
         super().__init__(parser or AutoScout24Parser(), mapper or AutoScout24Mapper())
         if client is None:
@@ -56,12 +81,13 @@ class AutoScout24Scraper(BaseScraper):
                 proxy=proxy,
             )
         self._client = client
+        self._country_delay = country_delay
 
     @staticmethod
-    def _build_url(page: int) -> str:
+    def _build_url(page: int, country: str = "E") -> str:
         params = {
             "atype": "C",
-            "cy": "E",
+            "cy": country,
             "page": str(page),
         }
         return f"{SEARCH_URL}?{urllib.parse.urlencode(params)}"
@@ -80,17 +106,54 @@ class AutoScout24Scraper(BaseScraper):
         self,
         max_pages: int = 1,
         on_page: Callable[[int, str], None] | None = None,
+        country_codes: list[str] | None = None,
     ) -> list[NormalizedListing]:
-        """Scrapea páginas. `on_page(page, html)` se invoca con el raw de cada página."""
+        """Scrapea `max_pages` por cada país indicado.
+
+        - `country_codes`: lista de códigos ISO (default: ["E"] para España).
+          Pasar `None` para todos los países de la UE.
+        - `on_page(page, html)`: se invoca con el raw de cada página.
+        - Entre países se espera `country_delay` segundos para evitar bloqueos.
+        """
+        if country_codes is None:
+            country_codes = ["E"]
+        elif country_codes == ["EU"]:
+            country_codes = [c for c, _ in EU_COUNTRIES]
+
         listings: list[NormalizedListing] = []
-        for page in range(1, max_pages + 1):
-            html = self._fetch(self._build_url(page))
-            if on_page is not None:
-                on_page(page, html)
-            records = self.parser.parse(html)
-            for record in records:
-                try:
-                    listings.append(self.mapper.map(record))
-                except (TypeError, ValueError) as exc:
-                    logger.warning("Anuncio %s de autoscout24 descartado: %s", record.get("id"), exc)
+        single_country = len(country_codes) == 1
+        for i, cy in enumerate(country_codes):
+            if i > 0:
+                logger.info("autoscout24: delay %.0fs entre países", self._country_delay)
+                time.sleep(self._country_delay)
+
+            try:
+                for page in range(1, max_pages + 1):
+                    html = self._fetch(self._build_url(page, cy))
+                    if on_page is not None:
+                        on_page(page, html)
+                    records = self.parser.parse(html)
+                    mapped = 0
+                    for record in records:
+                        try:
+                            listings.append(self.mapper.map(record))
+                            mapped += 1
+                        except (TypeError, ValueError) as exc:
+                            logger.warning(
+                                "Anuncio %s de autoscout24 descartado: %s",
+                                record.get("id"),
+                                exc,
+                            )
+                    logger.info(
+                        "autoscout24 cy=%s p=%d → %d anuncios (mapeados: %d)",
+                        cy,
+                        page,
+                        len(records),
+                        mapped,
+                    )
+            except Exception:
+                if single_country:
+                    raise
+                logger.exception("autoscout24 cy=%s falló; se continúa con el siguiente país", cy)
+
         return listings

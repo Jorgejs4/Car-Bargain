@@ -31,6 +31,8 @@ def listing_filters(
     transmission: str | None = Query(None, description="Cambio (ej. automatic)"),
     seller_type: str | None = Query(None, description="Tipo de vendedor (dealer/private/commercial)"),
     source: str | None = Query(None, description="Fuente (ej. mobile_de)"),
+    region: str | None = Query(None, description="Región: ES (España) o EU (resto de Europa)"),
+    min_bargain_score: float | None = Query(None, description="Score de oportunidad mínimo (positivo = ganga)"),
     is_historical: bool | None = Query(None, description="Solo históricos (Wayback) o solo live; por defecto se filtran históricos en ACTIVE"),
     needs_review: bool | None = Query(None, description="Filtrar por revisión manual pendiente"),
 ) -> dict:
@@ -46,6 +48,8 @@ def listing_filters(
         "transmission": transmission,
         "seller_type": seller_type,
         "source": source,
+        "region": region,
+        "min_bargain_score": min_bargain_score,
         "is_historical": is_historical,
         "needs_review": needs_review,
     }
@@ -62,10 +66,12 @@ def list_listings(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     status: ListingStatus | None = Query(default=ListingStatus.ACTIVE),
+    sort_by: str = Query("last_seen", description="Campo: price, mileage, year, last_seen"),
+    sort_order: str = Query("desc", description="asc o desc"),
     filters: dict = Depends(listing_filters),
 ) -> Page[ListingListItem]:
     items, total = listings_query.list_listings(
-        db, page=page, page_size=page_size, status=status, **filters
+        db, page=page, page_size=page_size, status=status, sort_by=sort_by, sort_order=sort_order, **filters
     )
     return _page(items, total, page, page_size)
 
@@ -75,10 +81,12 @@ def active_listings(
     db: Session = Depends(get_db),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
+    sort_by: str = Query("last_seen", description="Campo: price, mileage, year, last_seen"),
+    sort_order: str = Query("desc"),
     filters: dict = Depends(listing_filters),
 ) -> Page[ListingListItem]:
     items, total = listings_query.list_listings(
-        db, page=page, page_size=page_size, status=ListingStatus.ACTIVE, **filters
+        db, page=page, page_size=page_size, status=ListingStatus.ACTIVE, sort_by=sort_by, sort_order=sort_order, **filters
     )
     return _page(items, total, page, page_size)
 
@@ -88,6 +96,8 @@ def historical_listings(
     db: Session = Depends(get_db),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
+    sort_by: str = Query("last_seen", description="Campo: price, mileage, year, last_seen"),
+    sort_order: str = Query("desc"),
     filters: dict = Depends(listing_filters),
 ) -> Page[ListingListItem]:
     """Todas las ofertas (cualquier status y fuente, incluidas las históricas).
@@ -95,7 +105,7 @@ def historical_listings(
     Es el archivo completo: live + Wayback, ACTIVE/STALE/REMOVED/SOLD.
     """
     items, total = listings_query.list_listings(
-        db, page=page, page_size=page_size, status=None, **filters
+        db, page=page, page_size=page_size, status=None, sort_by=sort_by, sort_order=sort_order, **filters
     )
     return _page(items, total, page, page_size)
 

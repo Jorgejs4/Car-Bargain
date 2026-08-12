@@ -20,7 +20,7 @@ import httpx
 import redis
 from app.core.config import settings
 from app.db.session import SessionLocal
-from app.models import Listing, ListingSnapshot, ListingStatus, PhotoAnalysis
+from app.models import Listing, ListingSnapshot, ListingStatus, PhotoAnalysis, Vehicle
 from app.schemas.photo_analysis import PhotoAnalysisResult
 from app.services.ingest import ingest_listings
 from app.services.listing_images import ensure_local_images
@@ -118,13 +118,14 @@ def scrape_autoscout24(
     save_raw_response: bool = True,
     enqueue_image_downloads: bool = True,
 ) -> dict:
-    """Scrapea AutoScout24.es e ingesta los anuncios."""
+    """Scrapea AutoScout24 en toda la UE e ingesta los anuncios."""
     return _run_scrape(
         "autoscout24",
         AutoScout24Scraper(),
         max_pages=max_pages,
         save_raw_response=save_raw_response,
         enqueue_image_downloads=enqueue_image_downloads,
+        scraper_kwargs={"country_codes": ["EU"]},
     )
 
 
@@ -156,6 +157,7 @@ def _run_scrape(
     max_pages: int,
     save_raw_response: bool,
     enqueue_image_downloads: bool,
+    scraper_kwargs: dict | None = None,
 ) -> dict:
     """Ejecuta un scraper genérico: lock → fetch → ingesta → imágenes → resumen."""
     started = time.monotonic()
@@ -167,7 +169,7 @@ def _run_scrape(
         if save_raw_response:
             save_raw(html, source, f"srp_page_{page}.html")
 
-    listings = scraper.run(max_pages=max_pages, on_page=_save_raw)
+    listings = scraper.run(max_pages=max_pages, on_page=_save_raw, **(scraper_kwargs or {}))
 
     db = SessionLocal()
     try:
@@ -404,6 +406,107 @@ def update_listing_status(source: str | None = None) -> dict:
             duration_ms,
         )
         return {"source": source, "duration_ms": duration_ms, **asdict(result)}
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
+
+
+def _median(values: list[float]) -> float:
+    if not values:
+        return 0.0
+    n = len(values)
+    s = sorted(values)
+    if n % 2 == 1:
+        return s[n // 2]
+    return (s[n // 2 - 1] + s[n // 2]) / 2.0
+
+
+@celery_app.task(name="score.bargains")
+def score_bargains() -> dict:
+    """Calcula `bargain_score` para todos los listings ACTIVE no históricos.
+
+    Fórmula (cada componente normalizado a [-1,1] aprox.):
+        score = 0.40 * (P50_price - price) / max(P50_price, price)
+              + 0.25 * (P50_km - km) / max(P50_km, km)
+              + 0.15 * (year - P50_year) / max(year, P50_year)
+              - 0.20 * (1 si tiene daño visible, 0 si no)
+    """
+    started = time.monotonic()
+    db = SessionLocal()
+    try:
+        active_listings = db.scalars(
+            select(Listing)
+            .where(
+                Listing.status == ListingStatus.ACTIVE,
+                Listing.is_historical.is_(False),
+            )
+        ).all()
+
+        by_vehicle: dict[int, list[Listing]] = {}
+        for listing in active_listings:
+            vid = listing.vehicle_id
+            if vid is None:
+                continue
+            by_vehicle.setdefault(vid, []).append(listing)
+
+        scored = 0
+        for vid, listings in by_vehicle.items():
+            prices: list[float] = []
+            kms: list[float] = []
+            years: list[float] = []
+            listing_data: list[tuple[Listing, float, float]] = []
+
+            for li in listings:
+                snap = db.scalar(
+                    select(ListingSnapshot)
+                    .where(ListingSnapshot.listing_id == li.id)
+                    .order_by(ListingSnapshot.scraped_at.desc())
+                    .limit(1)
+                )
+                if snap is None or snap.price is None:
+                    continue
+                price = float(snap.price)
+                km = float(snap.mileage) if snap.mileage is not None else 0.0
+                prices.append(price)
+                if km > 0:
+                    kms.append(km)
+                listing_data.append((li, price, km))
+
+            vehicle = db.get(Vehicle, vid)
+            year = float(vehicle.year) if vehicle and vehicle.year else 0.0
+            if year > 0 and len(listing_data) > 0:
+                years = [year] * len(listing_data)
+
+            if not prices:
+                continue
+
+            p50_price = _median(prices)
+            p50_km = _median(kms) if kms else 0.0
+            p50_year = _median(years) if years else year
+
+            for li, price, km in listing_data:
+                price_term = ((p50_price - price) / max(p50_price, price, 1.0)) * 0.40
+                km_term = 0.0
+                if p50_km > 0 and km > 0:
+                    km_term = ((p50_km - km) / max(p50_km, km, 1.0)) * 0.25
+                year_term = 0.0
+                if p50_year > 0 and year > 0:
+                    year_term = ((year - p50_year) / max(year, p50_year, 1.0)) * 0.15
+
+                has_damage = bool(
+                    (li.photo_signals or {}).get("has_visible_damage")
+                )
+                damage_term = -0.20 if has_damage else 0.0
+
+                li.bargain_score = round(price_term + km_term + year_term + damage_term, 6)
+                scored += 1
+
+        db.commit()
+        duration_ms = int((time.monotonic() - started) * 1000)
+        logger.info("score.bargains: %s listings puntuados (%s ms)", scored, duration_ms)
+        return {"scored": scored, "duration_ms": duration_ms}
     except Exception:
         db.rollback()
         raise

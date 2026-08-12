@@ -25,7 +25,7 @@ celery_app.conf.beat_schedule = {
     "scrape-autoscout24-every-15m": {
         "task": "scrape.autoscout24",
         "schedule": crontab(minute="*/15"),
-        "kwargs": {"max_pages": 5},
+        "kwargs": {"max_pages": 2},
     },
     "scrape-coches-net-every-15m": {
         "task": "scrape.coches_net",
@@ -39,6 +39,10 @@ celery_app.conf.beat_schedule = {
     "analyze-pending-images-every-15m": {
         "task": "images.analyze_pending",
         "schedule": crontab(minute="*/15"),
+    },
+    "score-bargains-every-16m": {
+        "task": "score.bargains",
+        "schedule": crontab(minute="1,16,31,46"),
     },
 }
 

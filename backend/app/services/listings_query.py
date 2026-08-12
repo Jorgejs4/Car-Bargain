@@ -9,7 +9,7 @@ import math
 from collections import Counter
 from decimal import Decimal
 
-from sqlalchemy import func, select
+from sqlalchemy import asc, desc, func, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import Listing, ListingSnapshot, ListingStatus, Vehicle
@@ -20,6 +20,14 @@ from app.schemas.vehicle import VehicleRead
 
 PAGE_SIZE_DEFAULT = 20
 PAGE_SIZE_MAX = 100
+
+_SORT_COLUMNS = {
+    "price": lambda latest: latest.c.price,
+    "mileage": lambda latest: latest.c.mileage,
+    "year": lambda latest: Vehicle.year,
+    "last_seen": lambda latest: Listing.last_seen_at,
+    "bargain": lambda latest: Listing.bargain_score,
+}
 
 
 def _latest_snapshots_subquery():
@@ -47,9 +55,11 @@ def _build_conditions(
     seller_type=None,
     status=None,
     source=None,
+    region=None,
     needs_review=None,
     vehicle_id=None,
     is_historical=None,
+    min_bargain_score=None,
 ):
     conditions = []
     if vehicle_id is not None:
@@ -81,10 +91,17 @@ def _build_conditions(
     if is_historical is not None:
         conditions.append(Listing.is_historical.is_(is_historical))
     elif status == ListingStatus.ACTIVE:
-        # Regla del dashboard: los anuncios activos nunca mezclan datos históricos.
         conditions.append(Listing.is_historical.is_(False))
+    if region:
+        _eu_codes = {"DE", "FR", "IT", "NL", "BE", "AT", "LU"}
+        if region.upper() == "ES":
+            conditions.append(Listing.country == "ES")
+        elif region.upper() == "EU":
+            conditions.append(Listing.country.in_(_eu_codes))
     if needs_review is not None:
         conditions.append(Listing.needs_review == needs_review)
+    if min_bargain_score is not None:
+        conditions.append(Listing.bargain_score >= min_bargain_score)
     return conditions
 
 
@@ -124,6 +141,7 @@ def _item(
         "photo_signals": listing.photo_signals,
         "needs_review": listing.needs_review,
         "risk_score": listing.risk_score,
+        "bargain_score": listing.bargain_score,
         "first_seen_at": listing.first_seen_at,
         "last_seen_at": listing.last_seen_at,
     }
@@ -134,6 +152,8 @@ def list_listings(
     *,
     page: int = 1,
     page_size: int = PAGE_SIZE_DEFAULT,
+    sort_by: str = "last_seen",
+    sort_order: str = "desc",
     **filters,
 ) -> tuple[list[dict], int]:
     """Devuelve `(items, total)` de listings filtrados y paginados.
@@ -159,8 +179,12 @@ def list_listings(
     )
 
     total = session.scalar(select(func.count()).select_from(base.subquery())) or 0
+
+    sort_col_fn = _SORT_COLUMNS.get(sort_by, _SORT_COLUMNS["last_seen"])
+    sort_col = sort_col_fn(latest)
+    order_clause = desc(sort_col) if sort_order == "desc" else asc(sort_col)
     rows = session.execute(
-        base.order_by(Listing.last_seen_at.desc().nullslast())
+        base.order_by(order_clause.nullslast())
         .limit(page_size)
         .offset((page - 1) * page_size)
     ).all()
@@ -324,3 +348,38 @@ def vehicle_market(session: Session, vehicle_id: int) -> dict | None:
         "mean_price": round(total / len(values), 2),
         "currency": currency,
     }
+
+
+def list_brands(session: Session, *, q: str | None = None) -> list[str]:
+    """Marcas distintas con al menos un listing ACTIVE y no histórico."""
+    query = (
+        select(Vehicle.brand)
+        .join(Listing, Listing.vehicle_id == Vehicle.id)
+        .where(
+            Listing.status == ListingStatus.ACTIVE,
+            Listing.is_historical.is_(False),
+        )
+        .distinct()
+        .order_by(Vehicle.brand.asc())
+    )
+    if q:
+        query = query.where(Vehicle.brand.ilike(f"%{q}%"))
+    return session.scalars(query).all()
+
+
+def list_models(session: Session, *, brand: str) -> list[str]:
+    """Modelos distintos para una marca con listings ACTIVE no históricos."""
+    return (
+        session.scalars(
+            select(Vehicle.model)
+            .join(Listing, Listing.vehicle_id == Vehicle.id)
+            .where(
+                Vehicle.brand == brand,
+                Listing.status == ListingStatus.ACTIVE,
+                Listing.is_historical.is_(False),
+                Vehicle.model.is_not(None),
+            )
+            .distinct()
+            .order_by(Vehicle.model.asc())
+        ).all()
+    )

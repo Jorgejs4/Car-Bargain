@@ -26,6 +26,7 @@ class ListingRead(BaseModel):
     photo_signals: dict | None
     needs_review: bool
     risk_score: float | None
+    bargain_score: float | None
     created_at: datetime
     updated_at: datetime
 
@@ -60,6 +61,7 @@ class ListingListItem(BaseModel):
     photo_signals: dict | None
     needs_review: bool
     risk_score: float | None
+    bargain_score: float | None
 
     first_seen_at: datetime
     last_seen_at: datetime | None
