@@ -31,6 +31,7 @@ jobs:
     env:
       DATABASE_URL: postgresql+psycopg://carbargains:carbargains@localhost:5432/carbargains_test
       REDIS_URL: redis://localhost:6379/0
+      TEST_DATABASE_URL: postgresql+psycopg://carbargains:carbargains@localhost:5432/carbargains_test
       ENVIRONMENT: test
     steps:
       - uses: actions/checkout@v4

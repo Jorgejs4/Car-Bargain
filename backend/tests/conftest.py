@@ -2,27 +2,36 @@ import os
 
 # Debe establecerse ANTES de importar app.* para que el engine de la app
 # apunte a la BD de test (las env vars tienen prioridad sobre .env).
-os.environ["DATABASE_URL"] = "postgresql+psycopg://carbargains:carbargains@localhost:5432/carbargains_test"
+os.environ["DATABASE_URL"] = os.environ.get(
+    "TEST_DATABASE_URL",
+    os.environ.get(
+        "DATABASE_URL",
+        "postgresql+psycopg://carbargains:carbargains@localhost:5432/carbargains_test",
+    ),
+)
 
 import app.models  # noqa: F401  # registra los modelos en Base.metadata
 import pytest
 from app.db.base import Base
 from sqlalchemy import create_engine, text
+from sqlalchemy.engine import make_url
 
 TEST_DB_URL = os.environ["DATABASE_URL"]
-TEST_DB_NAME = "carbargains_test"
+TEST_DB_NAME = make_url(TEST_DB_URL).database or "carbargains_test"
 
 
 @pytest.fixture(scope="session", autouse=True)
 def _test_database():
-    admin_url = TEST_DB_URL.rsplit("/", 1)[0] + "/carbargains"
+    # El servicio de CI solo garantiza la base estándar `postgres`; no asumir
+    # que exista una base de desarrollo con otro nombre.
+    admin_url = make_url(TEST_DB_URL).set(database="postgres")
     admin = create_engine(admin_url, isolation_level="AUTOCOMMIT")
     with admin.connect() as conn:
         exists = conn.execute(
             text("SELECT 1 FROM pg_database WHERE datname = :name"), {"name": TEST_DB_NAME}
         ).scalar()
         if not exists:
-            conn.execute(text("CREATE DATABASE carbargains_test"))
+            conn.execute(text(f'CREATE DATABASE "{TEST_DB_NAME}"'))
     admin.dispose()
 
     engine = create_engine(TEST_DB_URL)
