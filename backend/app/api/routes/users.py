@@ -9,13 +9,14 @@ import logging
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.models import AlertPreference, Notification, NotificationStatus
 from app.schemas import AlertPreferenceBase, AlertPreferenceRead, NotificationRead
 from app.services.alerts import evaluate_alerts
+from app.services.email_sender import send_deal_email
 
 logger = logging.getLogger(__name__)
 
@@ -61,13 +62,27 @@ def update_preferences(
     summary="Evalúa los listings activos contra las preferencias y genera notificaciones",
 )
 def trigger_evaluation(db: Session = Depends(get_db)) -> dict:
+    last_id = db.scalar(select(func.max(Notification.id))) or 0
     result = evaluate_alerts(db)
+    emails_sent = 0
+    pref = db.scalar(select(AlertPreference).where(AlertPreference.user_key == _DEFAULT_USER_KEY))
+    if pref is not None and pref.notify_email and result.notified:
+        notifications = db.scalars(
+            select(Notification)
+            .where(Notification.id > last_id)
+            .order_by(Notification.id.asc())
+        ).all()
+        for notification in notifications:
+            if send_deal_email(notification.title, notification.body or {}):
+                notification.status = NotificationStatus.SENT.value
+                emails_sent += 1
     db.commit()
     return {
         "checked": result.checked,
         "matched": result.matched,
         "notified": result.notified,
         "deduped": result.deduped,
+        "emails_sent": emails_sent,
     }
 
 
@@ -81,7 +96,9 @@ def list_notifications(
     db.commit()
     query = select(Notification).where(Notification.preference_id == pref.id)
     if unread:
-        query = query.where(Notification.status == NotificationStatus.PENDING.value)
+        query = query.where(Notification.status != NotificationStatus.READ.value)
+    if not pref.notify_web:
+        return []
     query = query.order_by(Notification.created_at.desc()).limit(limit)
     notifications = db.scalars(query).all()
     return [NotificationRead.model_validate(n) for n in notifications]

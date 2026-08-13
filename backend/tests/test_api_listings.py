@@ -104,6 +104,33 @@ def test_listings_filters(committed_session) -> None:
     assert client.get("/api/v1/listings", params={"model": "4"}).json()["total"] == 1
 
 
+def test_only_clean_excludes_text_problems_and_unknown(committed_session) -> None:
+    _seed_one(
+        committed_session,
+        listing_kwargs={
+            "source_listing_id": "clean",
+            "text_signals": {"deal_eligible": True, "has_problem": False},
+        },
+        snapshot_kwargs={"description": "Vehículo cuidado, documentación en regla."},
+    )
+    _seed_one(
+        committed_session,
+        listing_kwargs={
+            "source_listing_id": "problem",
+            "text_signals": {"deal_eligible": False, "has_problem": True},
+        },
+    )
+    _seed_one(
+        committed_session,
+        listing_kwargs={"source_listing_id": "unknown", "text_signals": None},
+    )
+
+    response = client.get("/api/v1/listings", params={"only_clean": "true"})
+    assert response.status_code == 200
+    assert response.json()["total"] == 1
+    assert response.json()["items"][0]["source_listing_id"] == "clean"
+
+
 def test_listings_pagination(committed_session) -> None:
     for i in range(25):
         _seed_one(

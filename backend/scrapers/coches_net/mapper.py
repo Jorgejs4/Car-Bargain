@@ -15,6 +15,7 @@ coches.net no expone transmisión en el SRP → `transmission=None` (unknown);
 
 from datetime import datetime, timezone
 
+from scrapers.base.detail import extract_record_description
 from scrapers.base.interfaces import BaseMapper
 from scrapers.base.models import NormalizedListing
 
@@ -96,7 +97,7 @@ class CochesNetMapper(BaseMapper):
             country="ES",
             city=city,
             title=title,
-            description=None,
+            description=extract_record_description(record),
             image_urls=photos,
             scraped_at=datetime.now(timezone.utc),
         )

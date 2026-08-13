@@ -24,11 +24,13 @@ class ListingRead(BaseModel):
     is_historical: bool = False
     status: ListingStatus
     photo_signals: dict | None
+    text_signals: dict | None
     needs_review: bool
     risk_score: float | None
     bargain_score: float | None
     absolute_margin: float | None
     predicted_price: float | None
+    predicted_price_es: float | None
     cross_border_margin: float | None
     cross_border_score: float | None
     estimated_import_cost: float | None
@@ -66,11 +68,13 @@ class ListingListItem(BaseModel):
 
     condition_signals: dict | None
     photo_signals: dict | None
+    text_signals: dict | None
     needs_review: bool
     risk_score: float | None
     bargain_score: float | None
     absolute_margin: float | None
     predicted_price: float | None
+    predicted_price_es: float | None
     cross_border_margin: float | None
     cross_border_score: float | None
     estimated_import_cost: float | None

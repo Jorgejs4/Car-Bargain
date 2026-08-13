@@ -44,6 +44,7 @@ def make_listing(
     is_historical=False,
     needs_review=False,
     photo_signals=None,
+    text_signals=None,
     risk_score=None,
 ):
     source_listing_id = source_listing_id or str(uuid4())
@@ -58,6 +59,7 @@ def make_listing(
         is_historical=is_historical,
         needs_review=needs_review,
         photo_signals=photo_signals,
+        text_signals=text_signals,
         risk_score=risk_score,
         url=f"https://s.example/{source_listing_id}",
         seller_type="dealer",
@@ -75,6 +77,7 @@ def make_snapshot(
     currency="EUR",
     mileage=50000,
     title="Titulo",
+    description=None,
     condition_signals=None,
     scraped_at=None,
 ):
@@ -85,6 +88,7 @@ def make_snapshot(
         currency=currency,
         mileage=mileage,
         title=title,
+        description=description,
         condition_signals=condition_signals,
     )
     db.add(snapshot)

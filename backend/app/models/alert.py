@@ -8,7 +8,16 @@ notificaciones se generan cuando un listing ACTIVE cumple todos los filtros.
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, func
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -65,6 +74,9 @@ class Notification(Base):
     """Notificación de una ganga que cumple las preferencias del usuario."""
 
     __tablename__ = "notifications"
+    __table_args__ = (
+        UniqueConstraint("preference_id", "listing_id", name="uq_notifications_preference_listing"),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
     preference_id: Mapped[int] = mapped_column(

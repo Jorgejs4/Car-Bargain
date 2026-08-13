@@ -17,6 +17,7 @@ Valores desconocidos o ausentes → `None` (nunca se inventan señales).
 import re
 from datetime import datetime, timezone
 
+from scrapers.base.detail import extract_record_description
 from scrapers.base.interfaces import BaseMapper
 from scrapers.base.models import NormalizedListing
 
@@ -174,7 +175,7 @@ class AutoScout24Mapper(BaseMapper):
             country=country,
             city=location.get("city") or None,
             title=title,
-            description=None,
+            description=extract_record_description(record),
             image_urls=image_urls,
             scraped_at=datetime.now(timezone.utc),
         )

@@ -13,7 +13,7 @@ El commit lo decide el llamador (task Celery / script); aquí solo se flushea.
 import logging
 from dataclasses import dataclass, field
 
-from scrapers.base.condition import extract_condition_signals
+from scrapers.base.condition import extract_condition_signals, language_for_country
 from scrapers.base.models import NormalizedListing
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -30,17 +30,20 @@ from app.services.vehicle_matching import match_vehicle
 
 logger = logging.getLogger(__name__)
 
-# Idioma del lexicón según el país del anuncio (default alemán, el idioma dominante).
-_LANG_BY_COUNTRY = {"DE": "de", "AT": "de", "CH": "de", "ES": "es"}
-
-
+# Idioma del lexicón según el país del anuncio.
 def _language_for(nl: NormalizedListing) -> str:
-    return _LANG_BY_COUNTRY.get((nl.country or "").upper(), "de")
+    return language_for_country(nl.country)
 
 
 def _condition_signals_for(nl: NormalizedListing) -> dict:
     text = " ".join(part for part in (nl.title, nl.description) if part)
-    return extract_condition_signals(text, lang=_language_for(nl), source="listing_text")
+    return extract_condition_signals(
+        text,
+        lang=_language_for(nl),
+        source="listing_text",
+        title=nl.title,
+        description=nl.description,
+    )
 
 
 @dataclass
@@ -110,7 +113,8 @@ def _latest_snapshot(session: Session, listing_id: int) -> ListingSnapshot | Non
     )
 
 
-def _append_snapshot(session: Session, listing: Listing, nl: NormalizedListing) -> None:
+def _append_snapshot(session: Session, listing: Listing, nl: NormalizedListing) -> dict:
+    condition_signals = _condition_signals_for(nl)
     session.add(
         ListingSnapshot(
             listing_id=listing.id,
@@ -122,10 +126,11 @@ def _append_snapshot(session: Session, listing: Listing, nl: NormalizedListing) 
             description=nl.description,
             seller_type=nl.seller_type,
             location=nl.city,
-            condition_signals=_condition_signals_for(nl),
+            condition_signals=condition_signals,
             raw_data=nl.model_dump(mode="json"),
         )
     )
+    return condition_signals
 
 
 def _image_urls_changed(prev_snapshot: ListingSnapshot | None, nl: NormalizedListing) -> bool:
@@ -225,7 +230,8 @@ def _ingest_one(session: Session, nl: NormalizedListing) -> tuple[Listing, bool,
     listing.vehicle_id = result.vehicle.id
     _record_match(session, listing, result, nl)
     prev_snapshot = _latest_snapshot(session, listing.id)
-    _append_snapshot(session, listing, nl)
+    condition_signals = _append_snapshot(session, listing, nl)
+    listing.text_signals = condition_signals
     events = _emit_events(
         session, listing, nl, prev_snapshot, created=created, prev_status=prev_status
     )

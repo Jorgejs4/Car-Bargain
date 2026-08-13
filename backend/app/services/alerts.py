@@ -20,6 +20,7 @@ from app.models import (
     NotificationStatus,
     Vehicle,
 )
+from app.services.deal_filters import is_clean_deal
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,8 @@ def _matches(pref: AlertPreference, li: Listing, vehicle: Vehicle | None, snap: 
     """True si el listing cumple todos los filtros configurados (los None se ignoran)."""
     if snap is None or snap.price is None:
         return False
+    if not is_clean_deal(li.text_signals, li.photo_signals, li.needs_review):
+        return False
 
     price = float(snap.price)
 
@@ -45,34 +48,29 @@ def _matches(pref: AlertPreference, li: Listing, vehicle: Vehicle | None, snap: 
         return False
     if (
         pref.max_total_cost is not None
-        and li.total_cost_es is not None
-        and li.total_cost_es > pref.max_total_cost
+        and (li.total_cost_es is None or li.total_cost_es > pref.max_total_cost)
     ):
         return False
 
     if (
         pref.min_profit is not None
-        and li.absolute_margin is not None
-        and li.absolute_margin < pref.min_profit
+        and (li.absolute_margin is None or li.absolute_margin < pref.min_profit)
     ):
         return False
-    if (
-        pref.min_roi is not None
-        and li.absolute_margin is not None
-    ):
-        roi = li.absolute_margin / price if price > 0 else 0.0
+    if pref.min_roi is not None:
+        if li.absolute_margin is None or price <= 0:
+            return False
+        roi = li.absolute_margin / price
         if roi < pref.min_roi:
             return False
     if (
         pref.min_bargain_score is not None
-        and li.bargain_score is not None
-        and li.bargain_score < pref.min_bargain_score
+        and (li.bargain_score is None or li.bargain_score < pref.min_bargain_score)
     ):
         return False
     if (
         pref.max_risk_score is not None
-        and li.risk_score is not None
-        and float(li.risk_score) > pref.max_risk_score
+        and (li.risk_score is None or float(li.risk_score) > pref.max_risk_score)
     ):
         return False
 
@@ -86,15 +84,12 @@ def _matches(pref: AlertPreference, li: Listing, vehicle: Vehicle | None, snap: 
         return False
     if (
         pref.max_mileage is not None
-        and snap.mileage is not None
-        and snap.mileage > pref.max_mileage
+        and (snap.mileage is None or snap.mileage > pref.max_mileage)
     ):
         return False
     if (
         pref.year_min is not None
-        and vehicle
-        and vehicle.year is not None
-        and vehicle.year < pref.year_min
+        and (vehicle is None or vehicle.year is None or vehicle.year < pref.year_min)
     ):
         return False
 
@@ -117,6 +112,7 @@ def _build_notification(pref: AlertPreference, li: Listing, vehicle: Vehicle | N
         "bargain_score": li.bargain_score,
         "cross_border_margin": li.cross_border_margin,
         "total_cost_es": li.total_cost_es,
+        "text_signals": li.text_signals,
         "risk_score": float(li.risk_score) if li.risk_score is not None else None,
         "url": li.url,
         "listing_id": li.id,
@@ -164,6 +160,8 @@ def evaluate_alerts(session: Session, user_key: str = "me") -> EvalResult:
             continue
 
         title, body = _build_notification(pref, li, vehicle, snap)
+        if not pref.notify_web and not pref.notify_email:
+            continue
         session.add(
             Notification(
                 preference_id=pref.id,

@@ -37,6 +37,10 @@ def listing_filters(
     min_cross_border_margin: float | None = Query(None, description="Margen cross-border mínimo en € (ahorro tras importación)"),
     is_historical: bool | None = Query(None, description="Solo históricos (Wayback) o solo live; por defecto se filtran históricos en ACTIVE"),
     needs_review: bool | None = Query(None, description="Filtrar por revisión manual pendiente"),
+    only_clean: bool = Query(
+        False,
+        description="Solo anuncios con descripción analizada, sin problemas textuales ni daño visual",
+    ),
 ) -> dict:
     return {
         "brand": brand,
@@ -56,6 +60,7 @@ def listing_filters(
         "min_cross_border_margin": min_cross_border_margin,
         "is_historical": is_historical,
         "needs_review": needs_review,
+        "only_clean": only_clean,
     }
 
 

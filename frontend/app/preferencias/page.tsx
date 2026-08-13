@@ -260,6 +260,13 @@ export default function PreferenciasPage() {
             Email
           </label>
         </div>
+        <p className="mt-2 text-xs text-neutral-500">
+          El envío por email requiere configurar SMTP en <code className="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-800">.env</code>{" "}
+          (<code className="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-800">SMTP_HOST</code>,{" "}
+          <code className="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-800">SMTP_USER</code>,{" "}
+          <code className="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-800">SMTP_PASSWORD</code>,{" "}
+          <code className="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-800">ALERT_EMAIL_TO</code>). Sin SMTP, las alertas llegan solo por la campanita web.
+        </p>
       </section>
 
       <div className="flex flex-wrap gap-2">

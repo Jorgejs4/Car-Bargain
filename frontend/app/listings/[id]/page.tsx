@@ -89,6 +89,13 @@ export default async function ListingPage({
   const accFree = listing.condition_signals?.accident_free as boolean | undefined;
   const accConf = listing.condition_signals?.confidence as number | undefined;
   const keywords = (listing.condition_signals?.keywords_found as string[] | undefined) ?? [];
+  const textSignals = listing.text_signals;
+  const textProblem = textSignals?.has_problem === true
+    || listing.condition_signals?.has_problem === true
+    || ["has_accident", "has_engine_issue", "has_mechanical_issue", "has_gearbox_issue", "has_paper_issue", "not_running"].some((key) => listing.condition_signals?.[key] === true);
+  const textProblems = (textSignals?.problem_types as string[] | undefined)
+    ?? (listing.condition_signals?.problem_types as string[] | undefined)
+    ?? [];
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
@@ -98,7 +105,9 @@ export default async function ListingPage({
 
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">{title}</h1>
+           <h1 className="text-2xl font-bold">
+             {textProblem ? "AVERÍA / PROBLEMA DETECTADO · " : ""}{title}
+           </h1>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {listing.brand && listing.model ? `${listing.brand} ${listing.model}` : "Vehículo"}
             {vehicle?.year ? ` · ${vehicle.year}` : ""}
@@ -216,6 +225,12 @@ export default async function ListingPage({
             </div>
           ) : (
             <p className="text-sm text-neutral-500">Sin señales de texto.</p>
+          )}
+          {textProblem && (
+            <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
+              <strong>Problemas detectados en título/descripción:</strong>{" "}
+              {textProblems.join(", ") || "revisar texto"}
+            </div>
           )}
         </Section>
       </div>

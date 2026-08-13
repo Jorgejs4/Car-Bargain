@@ -32,11 +32,13 @@ export interface ListingListItem {
   mileage: number | null;
   condition_signals: Record<string, unknown> | null;
   photo_signals: Record<string, unknown> | null;
+  text_signals: Record<string, unknown> | null;
   needs_review: boolean;
   risk_score: number | null;
   bargain_score: number | null;
   absolute_margin: number | null;
   predicted_price: number | null;
+  predicted_price_es: number | null;
   cross_border_margin: number | null;
   cross_border_score: number | null;
   estimated_import_cost: number | null;
@@ -178,6 +180,7 @@ export interface ListingFilters {
   seller_type?: string;
   source?: string;
   needs_review?: boolean;
+  only_clean?: boolean;
   min_bargain_score?: number;
   min_absolute_margin?: number;
   min_cross_border_margin?: number;
@@ -185,14 +188,21 @@ export interface ListingFilters {
   sort_order?: string;
 }
 
-export const API_BASE_URL =
+const PUBLIC_API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const SERVER_API_BASE_URL =
+  process.env.API_INTERNAL_URL ?? PUBLIC_API_BASE_URL;
+export const API_BASE_URL =
+  typeof window === "undefined" ? SERVER_API_BASE_URL : PUBLIC_API_BASE_URL;
 
-async function getJson<T>(path: string, signal?: AbortSignal): Promise<T> {
+async function getJson<T>(path: string, init?: RequestInit | AbortSignal): Promise<T> {
+  const opts: RequestInit = init instanceof AbortSignal
+    ? { signal: init }
+    : (init ?? {});
   const res = await fetch(`${API_BASE_URL}${path}`, {
-    headers: { Accept: "application/json" },
-    signal,
+    ...opts,
     cache: "no-store",
+    headers: { Accept: "application/json", ...(opts.headers ?? {}) },
   });
   if (!res.ok) {
     throw new Error(`API ${res.status} en ${path}`);

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { fetchListings, type ListingFilters } from "@/lib/api";
 import { ListingCard } from "@/components/ListingCard";
-import FilterForm from "@/components/FilterForm";
 
 function num(v: string | string[] | undefined): number | undefined {
   if (typeof v !== "string" || v === "") return undefined;
@@ -23,19 +22,12 @@ function parseFilters(searchParams: Record<string, string | string[] | undefined
     fuel: typeof searchParams.fuel === "string" ? searchParams.fuel || undefined : undefined,
     transmission:
       typeof searchParams.transmission === "string" ? searchParams.transmission || undefined : undefined,
-    seller_type:
-      typeof searchParams.seller_type === "string" ? searchParams.seller_type || undefined : undefined,
-    region:
-      typeof searchParams.region === "string" ? searchParams.region || undefined : undefined,
-    sort_by: sort_by,
-    sort_order: sort_order,
-    min_bargain_score:
-      searchParams.min_bargain_score === undefined ? 0 : num(searchParams.min_bargain_score),
-    min_absolute_margin:
-      num(searchParams.min_absolute_margin),
+    region: "EU",
+    sort_by,
+    sort_order,
+    min_cross_border_margin: 0,
     only_clean: true,
-    needs_review:
-      searchParams.needs_review === "true" ? true : undefined,
+    needs_review: searchParams.needs_review === "true" ? true : undefined,
   };
 }
 
@@ -49,12 +41,12 @@ function buildPageUrl(
     if (value) params.set(key, value);
   }
   params.set("page", String(page));
-  return `/?${params.toString()}`;
+  return `/importar?${params.toString()}`;
 }
 
 export const dynamic = "force-dynamic";
 
-export default async function Home({
+export default async function ImportarPage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -66,17 +58,22 @@ export default async function Home({
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
       <div>
-        <h1 className="text-2xl font-bold">Gangas detectadas</h1>
+        <h1 className="text-2xl font-bold">Chollos de importación</h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          {data.total} anuncios · ordenados por mejor oportunidad · página {data.page} de {Math.max(1, data.pages)}
+          Unidades europeas (no españolas) con valor en España por encima del
+          precio total de traerlas (compra + importación). Solo con comparables
+          de confianza en el mercado español.
+        </p>
+        <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+          {data.total} anuncios · ordenados por mejor margen de importación · página{" "}
+          {data.page} de {Math.max(1, data.pages)}
         </p>
       </div>
 
-      <FilterForm />
-
       {data.items.length === 0 ? (
         <p className="rounded-xl border border-dashed border-neutral-300 p-8 text-center text-neutral-500 dark:border-neutral-700">
-          No hay anuncios que coincidan con los filtros.
+          No hay chollos de importación ahora mismo. Cuando se scrapeen anuncios
+          europeos con buen margen aparecerán aquí.
         </p>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

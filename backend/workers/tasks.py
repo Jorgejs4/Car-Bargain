@@ -22,9 +22,23 @@ from app.core.config import settings
 from app.db.session import SessionLocal
 from app.engines.import_costs import estimate_for_listing
 from app.engines.valuation import score_all
-from app.models import Listing, ListingSnapshot, ListingStatus, PhotoAnalysis, Vehicle
+from app.models import (
+    AlertPreference,
+    Listing,
+    ListingEvent,
+    ListingEventType,
+    ListingSnapshot,
+    ListingStatus,
+    Notification,
+    NotificationStatus,
+    PhotoAnalysis,
+    Vehicle,
+)
 from app.schemas.photo_analysis import PhotoAnalysisResult
 from app.services.alerts import evaluate_alerts
+from app.services.deal_filters import is_clean_deal
+from app.services.detail_text import fetch_listing_detail
+from app.services.email_sender import send_deal_email
 from app.services.ingest import ingest_listings
 from app.services.listing_images import ensure_local_images
 from app.services.photo_analysis import aggregate_photo_signals, evaluate_damage_risk
@@ -39,7 +53,7 @@ from scrapers.autoscout24.scraper import AutoScout24Scraper
 from scrapers.base.interfaces import BaseScraper
 from scrapers.coches_net.scraper import CochesNetScraper
 from scrapers.mobile_de.scraper import MobileDeScraper
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from workers.celery_app import celery_app
@@ -64,6 +78,14 @@ def _acquire_lock(source: str) -> bool:
     except redis.RedisError:
         logger.warning("Redis no disponible; se continúa sin lock")
         return True
+
+
+def _release_lock(source: str) -> None:
+    """Libera el lock al terminar; el TTL protege frente a procesos caídos."""
+    try:
+        _redis().delete(_LOCK_KEY_TEMPLATE.format(source))
+    except redis.RedisError:
+        logger.warning("No se pudo liberar el lock de %s", source)
 
 
 def _publish_last_run(summary: dict, source: str) -> None:
@@ -172,43 +194,138 @@ def _run_scrape(
         if save_raw_response:
             save_raw(html, source, f"srp_page_{page}.html")
 
-    listings = scraper.run(max_pages=max_pages, on_page=_save_raw, **(scraper_kwargs or {}))
+    try:
+        listings = scraper.run(max_pages=max_pages, on_page=_save_raw, **(scraper_kwargs or {}))
 
+        db = SessionLocal()
+        try:
+            result = ingest_listings(db, listings)
+            db.commit()
+        except Exception:
+            db.rollback()
+            raise
+        finally:
+            db.close()
+
+        if enqueue_image_downloads:
+            for listing_id in result.changed_listing_ids:
+                download_listing_images.delay(listing_id)
+                enrich_listing_text.delay(listing_id)
+
+        duration_ms = int((time.monotonic() - started) * 1000)
+        summary = {
+            "source": source,
+            "listings": len(listings),
+            "duration_ms": duration_ms,
+            **asdict(result),
+        }
+        logger.info(
+            "%s: %s anuncios (%s ms) | creados=%s actualizados=%s snapshots=%s "
+            "eventos=%s omitidos=%s",
+            source,
+            len(listings),
+            duration_ms,
+            result.listings_created,
+            result.listings_updated,
+            result.snapshots_appended,
+            result.events_emitted,
+            result.skipped,
+        )
+        _publish_last_run(summary, source)
+        return summary
+    finally:
+        _release_lock(source)
+
+
+@celery_app.task(name="text.enrich", autoretry_for=(httpx.HTTPError,), retry_backoff=True, retry_kwargs={"max_retries": 2})
+def enrich_listing_text(listing_id: int) -> dict:
+    """Obtiene descripción de detalle y analiza título + descripción."""
     db = SessionLocal()
     try:
-        result = ingest_listings(db, listings)
+        listing = db.get(Listing, listing_id)
+        if listing is None or not listing.url:
+            return {"listing_id": listing_id, "status": "not_found"}
+        latest = _latest_snapshot(db, listing_id)
+        if latest is None:
+            return {"listing_id": listing_id, "status": "no_snapshot"}
+
+        detail = fetch_listing_detail(listing.source, listing.url)
+        title = detail.get("title") or latest.title
+        description = detail.get("description") or latest.description
+        from scrapers.base.condition import extract_condition_signals
+
+        lang = {"ES": "es", "DE": "de", "AT": "de", "FR": "fr", "LU": "fr", "IT": "it", "NL": "nl", "BE": "nl"}.get(
+            (listing.country or "").upper(), "en"
+        )
+        signals = extract_condition_signals(
+            " ".join(part for part in (title, description) if part),
+            lang=lang,
+            source="listing_detail_lexicon",
+            title=title,
+            description=description,
+        )
+        signals["detail_fetched"] = True
+        signals["detail_fetch_status"] = "ok" if description else "not_found"
+        listing.text_signals = signals
+
+        if description and description != latest.description:
+            db.add(
+                ListingSnapshot(
+                    listing_id=listing.id,
+                    scraped_at=datetime.now(timezone.utc),
+                    price=latest.price,
+                    currency=latest.currency,
+                    mileage=latest.mileage,
+                    title=title,
+                    description=description,
+                    seller_type=latest.seller_type,
+                    location=latest.location,
+                    condition_signals=signals,
+                    raw_data={**(latest.raw_data or {}), "detail_enriched": True},
+                )
+            )
+            db.add(
+                ListingEvent(
+                    listing_id=listing.id,
+                    event_type=ListingEventType.DESCRIPTION_CHANGED,
+                    event_timestamp=datetime.now(timezone.utc),
+                    old_value={"title": latest.title, "description": latest.description},
+                    new_value={"title": title, "description": description},
+                )
+            )
         db.commit()
+        return {
+            "listing_id": listing_id,
+            "status": "done",
+            "description": bool(description),
+            "deal_eligible": signals["deal_eligible"],
+        }
     except Exception:
         db.rollback()
         raise
     finally:
         db.close()
 
-    if enqueue_image_downloads:
-        for listing_id in result.changed_listing_ids:
-            download_listing_images.delay(listing_id)
 
-    duration_ms = int((time.monotonic() - started) * 1000)
-    summary = {
-        "source": source,
-        "listings": len(listings),
-        "duration_ms": duration_ms,
-        **asdict(result),
-    }
-    logger.info(
-        "%s: %s anuncios (%s ms) | creados=%s actualizados=%s snapshots=%s "
-        "eventos=%s omitidos=%s",
-        source,
-        len(listings),
-        duration_ms,
-        result.listings_created,
-        result.listings_updated,
-        result.snapshots_appended,
-        result.events_emitted,
-        result.skipped,
-    )
-    _publish_last_run(summary, source)
-    return summary
+@celery_app.task(name="text.enrich_pending")
+def enrich_pending_text(limit: int = 100) -> dict:
+    """Encola detalles aún no enriquecidos sin descargar toda la base."""
+    db = SessionLocal()
+    try:
+        listings = db.scalars(
+            select(Listing).where(
+                Listing.status.in_([ListingStatus.ACTIVE, ListingStatus.STALE]),
+                Listing.is_historical.is_(False),
+            ).limit(limit)
+        ).all()
+        queued = 0
+        for listing in listings:
+            if not listing.text_signals or not listing.text_signals.get("detail_fetched"):
+                enrich_listing_text.delay(listing.id)
+                queued += 1
+        return {"queued": queued}
+    finally:
+        db.close()
 
 
 @celery_app.task(name="images.download")
@@ -473,7 +590,7 @@ def score_bargains() -> dict:
 def compute_import_costs() -> dict:
     """Calcula el coste de importación a España para listings no-ES.
 
-    Para cada listing ACTIVE no histórico con país != ES: estima impuesto
+    Para cada listing ACTIVE/STALE no histórico con país != ES: estima impuesto
     de matriculación, transporte, ITV y gestoría, y guarda el total.
     """
     started = time.monotonic()
@@ -481,7 +598,7 @@ def compute_import_costs() -> dict:
     try:
         listings = db.scalars(
             select(Listing).where(
-                Listing.status == ListingStatus.ACTIVE,
+                Listing.status.in_([ListingStatus.ACTIVE, ListingStatus.STALE]),
                 Listing.is_historical.is_(False),
                 Listing.country != "ES",
             )
@@ -524,36 +641,47 @@ def compute_import_costs() -> dict:
 
 @celery_app.task(name="score.cross_border")
 def score_cross_border() -> dict:
-    """Fase 9: margen cross-border descontando costes de importación.
+    """Fase 9: margen cross-border (chollo de importación) para listings EU.
 
-    Para cada listing ACTIVE no histórico:
-      cross_border_margin = absolute_margin - estimated_import_cost
-      cross_border_score  = cross_border_margin / predicted_price
+    Para cada listing ACTIVE no histórico con país != ES:
+      cross_border_margin = predicted_price_es - total_cost_es
+      cross_border_score  = cross_border_margin / predicted_price_es
 
-    Un cross_border_margin positivo significa que incluso después de pagar
-    la importación, el coche sigue por debajo del valor de mercado predicho.
+    `predicted_price_es` es lo que vale esa unidad en el mercado español (motor
+    ES); `total_cost_es` es precio + costes de importación. Un margen positivo
+    significa que traerlo a España es más barato que comprar una unidad
+    equivalente aquí → chollo de importación.
+
+    Para listings ES el margen es el propio `absolute_margin` (no aplica
+    importación) y no se marca como cross-border.
     """
     started = time.monotonic()
     db = SessionLocal()
     try:
-        listings = db.scalars(
+        # Limpia valores antiguos (fórmula anterior) de todos los listings.
+        all_listings = db.scalars(
             select(Listing).where(
-                Listing.status == ListingStatus.ACTIVE,
+                Listing.status.in_([ListingStatus.ACTIVE, ListingStatus.STALE]),
                 Listing.is_historical.is_(False),
             )
         ).all()
+        for li in all_listings:
+            li.cross_border_margin = None
+            li.cross_border_score = None
 
+        listings = [li for li in all_listings if li.country != "ES"]
         scored = 0
         for li in listings:
-            am = li.absolute_margin
-            pp = li.predicted_price
-            imp = li.estimated_import_cost or 0.0
-            if am is None or pp is None or pp == 0:
+            if not is_clean_deal(li.text_signals, li.photo_signals, li.needs_review):
+                continue
+            es = li.predicted_price_es
+            total = li.total_cost_es
+            if es is None or total is None or es == 0:
                 continue
 
-            cbm = am - imp
+            cbm = es - total
             li.cross_border_margin = round(cbm, 2)
-            li.cross_border_score = round(cbm / pp, 6)
+            li.cross_border_score = round(cbm / es, 6)
             scored += 1
 
         db.commit()
@@ -569,19 +697,44 @@ def score_cross_border() -> dict:
 
 @celery_app.task(name="alerts.evaluate")
 def evaluate_alerts_task() -> dict:
-    """Fase 10: genera notificaciones para listings que cumplen las preferencias."""
+    """Fase 10: genera notificaciones y envía emails para los que cumplen las preferencias."""
     started = time.monotonic()
     db = SessionLocal()
     try:
+        last_id = db.scalar(
+            select(func.max(Notification.id)).where(Notification.status.isnot(None))
+        )
+        last_id = last_id or 0
         result = evaluate_alerts(db)
+        emails_sent = 0
+        emails_failed = 0
+
+        if result.notified > 0:
+            pref = db.scalar(select(AlertPreference))
+            if pref is not None and pref.notify_email:
+                new_notifs = db.scalars(
+                    select(Notification)
+                    .where(Notification.id > last_id)
+                    .order_by(Notification.id.desc())
+                ).all()
+                for n in new_notifs:
+                    if send_deal_email(n.title, n.body or {}):
+                        n.status = NotificationStatus.SENT.value
+                        emails_sent += 1
+                    else:
+                        emails_failed += 1
+
         db.commit()
         duration_ms = int((time.monotonic() - started) * 1000)
         logger.info(
-            "alerts.evaluate: revisados=%s matched=%s notificados=%s dedup=%s (%s ms)",
+            "alerts.evaluate: revisados=%s matched=%s notificados=%s dedup=%s "
+            "emails_sent=%s emails_failed=%s (%s ms)",
             result.checked,
             result.matched,
             result.notified,
             result.deduped,
+            emails_sent,
+            emails_failed,
             duration_ms,
         )
         return {
@@ -589,6 +742,8 @@ def evaluate_alerts_task() -> dict:
             "matched": result.matched,
             "notified": result.notified,
             "deduped": result.deduped,
+            "emails_sent": emails_sent,
+            "emails_failed": emails_failed,
             "duration_ms": duration_ms,
         }
     except Exception:

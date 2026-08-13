@@ -1,6 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -25,6 +26,9 @@ class Settings(BaseSettings):
     r2_secret_key: str | None = None
     r2_bucket: str | None = None
     scraper_proxy: str | None = None
+    # `celery` es la opción recomendada en Oracle. `github` deja el disparo
+    # periódico a .github/workflows/scrape-trigger.yml.
+    scraper_scheduler: str = "celery"
 
     # Clave compartida de los endpoints internos POST /internal/* (no públicos).
     internal_api_key: str = "dev-internal-key-change-me"
@@ -52,6 +56,26 @@ class Settings(BaseSettings):
 
     # Vehicle matching (Fase 5). Umbrales de confianza para cada estrategia.
     match_fuzzy_threshold: float = 0.85  # confianza mínima para aceptar un match fuzzy
+
+    # Alertas por email (Fase 10). SMTP estándar (Gmail, Outlook, Resend, etc.).
+    # Dejar smtp_host vacío → se desactivan los envíos (solo notificaciones web).
+    smtp_host: str | None = None
+    smtp_port: int = 587
+    smtp_user: str | None = None
+    smtp_password: str | None = None
+    smtp_use_tls: bool = True
+    smtp_from: str | None = None
+    alert_email_to: str | None = None
+
+    @model_validator(mode="after")
+    def validate_production_secrets(self) -> "Settings":
+        """No permitir arrancar producción con las credenciales de desarrollo."""
+        if self.environment.lower() in {"production", "prod"}:
+            if self.secret_key == "dev-secret-change-me":
+                raise ValueError("SECRET_KEY debe configurarse en producción")
+            if self.internal_api_key == "dev-internal-key-change-me":
+                raise ValueError("INTERNAL_API_KEY debe configurarse en producción")
+        return self
 
 
 @lru_cache

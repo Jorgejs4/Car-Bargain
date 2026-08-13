@@ -40,6 +40,10 @@ celery_app.conf.beat_schedule = {
         "task": "images.analyze_pending",
         "schedule": crontab(minute="*/15"),
     },
+    "enrich-pending-text-every-15m": {
+        "task": "text.enrich_pending",
+        "schedule": crontab(minute="*/15"),
+    },
     "score-bargains-every-16m": {
         "task": "score.bargains",
         "schedule": crontab(minute="1,16,31,46"),
@@ -57,5 +61,13 @@ celery_app.conf.beat_schedule = {
         "schedule": crontab(minute="5,40"),
     },
 }
+
+if settings.scraper_scheduler.lower() == "github":
+    for _scrape_schedule in (
+        "scrape-mobile-de-every-15m",
+        "scrape-autoscout24-every-15m",
+        "scrape-coches-net-every-15m",
+    ):
+        celery_app.conf.beat_schedule.pop(_scrape_schedule, None)
 
 celery_app.autodiscover_tasks(["workers"])

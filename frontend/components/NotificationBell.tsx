@@ -29,9 +29,12 @@ export function NotificationBell() {
   }, []);
 
   useEffect(() => {
-    load();
+    const initial = window.setTimeout(() => { void load(); }, 0);
     const t = setInterval(load, 60000);
-    return () => clearInterval(t);
+    return () => {
+      window.clearTimeout(initial);
+      clearInterval(t);
+    };
   }, [load]);
 
   const unread = items.length;

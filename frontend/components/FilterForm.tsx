@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import { fetchBrands, fetchModels } from "@/lib/api";
 
 const FUELS = ["diesel", "petrol", "electric", "hybrid", "lpg", "hydrogen"];
@@ -27,6 +27,7 @@ const SORT_OPTIONS = [
 
 export function FilterFormInner() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [brand, setBrand] = useState(searchParams.get("brand") ?? "");
@@ -41,7 +42,9 @@ export function FilterFormInner() {
   const [region, setRegion] = useState(searchParams.get("region") ?? "");
   const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "cross_border-desc");
   const [needsReview, setNeedsReview] = useState(searchParams.get("needs_review") === "true");
-  const [onlyBargains, setOnlyBargains] = useState(searchParams.get("min_bargain_score") !== null);
+  const [onlyBargains, setOnlyBargains] = useState(
+    searchParams.get("min_bargain_score") !== null || pathname === "/",
+  );
   const [minAbsMargin, setMinAbsMargin] = useState(searchParams.get("min_absolute_margin") ?? "");
 
   const [brands, setBrands] = useState<string[]>([]);
@@ -51,12 +54,10 @@ export function FilterFormInner() {
     fetchBrands().then(setBrands).catch(() => {});
   }, []);
 
-  const loadModels = useCallback((b: string) => {
-    if (!b) { setModels([]); return; }
-    fetchModels(b).then(setModels).catch(() => setModels([]));
-  }, []);
-
-  useEffect(() => { loadModels(brand); }, [brand, loadModels]);
+  useEffect(() => {
+    if (!brand) return;
+    void fetchModels(brand).then(setModels).catch(() => setModels([]));
+  }, [brand]);
 
   function apply() {
     const params = new URLSearchParams();
@@ -84,7 +85,7 @@ export function FilterFormInner() {
     setBrand(""); setModel(""); setPriceMin(""); setPriceMax("");
     setMileageMax(""); setYearMin(""); setFuel(""); setTransmission("");
     setSellerType(""); setRegion(""); setSortBy("cross_border-desc");
-    setNeedsReview(false); setOnlyBargains(false); setMinAbsMargin(""); setModels([]);
+    setNeedsReview(false); setOnlyBargains(pathname === "/"); setMinAbsMargin(""); setModels([]);
     router.push(window.location.pathname);
   }
 
@@ -148,6 +149,13 @@ export function FilterFormInner() {
           <select className={selectCls} value={transmission} onChange={(e) => setTransmission(e.target.value)}>
             <option value="">Todos</option>
             {TRANSMISSIONS.map((t) => (<option key={t} value={t}>{t}</option>))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
+          Vendedor
+          <select className={selectCls} value={sellerType} onChange={(e) => setSellerType(e.target.value)}>
+            <option value="">Todos</option>
+            {SELLER_TYPES.map((seller) => (<option key={seller} value={seller}>{seller}</option>))}
           </select>
         </label>
       </div>

@@ -19,6 +19,14 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
     (listing.photo_signals?.has_visible_damage as boolean | undefined) ??
     false;
   const analyzedImages = (listing.photo_signals?.analyzed_images as number | undefined) ?? 0;
+  const textSignals = listing.text_signals;
+  const snapshotSignals = listing.condition_signals;
+  const hasTextProblem = textSignals?.has_problem === true
+    || snapshotSignals?.has_problem === true
+    || ["has_accident", "has_engine_issue", "has_mechanical_issue", "has_gearbox_issue", "has_paper_issue", "not_running"].some((key) => snapshotSignals?.[key] === true);
+  const textProblems = (textSignals?.problem_types as string[] | undefined)
+    ?? (snapshotSignals?.problem_types as string[] | undefined)
+    ?? [];
 
   return (
     <Link
@@ -27,7 +35,7 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-semibold leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400">
-          {title}
+          {hasTextProblem ? "AVERÍA / PROBLEMA DETECTADO · " : ""}{title}
         </h3>
         <StatusBadge status={listing.status} />
       </div>
@@ -60,18 +68,34 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
 {listing.country && listing.country !== "ES" && listing.total_cost_es != null && (
         <div className="mt-0.5 text-xs">
           {listing.cross_border_margin != null && listing.cross_border_margin > 0 ? (
-            <span className="text-green-600 dark:text-green-400">
-              Ahorro neto: {listing.cross_border_margin.toLocaleString("es-ES")}EUR tras importacion
+            <span className="font-medium text-green-600 dark:text-green-400">
+              Importar: ahorro {listing.cross_border_margin.toLocaleString("es-ES")}€ (
+              {Math.round((listing.cross_border_margin / (listing.predicted_price_es ?? 1)) * 100)}%)
             </span>
           ) : (
             <span className="text-amber-600 dark:text-amber-400">
-              {listing.total_cost_es.toLocaleString("es-ES")}EUR total en Espana
+              {listing.total_cost_es.toLocaleString("es-ES")}€ total en España
             </span>
           )}
         </div>
       )}
+      {listing.country && listing.country !== "ES" && listing.total_cost_es == null && (
+        <div className="mt-0.5 text-xs text-neutral-400">
+          Sin costes de importación calculados
+        </div>
+      )}
+      {listing.absolute_margin == null && listing.bargain_score == null && (
+        <div className="mt-1 text-xs text-neutral-400">
+          Sin valoración (faltan comparables de confianza)
+        </div>
+      )}
 
       <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        {hasTextProblem && (
+          <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-800 dark:bg-red-950 dark:text-red-300">
+            Problema: {textProblems.join(", ") || "revisar texto"}
+          </span>
+        )}
         {listing.is_historical && <HistoricalBadge />}
         {hasDamage && analyzedImages > 0 && <DamageBadge />}
         {listing.needs_review && <ReviewBadge />}

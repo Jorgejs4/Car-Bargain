@@ -74,6 +74,10 @@ class Listing(Base):
 
     # Agregado de daño visual (CV, Fase 3): photo_damage_prob / has_visible_damage / damage_types.
     photo_signals: Mapped[dict | None] = mapped_column(JSONB)
+    # Agregado de análisis del título + descripción más recientes.
+    # `deal_eligible` solo es true cuando hay descripción y no se detecta un
+    # problema textual explícito; ausencia de evidencia queda en unknown.
+    text_signals: Mapped[dict | None] = mapped_column(JSONB)
     needs_review: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
     risk_score: Mapped[Decimal | None] = mapped_column(Numeric(4, 3))
 
@@ -81,9 +85,15 @@ class Listing(Base):
     # considerando precio, km, año y daños. Null si aún no se ha calculado.
     bargain_score: Mapped[float | None] = mapped_column(index=True)
 
-    # Margen absoluto en € (predicho - real) y precio predicho por el modelo.
+    # Margen absoluto en € (predicho - real) y precio predicho por el modelo
+    # del mercado propio del listing (motor ES para ES, motor EU para el resto).
     absolute_margin: Mapped[float | None] = mapped_column()
     predicted_price: Mapped[float | None] = mapped_column()
+
+    # Valor estimado de esa unidad en el mercado español (motor ES).
+    # Se usa para detectar chollos de importación: si un listing EU vale X en
+    # España y cuesta X - gastos traerlo, hay margen de importación.
+    predicted_price_es: Mapped[float | None] = mapped_column(index=True)
 
     # Fase 9: margen cross-border (€) y score (%) descontando costes de importación.
     # Positivo = incluso importándolo, el precio total está por debajo del valor de mercado.

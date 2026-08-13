@@ -1,12 +1,9 @@
-import pytest
-
 from app.models import (
     AlertPreference,
     Listing,
     ListingSnapshot,
     ListingStatus,
     Notification,
-    NotificationStatus,
 )
 from app.services.alerts import evaluate_alerts
 
@@ -19,6 +16,11 @@ def _make_listing(db, **kwargs) -> Listing:
         "status": ListingStatus.ACTIVE,
         "country": "DE",
         "is_historical": False,
+        "text_signals": {
+            "deal_eligible": True,
+            "has_problem": False,
+            "description_available": True,
+        },
     }
     defaults.update(kwargs)
     li = Listing(**defaults)
@@ -70,6 +72,33 @@ def test_evaluate_with_matching_creates_notification(db_session) -> None:
     li = _make_listing(db_session)
     _make_snapshot(db_session, li.id, price=10000.0)
     li.absolute_margin = 1000.0
+    db_session.commit()
+
+    result = evaluate_alerts(db_session)
+    assert result.matched == 1
+    assert result.notified == 1
+    assert db_session.query(Notification).count() == 1
+
+
+def test_configured_profit_filter_rejects_missing_profit(db_session) -> None:
+    pref = AlertPreference(user_key="me", min_profit=500.0)
+    db_session.add(pref)
+    db_session.flush()
+    li = _make_listing(db_session, absolute_margin=None)
+    _make_snapshot(db_session, li.id)
+    db_session.commit()
+
+    result = evaluate_alerts(db_session)
+    assert result.matched == 0
+    assert result.notified == 0
+
+
+def test_disabled_web_notifications_are_not_created(db_session) -> None:
+    pref = AlertPreference(user_key="me", notify_web=False, notify_email=True)
+    db_session.add(pref)
+    db_session.flush()
+    li = _make_listing(db_session)
+    _make_snapshot(db_session, li.id)
     db_session.commit()
 
     result = evaluate_alerts(db_session)

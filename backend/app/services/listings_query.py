@@ -9,7 +9,7 @@ import math
 from collections import Counter
 from decimal import Decimal
 
-from sqlalchemy import asc, desc, func, select
+from sqlalchemy import asc, desc, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import Listing, ListingSnapshot, ListingStatus, Vehicle
@@ -60,6 +60,7 @@ def _build_conditions(
     source=None,
     region=None,
     needs_review=None,
+    only_clean=False,
     vehicle_id=None,
     is_historical=None,
     min_bargain_score=None,
@@ -105,6 +106,22 @@ def _build_conditions(
             conditions.append(Listing.country.in_(_eu_codes))
     if needs_review is not None:
         conditions.append(Listing.needs_review == needs_review)
+    if only_clean:
+        # Solo entra en la pestaña de chollos una oferta con descripción
+        # analizada, sin problema textual explícito, sin daño visual y sin
+        # revisión pendiente. Los anuncios sin análisis quedan unknown.
+        text_signals = Listing.text_signals
+        conditions.extend(
+            [
+                Listing.needs_review.is_(False),
+                text_signals.is_not(None),
+                text_signals.contains({"deal_eligible": True}),
+                or_(
+                    Listing.photo_signals.is_(None),
+                    ~Listing.photo_signals.contains({"has_visible_damage": True}),
+                ),
+            ]
+        )
     if min_bargain_score is not None:
         conditions.append(Listing.bargain_score >= min_bargain_score)
     if min_absolute_margin is not None:
@@ -148,11 +165,13 @@ def _item(
         "mileage": mileage,
         "condition_signals": condition_signals,
         "photo_signals": listing.photo_signals,
+        "text_signals": listing.text_signals,
         "needs_review": listing.needs_review,
         "risk_score": listing.risk_score,
         "bargain_score": listing.bargain_score,
         "absolute_margin": listing.absolute_margin,
         "predicted_price": listing.predicted_price,
+        "predicted_price_es": listing.predicted_price_es,
         "cross_border_margin": listing.cross_border_margin,
         "cross_border_score": listing.cross_border_score,
         "estimated_import_cost": listing.estimated_import_cost,

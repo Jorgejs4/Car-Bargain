@@ -14,6 +14,7 @@ Valores desconocidos o ausentes → `None` (nunca se inventan señales).
 import re
 from datetime import datetime, timezone
 
+from scrapers.base.detail import extract_record_description
 from scrapers.base.interfaces import BaseMapper
 from scrapers.base.models import NormalizedListing
 
@@ -170,7 +171,7 @@ class MobileDeMapper(BaseMapper):
             country=country,
             city=attr.get("loc"),
             title=record.get("title") or f"{brand} {model}",
-            description=None,
+            description=extract_record_description(record),
             image_urls=_get_image_urls(record),
             scraped_at=datetime.now(timezone.utc),
         )

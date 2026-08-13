@@ -1,18 +1,39 @@
-"""Motor de valoración: predicción de precio justo en dos etapas.
+"""Motor de valoración dual por comparables jerárquicos (Fase 6 v6).
 
-Fase 6 v2: en lugar de una regresión ciega a la marca, primero se calcula un
-precio base por marca (mediana de los precios de esa marca en el mercado). La
-regresión lineal modela solo la desviación respecto a ese precio base según
-año, km, combustible, cambio y daños.
+El usuario detectó que las predicciones anteriores eran irreales: mezclaban
+los mercados ES y EU en un único modelo y la regresión lineal global producía
+precios sin relación con la media real de los anuncios.
 
-Esto evita que un Smart y un Mercedes con el mismo año/km reciban la misma
-predicción: el Smart parte de ~15 k€ y el Mercedes de ~40 k€.
+Esta versión NO usa regresión global. Entrena **dos motores por comparables**:
 
-El `bargain_score` final es (precio_predicho - precio_real) / precio_predicho.
+  - Motor Español (es): entrenado solo con listings ES.
+  - Motor Europeo (eu): entrenado solo con listings NO-ES (NL, DE, FR, IT…).
+
+Cada listing obtiene dos valoraciones:
+
+  - `predicted_price_es`: lo que vale esa unidad en el mercado español.
+  - `predicted_price_eu`:  lo que vale esa unidad en el mercado europeo.
+
+Para cada listing se usa el motor de SU mercado:
+
+  - listing ES → `bargain_score`/`absolute_margin` con el motor español.
+  - listing EU → `bargain_score`/`absolute_margin` con el motor europeo.
+
+El margen cross-border (chollo de importación) = valor en España
+(`predicted_price_es`) menos el coste total de traerlo a España
+(`total_cost_es` = precio + costes de importación). Solo se muestra para
+listings no-ES y con comparables en el mercado español (confianza media+).
+
+Confianza por motor (jerárquica, igual que un tasador):
+  alta:   mismo brand+model, edad ±2 años → mediana
+  media:  misma marca, edad ±2 años → mediana
+  sin:    sin comparables cercanos → `None` (la UI muestra "sin valoración").
+
+El daño visual (CV) reduce un 15% el valor antes de comparar. Solo se
+publican márgenes con confianza alta o media.
 """
 
 import logging
-from collections import defaultdict
 from datetime import datetime, timezone
 
 import numpy as np
@@ -23,8 +44,13 @@ from app.models import Listing, ListingSnapshot, ListingStatus, Vehicle
 
 logger = logging.getLogger(__name__)
 
-_FUEL_FEATURES = ["petrol", "diesel", "electric", "hybrid", "lpg", "cng", "hydrogen"]
-_NUMERIC_FEATURE_COUNT = 2  # year, mileage_km
+CONFIDENCE_HIGH = "high"
+CONFIDENCE_MEDIUM = "medium"
+CONFIDENCE_NONE = "none"
+
+_CURRENT_YEAR = 2026
+_YEAR_RATE = 0.07          # ~7% de depreciación por año
+_KM_RATE_PER_10K = 0.03    # ~3% del precio por cada 10.000 km de más
 
 
 def _median(values: list[float]) -> float:
@@ -32,160 +58,142 @@ def _median(values: list[float]) -> float:
         return 0.0
     s = sorted(values)
     n = len(s)
-    if n % 2 == 1:
-        return s[n // 2]
-    return (s[n // 2 - 1] + s[n // 2]) / 2.0
+    return s[n // 2] if n % 2 == 1 else (s[n // 2 - 1] + s[n // 2]) / 2.0
 
 
-def _fit_linear(X: np.ndarray, y: np.ndarray) -> np.ndarray:
-    return np.linalg.lstsq(X, y, rcond=None)[0]
+def _key(value: str | None) -> str:
+    return (value or "").strip().lower()
 
 
-def _r2_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
-    ss_res = float(np.sum((y_true - y_pred) ** 2))
-    ss_tot = float(np.sum((y_true - np.mean(y_true)) ** 2))
-    if ss_tot == 0:
-        return 0.0
-    return 1.0 - ss_res / ss_tot
+class ComparablesValuation:
+    """Valora por comparables jerárquicos de UN mercado; devuelve (precio, confianza)."""
 
-
-class ValuationModel:
-    """Modelo en dos etapas: baseline por marca + regresión sobre residuos."""
-
-    def __init__(self):
-        self.brand_baseline: dict[str, float] = {}
-        self.default_baseline: float = 0.0
-        self.coefs: np.ndarray | None = None
-        self.feature_names: list[str] = []
-        self.X_mean: np.ndarray | None = None
-        self.X_std: np.ndarray | None = None
+    def __init__(self) -> None:
+        self.rows: list[dict] = []
         self.trained_at: datetime | None = None
 
-    def _build_features(self, row: dict) -> list[float]:
-        f: list[float] = []
-        self.feature_names = ["year", "mileage_km"]
-
-        f.append(float(row.get("year", 0) or 0))
-        f.append(float(row.get("mileage", 0) or 0))
-
-        fuel = (row.get("fuel") or "").lower()
-        for feat in _FUEL_FEATURES:
-            self.feature_names.append(f"fuel_{feat}")
-            f.append(1.0 if fuel == feat else 0.0)
-
-        trans = (row.get("transmission") or "").lower()
-        for t in ["manual", "automatic"]:
-            self.feature_names.append(f"transmission_{t}")
-            f.append(1.0 if trans == t else 0.0)
-
-        has_damage = bool((row.get("photo_signals") or {}).get("has_visible_damage"))
-        self.feature_names.append("has_damage")
-        f.append(1.0 if has_damage else 0.0)
-
-        self.feature_names.append("intercept")
-        f.append(1.0)
-        return f
-
-    def _compute_baselines(self, rows: list[dict]) -> dict[str, float]:
-        """Mediana de precio por marca (normalizada a minúsculas)."""
-        by_brand: dict[str, list[float]] = defaultdict(list)
-        for r in rows:
-            brand = (r.get("brand") or "").strip().lower()
-            if brand:
-                by_brand[brand].append(r["price"])
-        baselines = {}
-        for brand, prices in by_brand.items():
-            baselines[brand] = _median(prices)
-        all_prices = [r["price"] for r in rows]
-        self.default_baseline = _median(all_prices) if all_prices else 0.0
-        return baselines
-
     def fit(self, rows: list[dict]) -> bool:
-        if len(rows) < 10:
-            logger.warning("ValuationModel.fit: solo %d filas, se necesitan ≥10", len(rows))
+        if len(rows) < 3:
+            logger.warning("ComparablesValuation.fit: solo %d filas", len(rows))
             return False
-
-        self.brand_baseline = self._compute_baselines(rows)
-
-        # Construir features y target como residuo sobre el baseline de marca
-        raw_features = []
-        residuals = []
-        for r in rows:
-            brand = (r.get("brand") or "").strip().lower()
-            baseline = self.brand_baseline.get(brand, self.default_baseline)
-            raw_features.append(self._build_features(r))
-            residuals.append(r["price"] - baseline)
-
-        X_raw = np.array(raw_features, dtype=np.float64)
-        y = np.array(residuals, dtype=np.float64)
-
-        self.X_mean = np.zeros(X_raw.shape[1])
-        self.X_std = np.ones(X_raw.shape[1])
-        X = X_raw.copy()
-        for j in range(min(_NUMERIC_FEATURE_COUNT, X.shape[1])):
-            col = X[:, j]
-            mean_j = float(np.mean(col))
-            std_j = float(np.std(col))
-            self.X_mean[j] = mean_j
-            self.X_std[j] = std_j if std_j > 0 else 1.0
-            X[:, j] = (col - mean_j) / self.X_std[j]
-
-        self.coefs = _fit_linear(X, y)
+        self.rows = rows
         self.trained_at = datetime.now(timezone.utc)
-
-        # Reconstruir predicciones completas para calcular R²
-        y_pred_full = np.array([self._full_predict(r) or 0.0 for r in rows])
-        y_full = np.array([r["price"] for r in rows])
-        r2 = _r2_score(y_full, y_pred_full)
-
-        logger.info(
-            "ValuationModel entrenado: %d filas, %d marcas, %d features, R²=%.3f",
-            len(rows),
-            len(self.brand_baseline),
-            len(self.feature_names),
-            r2,
-        )
         return True
 
-    def _full_predict(self, row: dict) -> float | None:
-        """Predicción completa: baseline marca + modelo residual."""
-        if self.coefs is None:
-            return None
-        brand = (row.get("brand") or "").strip().lower()
-        baseline = self.brand_baseline.get(brand, self.default_baseline)
+    def _candidates(
+        self,
+        my_id: int,
+        brand: str | None,
+        model: str | None,
+        year: int,
+        *,
+        same_model: bool,
+        age_window: int | None,
+    ) -> list[dict]:
+        out: list[dict] = []
+        for r in self.rows:
+            if r["listing_id"] == my_id:
+                continue
+            if _key(r.get("brand")) != brand:
+                continue
+            if same_model and _key(r.get("model")) != model:
+                continue
+            if age_window is not None:
+                r_year = r.get("year") or 0
+                if not r_year or abs(r_year - year) > age_window:
+                    continue
+            out.append(r)
+        return out
 
-        raw = np.array(self._build_features(row), dtype=np.float64)
-        x = raw.copy()
-        for j in range(min(_NUMERIC_FEATURE_COUNT, x.shape[0])):
-            x[j] = (raw[j] - self.X_mean[j]) / self.X_std[j]
+    def predict(self, row: dict) -> tuple[float | None, str]:
+        if not self.rows:
+            return None, CONFIDENCE_NONE
 
-        residual = float(x @ self.coefs)
-        return max(500.0, baseline + residual)
+        my_id = row["listing_id"]
+        brand = _key(row.get("brand"))
+        model = _key(row.get("model"))
+        year = row.get("year") or 0
 
-    def predict(self, row: dict) -> float | None:
-        return self._full_predict(row)
+        levels = [
+            (True, 2, CONFIDENCE_HIGH),
+            (True, None, CONFIDENCE_MEDIUM),
+            (False, 2, CONFIDENCE_MEDIUM),
+        ]
+        for same_model, age_window, confidence in levels:
+            comps = self._candidates(
+                my_id, brand, model, year,
+                same_model=same_model, age_window=age_window,
+            )
+            if len(comps) >= 2:
+                return self._adjusted_median(comps, row), confidence
+
+        # Misma marca, cualquier edad → solo referencia, sin publicar margen.
+        comps = self._candidates(
+            my_id, brand, model, year,
+            same_model=False, age_window=None,
+        )
+        if len(comps) >= 3:
+            return self._adjusted_median(comps, row), CONFIDENCE_NONE
+
+        return None, CONFIDENCE_NONE
+
+    def _adjusted_median(self, comps: list[dict], row: dict) -> float:
+        base = _median([c["price"] for c in comps])
+        ref_year = _median([c["year"] for c in comps if c["year"]]) or (row.get("year") or 0)
+        ref_km = _median([c["km"] for c in comps if c["km"]]) or (row.get("km") or 0)
+        year = row.get("year") or 0
+        km = row.get("km") or 0
+
+        price = base
+        if ref_year and year:
+            price *= 1.0 + _YEAR_RATE * (year - ref_year)
+        if ref_km and km:
+            price *= 1.0 - _KM_RATE_PER_10K * ((km - ref_km) / 10000.0)
+        return max(500.0, price)
 
 
-_model: ValuationModel | None = None
+class DualMarketValuation:
+    """Dos motores: español y europeo (excluye España)."""
+
+    def __init__(self) -> None:
+        self.es: ComparablesValuation = ComparablesValuation()
+        self.eu: ComparablesValuation = ComparablesValuation()
+
+    def fit(self, rows: list[dict]) -> bool:
+        es_rows = [r for r in rows if _key(r.get("country")) == "es"]
+        eu_rows = [r for r in rows if _key(r.get("country")) != "es"]
+        es_ok = self.es.fit(es_rows)
+        eu_ok = self.eu.fit(eu_rows)
+        logger.info(
+            "DualMarketValuation.fit: es=%d(%s) eu=%d(%s)",
+            len(es_rows), "ok" if es_ok else "insuficiente",
+            len(eu_rows), "ok" if eu_ok else "insuficiente",
+        )
+        return es_ok or eu_ok
 
 
-def get_model() -> ValuationModel:
+_model: DualMarketValuation | None = None
+
+
+def get_model() -> DualMarketValuation:
     global _model
     if _model is None:
-        _model = ValuationModel()
+        _model = DualMarketValuation()
     return _model
 
 
 def fetch_training_rows(session: Session) -> list[dict]:
-    """Recoge las filas de entrenamiento: listings ACTIVE no históricos con snapshot."""
+    """Filas de entrenamiento: ACTIVE + STALE (no históricos) con snapshot.
+
+    STALE son anuncios recientes que llevan >6h sin verse; su último precio
+    sigue siendo un dato real del mercado, así que sirven para entrenar.
+    """
     listings = session.scalars(
-        select(Listing)
-        .where(
-            Listing.status == ListingStatus.ACTIVE,
+        select(Listing).where(
+            Listing.status.in_([ListingStatus.ACTIVE, ListingStatus.STALE]),
             Listing.is_historical.is_(False),
         )
     ).all()
-
     rows: list[dict] = []
     for li in listings:
         snap = session.scalar(
@@ -199,48 +207,100 @@ def fetch_training_rows(session: Session) -> list[dict]:
         vehicle = session.get(Vehicle, li.vehicle_id) if li.vehicle_id else None
         rows.append({
             "listing_id": li.id,
+            "country": li.country,
             "price": float(snap.price),
-            "mileage": float(snap.mileage) if snap.mileage else 0.0,
+            "km": float(snap.mileage) if snap.mileage else 0.0,
             "year": vehicle.year if vehicle and vehicle.year else 0,
             "fuel": vehicle.fuel if vehicle else None,
             "transmission": vehicle.transmission if vehicle else None,
             "brand": vehicle.brand if vehicle else None,
+            "model": vehicle.model if vehicle else None,
             "photo_signals": li.photo_signals,
         })
     return rows
 
 
+def _r2_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    ss_res = float(np.sum((y_true - y_pred) ** 2))
+    ss_tot = float(np.sum((y_true - np.mean(y_true)) ** 2))
+    return 0.0 if ss_tot == 0 else 1.0 - ss_res / ss_tot
+
+
 def score_all(session: Session) -> dict:
+    """Valora listings con dos motores (ES y EU). Margen solo con confianza alta/media."""
     import time
 
     started = time.monotonic()
     rows = fetch_training_rows(session)
     model = get_model()
     trained = model.fit(rows)
-
     if not trained:
-        return {"trained": False, "scored": 0, "r2": None, "duration_ms": 0}
+        return {"trained": False, "scored": 0, "r2": None, "mape": None, "duration_ms": 0}
 
     scored = 0
-    for row in rows:
-        listing_id = row["listing_id"]
-        predicted = model.predict(row)
-        if predicted is None or predicted == 0:
-            continue
-        actual = row["price"]
-        rel_margin = (predicted - actual) / predicted
-        abs_margin = predicted - actual
-        listing = session.get(Listing, listing_id)
-        if listing is not None:
-            listing.bargain_score = round(rel_margin, 6)
-            listing.absolute_margin = round(abs_margin, 2)
-            listing.predicted_price = round(predicted, 2)
-            scored += 1
+    high = medium = none = 0
+    y_eval: list[float] = []
+    p_eval: list[float] = []
 
-    y = np.array([float(r["price"]) for r in rows])
-    y_pred = np.array([model.predict(r) or 0.0 for r in rows])
-    r2 = _r2_score(y, y_pred)
+    for row in rows:
+        listing = session.get(Listing, row["listing_id"])
+        if listing is None:
+            continue
+        is_es = _key(row.get("country")) == "es"
+        own = model.es if is_es else model.eu
+
+        predicted, confidence = own.predict(row)
+        if predicted is None or confidence == CONFIDENCE_NONE:
+            listing.predicted_price = None
+            listing.bargain_score = None
+            listing.absolute_margin = None
+            none += 1
+        else:
+            has_damage = bool((row.get("photo_signals") or {}).get("has_visible_damage"))
+            if has_damage:
+                predicted *= 0.85
+            actual = row["price"]
+            listing.predicted_price = round(predicted, 2)
+            listing.bargain_score = round((predicted - actual) / predicted, 6)
+            listing.absolute_margin = round(predicted - actual, 2)
+            scored += 1
+            y_eval.append(actual)
+            p_eval.append(predicted)
+            if confidence == CONFIDENCE_HIGH:
+                high += 1
+            else:
+                medium += 1
+
+        # Valor en mercado español (para chollos de importación).
+        es_pred, es_conf = model.es.predict(row)
+        if es_pred is None or es_conf == CONFIDENCE_NONE:
+            listing.predicted_price_es = None
+        else:
+            has_damage = bool((row.get("photo_signals") or {}).get("has_visible_damage"))
+            if has_damage:
+                es_pred *= 0.85
+            listing.predicted_price_es = round(es_pred, 2)
+
+    y = np.array(y_eval)
+    y_pred = np.array(p_eval)
+    r2 = _r2_score(y, y_pred) if len(y) else None
+    mape = float(np.mean(np.abs(y_pred - y) / np.maximum(y, 1.0))) if len(y) else None
 
     duration_ms = int((time.monotonic() - started) * 1000)
-    logger.info("score_all: %d puntuados, R²=%.3f (%d ms)", scored, r2, duration_ms)
-    return {"trained": True, "scored": scored, "r2": round(r2, 4), "duration_ms": duration_ms}
+    logger.info(
+        "score_all: %d con margen (alta=%d media=%d), %d sin valoración, R²=%s MAPE=%s (%d ms)",
+        scored, high, medium, none,
+        f"{r2:.3f}" if r2 is not None else "n/a",
+        f"{mape*100:.1f}%" if mape is not None else "n/a",
+        duration_ms,
+    )
+    return {
+        "trained": True,
+        "scored": scored,
+        "high_confidence": high,
+        "medium_confidence": medium,
+        "no_confidence": none,
+        "r2": round(r2, 4) if r2 is not None else None,
+        "mape": round(mape, 4) if mape is not None else None,
+        "duration_ms": duration_ms,
+    }

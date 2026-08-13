@@ -1,0 +1,27 @@
+name: Trigger scrapers production
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Lanzar scrapers en la API de producción
+        env:
+          API_URL: ${{ secrets.CARBARGAINS_API_URL }}
+          INTERNAL_KEY: ${{ secrets.CARBARGAINS_INTERNAL_API_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$API_URL"
+          test -n "$INTERNAL_KEY"
+          for source in autoscout24 coches-net mobile-de; do
+            curl --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
+              -X POST "$API_URL/internal/scrapers/$source" \
+              -H "X-Internal-Key: $INTERNAL_KEY" \
+              -H "Content-Type: application/json" \
+              --data '{"max_pages":1,"save_raw_response":true,"enqueue_image_downloads":true}'
+          done
