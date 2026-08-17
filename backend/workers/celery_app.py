@@ -1,11 +1,25 @@
 from app.core.config import settings
 from celery import Celery
 from celery.schedules import crontab
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+
+
+def _celery_redis_url(url: str) -> str:
+    """Añade la opción TLS requerida por Upstash/Redis sobre rediss://."""
+    if not url.lower().startswith("rediss://"):
+        return url
+    parts = urlsplit(url)
+    query = dict(parse_qsl(parts.query, keep_blank_values=True))
+    query.setdefault("ssl_cert_reqs", "CERT_REQUIRED")
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
+
+
+REDIS_URL = _celery_redis_url(settings.redis_url)
 
 celery_app = Celery(
     "car_bargains",
-    broker=settings.redis_url,
-    backend=settings.redis_url,
+    broker=REDIS_URL,
+    backend=REDIS_URL,
 )
 
 celery_app.conf.update(
