@@ -79,3 +79,18 @@ def trigger_maintenance(task_name: str) -> dict:
         raise HTTPException(status_code=404, detail="Tarea de mantenimiento desconocida")
     result = celery_app.send_task(celery_name)
     return {"status": "enqueued", "task": task_name, "task_id": result.id}
+
+
+@router.get("/worker-status", dependencies=[Depends(require_internal_key)])
+def worker_status() -> dict:
+    """Diagnóstico temporal del Worker sin abrir su Shell."""
+    inspector = celery_app.control.inspect(timeout=2)
+    ping = inspector.ping() or {}
+    return {
+        "online": bool(ping),
+        "ping": ping,
+        "active": inspector.active() or {},
+        "reserved": inspector.reserved() or {},
+        "scheduled": inspector.scheduled() or {},
+        "stats": inspector.stats() or {},
+    }

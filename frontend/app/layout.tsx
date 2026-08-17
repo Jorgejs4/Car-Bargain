@@ -46,6 +46,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <Link href="/health" className="hover:text-neutral-900 dark:hover:text-neutral-100">
                 Salud
               </Link>
+              <Link href="/worker" className="hover:text-neutral-900 dark:hover:text-neutral-100">
+                Worker
+              </Link>
               <NotificationBell />
             </nav>
           </div>
