@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+celerybeat-schedule*
+.mypy_cache/
+
+# Entorno
+.env
+.env.local
+*.pem
+
+# Datos y artefactos
+raw/
+data/
+dist/
+build/
+logs/
+
+# Frontend
+node_modules/
+.next/
+out/
+
+# IDE / SO
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

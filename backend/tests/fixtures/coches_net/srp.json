@@ -1,0 +1,140 @@
+{
+ "initialResults": {
+  "totalResults": 258856,
+  "totalPages": 8629,
+  "items": [
+   {
+    "priceAverageIndicator": 24400,
+    "bodyTypeId": 6,
+    "creationDate": "2026-07-15T17:50:55Z",
+    "environmentalLabel": "0",
+    "hp": 300,
+    "fuelType": "Híbrido enchufable",
+    "fuelTypeId": 5,
+    "hasOnlineFinancing": false,
+    "hasReservation": false,
+    "hidePhone": false,
+    "hasWarranty": true,
+    "id": "71090895",
+    "img": "https://a.ccdn.es/cnet/vehicles/20437878/2fed1f69-2f94-4740-a2de-4f3884a37939.jpg",
+    "imgUrl": "https://a.ccdn.es/cnet/vehicles/20437878/2fed1f69-2f94-4740-a2de-4f3884a37939.jpg/359x269cut/",
+    "includesTaxes": true,
+    "isCertified": false,
+    "isFinanced": false,
+    "isTop": true,
+    "isUrgent": false,
+    "isProfessional": true,
+    "isUrlSemantic": true,
+    "km": 61178,
+    "location": {
+     "provinceIds": [
+      8
+     ],
+     "regionId": 9,
+     "regionLiteral": "Catalunya",
+     "mainProvince": "Barcelona",
+     "mainProvinceId": 8,
+     "cityId": 8019,
+     "cityLiteral": "Barcelona Capital"
+    },
+    "make": "DS",
+    "makeId": 1358,
+    "model": "DS 7 Crossback",
+    "modelId": 1223,
+    "pack": {
+     "legacyId": 20,
+     "type": "reference"
+    },
+    "price": 24995,
+    "url": "/ds-ds-7-crossback-16-etense-300-louvre-auto-4wd-5p-electrico-hibrido-2021-en-barcelona-71090895-covo.aspx",
+    "offerType": {
+     "id": 0,
+     "literal": "Ocasión"
+    },
+    "phone": "671578631",
+    "photos": [
+     "https://a.ccdn.es/cnet/vehicles/20437878/2fed1f69-2f94-4740-a2de-4f3884a37939.jpg",
+     "https://a.ccdn.es/cnet/vehicles/20437878/4f7963e2-73bd-4daf-972b-18f1cffd546d.jpg",
+     "https://a.ccdn.es/cnet/vehicles/20437878/d789958f-20e7-4ed5-9d24-22b3a48a28c4.jpg"
+    ],
+    "provinceId": 8,
+    "publicationDate": "2026-07-15T17:50:55Z",
+    "priceRankIndicator": 1,
+    "specificFuelTypeId": 8,
+    "taxTypeId": 1,
+    "title": "DS DS 7 Crossback 1.6 E-Tense 300 Louvre auto 4WD 5p eléctrico híbrido 2021",
+    "videos": [],
+    "warrantyId": 5,
+    "warrantyMonths": 24,
+    "year": 2021,
+    "seller": null,
+    "list_position": 1
+   },
+   {
+    "priceAverageIndicator": 8500,
+    "bodyTypeId": 5,
+    "creationDate": "2026-07-15T10:12:02Z",
+    "environmentalLabel": "0",
+    "hp": 90,
+    "fuelType": "Gasolina",
+    "fuelTypeId": 1,
+    "hasOnlineFinancing": false,
+    "hasReservation": false,
+    "hidePhone": false,
+    "hasWarranty": false,
+    "id": "71065213",
+    "img": "https://a.ccdn.es/cnet/vehicles/20311899/6feb71f5-0fb9-4bb6-9f47-cf9f11f2bc0a.jpg",
+    "imgUrl": "https://a.ccdn.es/cnet/vehicles/20311899/6feb71f5-0fb9-4bb6-9f47-cf9f11f2bc0a.jpg/359x269cut/",
+    "includesTaxes": true,
+    "isCertified": false,
+    "isFinanced": false,
+    "isTop": false,
+    "isUrgent": false,
+    "isProfessional": false,
+    "isUrlSemantic": true,
+    "km": 89000,
+    "location": {
+     "provinceIds": [
+      28
+     ],
+     "regionId": 29,
+     "regionLiteral": "Comunidad de Madrid",
+     "mainProvince": "Madrid",
+     "mainProvinceId": 28,
+     "cityId": 28079,
+     "cityLiteral": "Madrid"
+    },
+    "make": "Seat",
+    "makeId": 28,
+    "model": "Ibiza",
+    "modelId": 44,
+    "pack": {
+     "legacyId": 10,
+     "type": "reference"
+    },
+    "price": 8900,
+    "url": "/seat-ibiza-1-2-90-cv-sport-ecomotive-2016-en-madrid-71065213-covo.aspx",
+    "offerType": {
+     "id": 1,
+     "literal": "Particular"
+    },
+    "phone": null,
+    "photos": [
+     "https://a.ccdn.es/cnet/vehicles/20311899/6feb71f5-0fb9-4bb6-9f47-cf9f11f2bc0a.jpg"
+    ],
+    "provinceId": 28,
+    "publicationDate": "2026-07-15T10:12:02Z",
+    "priceRankIndicator": 2,
+    "specificFuelTypeId": 1,
+    "taxTypeId": 1,
+    "title": "Seat Ibiza 1.2 90 CV Sport Ecomotive 2016",
+    "videos": [],
+    "warrantyId": null,
+    "warrantyMonths": null,
+    "year": 2016,
+    "seller": null,
+    "list_position": 2
+   }
+  ]
+ }
+}

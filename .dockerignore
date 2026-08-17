@@ -1,0 +1,12 @@
+.git
+.github
+.venv
+backend/.venv
+frontend/node_modules
+frontend/.next
+raw
+data
+backups
+*.pyc
+__pycache__
+.env
