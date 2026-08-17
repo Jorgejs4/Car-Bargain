@@ -190,14 +190,11 @@ export interface ListingFilters {
 
 const CANONICAL_API_BASE_URL =
   "https://p01--car-bargains-backend-service--g8btymwgmj8f.code.run";
-const configuredPublicApiUrl = process.env.NEXT_PUBLIC_API_URL;
-const configuredServerApiUrl = process.env.API_INTERNAL_URL;
-const PUBLIC_API_BASE_URL = configuredPublicApiUrl?.includes("g8btymwgmj8f")
-  ? configuredPublicApiUrl
-  : CANONICAL_API_BASE_URL;
-const SERVER_API_BASE_URL = configuredServerApiUrl?.includes("g8btymwgmj8f")
-  ? configuredServerApiUrl
-  : CANONICAL_API_BASE_URL;
+// El backend público no lleva el sufijo `/api`: las rutas lo añaden abajo.
+// Se mantiene fijo para evitar que una variable de Vercel mal formada
+// convierta `/api/v1/listings` en una ruta 404.
+const PUBLIC_API_BASE_URL = CANONICAL_API_BASE_URL;
+const SERVER_API_BASE_URL = CANONICAL_API_BASE_URL;
 const normalizeApiBaseUrl = (value: string) =>
   /^https?:\/\//i.test(value) ? value : `https://${value}`;
 export const API_BASE_URL =
