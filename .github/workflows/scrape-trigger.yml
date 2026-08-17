@@ -23,39 +23,54 @@ jobs:
           set -euo pipefail
           test -n "$API_URL"
           test -n "$INTERNAL_KEY"
+          overall_failed=0
           for source in autoscout24 coches-net mobile-de; do
             pages=6
             if [ "$source" = "mobile-de" ]; then pages=3; fi
             response_file=$(mktemp)
-            http_code=$(curl --location --post301 --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
+            if ! http_code=$(curl --location --post301 --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
               -X POST "$API_URL/internal/scrapers/$source" \
               -H "X-Internal-Key: $INTERNAL_KEY" \
               -H "Content-Type: application/json" \
               --data "{\"max_pages\":${pages},\"save_raw_response\":true,\"enqueue_image_downloads\":true}" \
-              -o "$response_file" -w '%{http_code}')
+              -o "$response_file" -w '%{http_code}'); then
+              echo "[$source] error al llamar al endpoint: $(cat "$response_file")"
+              overall_failed=1
+              rm -f "$response_file"
+              continue
+            fi
             response=$(cat "$response_file")
             echo "[$source] HTTP $http_code"
             echo "[$source] respuesta de disparo: $response"
             rm -f "$response_file"
             if [ "$http_code" != "200" ]; then
               echo "[$source] la API no devolvió HTTP 200"
-              exit 1
+              overall_failed=1
+              continue
             fi
             if ! echo "$response" | jq -e . >/dev/null 2>&1; then
               echo "[$source] la API no devolvió JSON válido"
-              exit 1
+              overall_failed=1
+              continue
             fi
             task_id=$(echo "$response" | jq -r '.task_id // empty')
             if [ -z "$task_id" ]; then
               echo "[$source] la API no devolvió task_id"
-              exit 1
+              overall_failed=1
+              continue
             fi
             echo "[$source] tarea encolada: $task_id (max_pages=$pages)"
+            source_failed=0
+            state=""
             # Hasta 30 minutos por fuente: PENDING significa que Celery aún
             # no la ha tomado, no que el scraper haya fallado.
             for attempt in $(seq 1 360); do
-              status=$(curl --location --fail-with-body --silent --show-error \
-                -H "X-Internal-Key: $INTERNAL_KEY" "$API_URL/internal/tasks/$task_id")
+              if ! status=$(curl --location --fail-with-body --silent --show-error \
+                -H "X-Internal-Key: $INTERNAL_KEY" "$API_URL/internal/tasks/$task_id"); then
+                echo "[$source] no se pudo consultar el estado de la tarea"
+                source_failed=1
+                break
+              fi
               state=$(echo "$status" | jq -r .status)
               if [ "$state" = "SUCCESS" ]; then
                 echo "[$source] resumen:"
@@ -64,12 +79,17 @@ jobs:
               fi
               if [ "$state" = "FAILURE" ]; then
                 echo "$status" | jq .
-                exit 1
+                source_failed=1
+                break
               fi
               sleep 5
             done
             if [ "$state" != "SUCCESS" ]; then
               echo "[$source] timeout esperando resultado (estado=$state)"
-              exit 1
+              source_failed=1
+            fi
+            if [ "$source_failed" -ne 0 ]; then
+              overall_failed=1
             fi
           done
+          exit "$overall_failed"
