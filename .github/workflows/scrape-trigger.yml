@@ -22,7 +22,7 @@ jobs:
             pages=5
             if [ "$source" = "mobile-de" ]; then pages=2; fi
             response_file=$(mktemp)
-            http_code=$(curl --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
+            http_code=$(curl --location --post301 --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
               -X POST "$API_URL/internal/scrapers/$source" \
               -H "X-Internal-Key: $INTERNAL_KEY" \
               -H "Content-Type: application/json" \
@@ -47,7 +47,7 @@ jobs:
             fi
             echo "[$source] tarea encolada: $task_id (max_pages=$pages)"
             for attempt in $(seq 1 60); do
-              status=$(curl --fail-with-body --silent --show-error \
+              status=$(curl --location --fail-with-body --silent --show-error \
                 -H "X-Internal-Key: $INTERNAL_KEY" "$API_URL/internal/tasks/$task_id")
               state=$(echo "$status" | jq -r .status)
               if [ "$state" = "SUCCESS" ]; then
