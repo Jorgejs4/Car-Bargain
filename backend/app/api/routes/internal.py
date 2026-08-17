@@ -16,6 +16,17 @@ class ScraperTrigger(BaseModel):
     enqueue_image_downloads: bool = True
 
 
+MAINTENANCE_TASKS = {
+    "status": "status.update_listings",
+    "images": "images.analyze_pending",
+    "text": "text.enrich_pending",
+    "score": "score.bargains",
+    "import": "import.costs",
+    "cross-border": "score.cross_border",
+    "alerts": "alerts.evaluate",
+}
+
+
 def _trigger(task_name: str, payload: ScraperTrigger | None) -> dict:
     params = payload.model_dump() if payload else ScraperTrigger().model_dump()
     result = celery_app.send_task(task_name, kwargs=params)
@@ -58,3 +69,13 @@ def task_status(task_id: str) -> dict:
     elif result.failed():
         response["error"] = str(result.result)
     return response
+
+
+@router.post("/maintenance/{task_name}", dependencies=[Depends(require_internal_key)])
+def trigger_maintenance(task_name: str) -> dict:
+    celery_name = MAINTENANCE_TASKS.get(task_name)
+    if celery_name is None:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Tarea de mantenimiento desconocida")
+    result = celery_app.send_task(celery_name)
+    return {"status": "enqueued", "task": task_name, "task_id": result.id}
