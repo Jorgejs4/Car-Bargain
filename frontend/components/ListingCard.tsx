@@ -43,6 +43,7 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
       {listing.image_urls?.[0] && (
         <img src={listing.image_urls[0]} alt={title} className="mb-3 h-44 w-full rounded-lg object-cover" loading="lazy" />
       )}
+      {listing.archive_reason && listing.status !== "ACTIVE" && <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">Archivado: {listing.archive_reason}</p>}
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-semibold leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400">
           {hasTextProblem ? "AVERÍA / PROBLEMA DETECTADO · " : ""}{title}

@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { fetchListingDetail } from "@/lib/api";
 import { DamageBadge, ReviewBadge, StatusBadge } from "@/components/Badge";
 import { PriceChart } from "@/components/PriceChart";
+import { ImageCarousel } from "@/components/ImageCarousel";
+import { StatusControl } from "@/components/StatusControl";
 
 function fmtMoney(v: number | null, currency: string | null): string {
   if (v == null) return "—";
@@ -110,6 +112,7 @@ export default async function ListingPage({
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <StatusControl id={listing.id} initial={listing.status} />
           <StatusBadge status={listing.status} />
           {hasDamage && <DamageBadge />}
           {listing.needs_review && <ReviewBadge />}
@@ -160,9 +163,7 @@ export default async function ListingPage({
       <div className="grid gap-6 lg:grid-cols-2">
         {listing.image_urls?.length > 0 && (
           <Section title="Imágenes del anuncio">
-            <div className="grid grid-cols-2 gap-3">
-              {listing.image_urls.map((url) => <a key={url} href={url} target="_blank" rel="noreferrer"><img src={url} alt={title} className="h-40 w-full rounded-lg object-cover" loading="lazy" /></a>)}
-            </div>
+            <ImageCarousel images={listing.image_urls} alt={title} />
           </Section>
         )}
         <Section title="Vehículo">
@@ -236,6 +237,9 @@ export default async function ListingPage({
           )}
         </Section>
       </div>
+
+      {listing.is_historical && <Section title="Razón de archivado"><p className="text-sm">{listing.status === "SOLD" ? "Marcado como vendido." : "Anuncio histórico o ya no localizado en la fuente."}</p></Section>}
+      {!listing.is_historical && listing.comparison_count < 3 && <Section title="Estado de valoración"><p className="text-sm text-amber-700 dark:text-amber-300">No hay suficientes unidades para comparar este modelo (hay {listing.comparison_count}). No se muestra como chollo hasta disponer de al menos 3 comparables.</p></Section>}
 
       <Section title="Descripción y comentarios del vendedor">
         {listing.snapshots.some((s) => s.description || s.title) ? listing.snapshots.slice().reverse().map((s) => (

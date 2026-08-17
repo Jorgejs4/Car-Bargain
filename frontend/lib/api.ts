@@ -31,6 +31,8 @@ export interface ListingListItem {
   currency: string | null;
   mileage: number | null;
   image_urls: string[];
+  comparison_count: number;
+  archive_reason: string | null;
   condition_signals: Record<string, unknown> | null;
   photo_signals: Record<string, unknown> | null;
   text_signals: Record<string, unknown> | null;

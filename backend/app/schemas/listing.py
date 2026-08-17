@@ -66,6 +66,8 @@ class ListingListItem(BaseModel):
     currency: str | None
     mileage: int | None
     image_urls: list[str] = []
+    comparison_count: int = 0
+    archive_reason: str | None = None
 
     condition_signals: dict | None
     photo_signals: dict | None

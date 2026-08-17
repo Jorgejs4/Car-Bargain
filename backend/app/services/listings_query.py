@@ -153,9 +153,20 @@ def _item(
     title,
     condition_signals,
     raw_data=None,
+    comparison_count=0,
 ) -> dict:
     """Monta una fila de lista a partir del listing, su vehículo y su último snapshot."""
     image_urls = (raw_data or {}).get("image_urls") or []
+    if listing.is_historical:
+        archive_reason = "Anuncio procedente de histórico"
+    elif listing.status == ListingStatus.SOLD:
+        archive_reason = "Marcado como vendido"
+    elif listing.status in (ListingStatus.STALE, ListingStatus.REMOVED):
+        archive_reason = "No localizado recientemente en la fuente"
+    elif comparison_count < 3:
+        archive_reason = "No hay suficientes unidades para comparar"
+    else:
+        archive_reason = None
     return {
         "id": listing.id,
         "source": listing.source,
@@ -178,6 +189,8 @@ def _item(
         "currency": currency,
         "mileage": mileage,
         "image_urls": [str(url) for url in image_urls if url],
+        "comparison_count": int(comparison_count or 0),
+        "archive_reason": archive_reason,
         "condition_signals": condition_signals,
         "photo_signals": listing.photo_signals,
         "text_signals": listing.text_signals,
@@ -212,6 +225,12 @@ def list_listings(
     incluir cualquier estado, o `is_historical=True` para el archivo histórico.
     """
     latest = _latest_snapshots_subquery()
+    comparable = aliased(Listing)
+    comparison_count_expr = (
+        select(func.count(comparable.id))
+        .where(comparable.vehicle_id == Listing.vehicle_id, comparable.status == ListingStatus.ACTIVE, comparable.is_historical.is_(False))
+        .correlate(Listing).scalar_subquery()
+    )
     base = (
         select(
             Listing,
@@ -222,6 +241,7 @@ def list_listings(
             latest.c.title,
             latest.c.condition_signals,
             latest.c.raw_data,
+            comparison_count_expr,
         )
         .outerjoin(latest, latest.c.listing_id == Listing.id)
         .outerjoin(Vehicle, Vehicle.id == Listing.vehicle_id)
@@ -249,8 +269,9 @@ def list_listings(
             title=title,
             condition_signals=condition_signals,
             raw_data=raw_data,
+            comparison_count=comparison_count,
         )
-        for listing, vehicle, price, currency, mileage, title, condition_signals, raw_data in rows
+        for listing, vehicle, price, currency, mileage, title, condition_signals, raw_data, comparison_count in rows
     ]
     return items, int(total)
 
