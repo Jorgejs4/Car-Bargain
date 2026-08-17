@@ -216,6 +216,7 @@ def _run_scrape(
         summary = {
             "source": source,
             "listings": len(listings),
+            "repeated": max(0, len(listings) - result.listings_created),
             "duration_ms": duration_ms,
             **asdict(result),
         }

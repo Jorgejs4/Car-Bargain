@@ -21,9 +21,30 @@ jobs:
           for source in autoscout24 coches-net mobile-de; do
             pages=5
             if [ "$source" = "mobile-de" ]; then pages=2; fi
-            curl --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
+            response=$(curl --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
               -X POST "$API_URL/internal/scrapers/$source" \
               -H "X-Internal-Key: $INTERNAL_KEY" \
               -H "Content-Type: application/json" \
-              --data "{\"max_pages\":${pages},\"save_raw_response\":true,\"enqueue_image_downloads\":true}"
+              --data "{\"max_pages\":${pages},\"save_raw_response\":true,\"enqueue_image_downloads\":true}")
+            task_id=$(echo "$response" | jq -r .task_id)
+            echo "[$source] tarea encolada: $task_id (max_pages=$pages)"
+            for attempt in $(seq 1 60); do
+              status=$(curl --fail-with-body --silent --show-error \
+                -H "X-Internal-Key: $INTERNAL_KEY" "$API_URL/internal/tasks/$task_id")
+              state=$(echo "$status" | jq -r .status)
+              if [ "$state" = "SUCCESS" ]; then
+                echo "[$source] resumen:"
+                echo "$status" | jq '.result | {source, listings, listings_created, repeated, listings_updated, snapshots_appended, duration_ms}'
+                break
+              fi
+              if [ "$state" = "FAILURE" ]; then
+                echo "$status" | jq .
+                exit 1
+              fi
+              sleep 5
+            done
+            if [ "$state" != "SUCCESS" ]; then
+              echo "[$source] timeout esperando resultado (estado=$state)"
+              exit 1
+            fi
           done

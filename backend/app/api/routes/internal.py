@@ -1,5 +1,6 @@
 """Endpoints internos (disparo manual de jobs, protegidos, no públicos)."""
 
+from celery.result import AsyncResult
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 from workers.celery_app import celery_app
@@ -46,3 +47,14 @@ def trigger_autoscout24(payload: ScraperTrigger | None = None) -> dict:
 )
 def trigger_coches_net(payload: ScraperTrigger | None = None) -> dict:
     return _trigger("scrape.coches_net", payload)
+
+
+@router.get("/tasks/{task_id}", dependencies=[Depends(require_internal_key)])
+def task_status(task_id: str) -> dict:
+    result = AsyncResult(task_id, app=celery_app)
+    response = {"task_id": task_id, "status": result.status}
+    if result.successful():
+        response["result"] = result.result
+    elif result.failed():
+        response["error"] = str(result.result)
+    return response
