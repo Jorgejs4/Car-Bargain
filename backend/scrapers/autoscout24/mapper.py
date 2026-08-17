@@ -56,6 +56,14 @@ _SELLER_MAP = {
 }
 
 _BASE_HOST = "https://www.autoscout24.es"
+_IMAGE_SIZE_RE = re.compile(r"/(?:\d+)x(?:\d+)\.(?:webp|jpg|jpeg|png)$", re.IGNORECASE)
+
+
+def _high_resolution_image_url(url: str) -> str:
+    """Pide al CDN de AutoScout24 una imagen grande en vez de la miniatura SRP."""
+    if "prod.pictures.autoscout24.net/" not in url:
+        return url
+    return _IMAGE_SIZE_RE.sub("/1200x900.webp", url)
 
 
 def _lookup(value: str | None, mapping: dict[str, str]) -> str | None:
@@ -148,6 +156,7 @@ class AutoScout24Mapper(BaseMapper):
 
         image_urls = []
         for url in record.get("images") or []:
+            url = _high_resolution_image_url(str(url)) if url else url
             if url and url not in image_urls:
                 image_urls.append(url)
 
