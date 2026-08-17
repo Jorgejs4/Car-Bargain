@@ -21,12 +21,21 @@ jobs:
           for source in autoscout24 coches-net mobile-de; do
             pages=5
             if [ "$source" = "mobile-de" ]; then pages=2; fi
-            response=$(curl --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
+            response_file=$(mktemp)
+            http_code=$(curl --fail-with-body --silent --show-error --retry 3 --retry-delay 10 \
               -X POST "$API_URL/internal/scrapers/$source" \
               -H "X-Internal-Key: $INTERNAL_KEY" \
               -H "Content-Type: application/json" \
-              --data "{\"max_pages\":${pages},\"save_raw_response\":true,\"enqueue_image_downloads\":true}")
+              --data "{\"max_pages\":${pages},\"save_raw_response\":true,\"enqueue_image_downloads\":true}" \
+              -o "$response_file" -w '%{http_code}')
+            response=$(cat "$response_file")
+            echo "[$source] HTTP $http_code"
             echo "[$source] respuesta de disparo: $response"
+            rm -f "$response_file"
+            if [ "$http_code" != "200" ]; then
+              echo "[$source] la API no devolvió HTTP 200"
+              exit 1
+            fi
             if ! echo "$response" | jq -e . >/dev/null 2>&1; then
               echo "[$source] la API no devolvió JSON válido"
               exit 1
