@@ -61,7 +61,14 @@ export default async function Home({
 }) {
   const resolved = await searchParams;
   const filters = parseFilters(resolved);
-  const data = await fetchListings(filters);
+  let data;
+  let apiUnavailable = false;
+  try {
+    data = await fetchListings(filters);
+  } catch {
+    apiUnavailable = true;
+    data = { items: [], total: 0, page: filters.page ?? 1, pages: 0 };
+  }
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
@@ -73,6 +80,12 @@ export default async function Home({
       </div>
 
       <FilterForm />
+
+      {apiUnavailable && (
+        <p className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+          La API está temporalmente no disponible. La página se ha cargado, pero no se pueden mostrar ofertas ahora mismo.
+        </p>
+      )}
 
       {data.items.length === 0 ? (
         <p className="rounded-xl border border-dashed border-neutral-300 p-8 text-center text-neutral-500 dark:border-neutral-700">
