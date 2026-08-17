@@ -26,7 +26,16 @@ jobs:
               -H "X-Internal-Key: $INTERNAL_KEY" \
               -H "Content-Type: application/json" \
               --data "{\"max_pages\":${pages},\"save_raw_response\":true,\"enqueue_image_downloads\":true}")
-            task_id=$(echo "$response" | jq -r .task_id)
+            echo "[$source] respuesta de disparo: $response"
+            if ! echo "$response" | jq -e . >/dev/null 2>&1; then
+              echo "[$source] la API no devolvió JSON válido"
+              exit 1
+            fi
+            task_id=$(echo "$response" | jq -r '.task_id // empty')
+            if [ -z "$task_id" ]; then
+              echo "[$source] la API no devolvió task_id"
+              exit 1
+            fi
             echo "[$source] tarea encolada: $task_id (max_pages=$pages)"
             for attempt in $(seq 1 60); do
               status=$(curl --fail-with-body --silent --show-error \
