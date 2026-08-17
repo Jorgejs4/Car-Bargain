@@ -8,7 +8,12 @@ on:
 jobs:
   trigger:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # Un único worker procesa también imágenes y enriquecimiento de texto.
+    # No iniciar otra tanda mientras la anterior sigue esperando al worker.
+    concurrency:
+      group: production-scrapers
+      cancel-in-progress: false
+    timeout-minutes: 60
     steps:
       - name: Lanzar scrapers en la API de producción
         env:
@@ -46,7 +51,9 @@ jobs:
               exit 1
             fi
             echo "[$source] tarea encolada: $task_id (max_pages=$pages)"
-            for attempt in $(seq 1 60); do
+            # Hasta 30 minutos por fuente: PENDING significa que Celery aún
+            # no la ha tomado, no que el scraper haya fallado.
+            for attempt in $(seq 1 360); do
               status=$(curl --location --fail-with-body --silent --show-error \
                 -H "X-Internal-Key: $INTERNAL_KEY" "$API_URL/internal/tasks/$task_id")
               state=$(echo "$status" | jq -r .status)
