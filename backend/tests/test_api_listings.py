@@ -105,7 +105,7 @@ def test_listings_filters(committed_session) -> None:
 
 
 def test_only_clean_excludes_text_problems_and_unknown(committed_session) -> None:
-    _seed_one(
+    vehicle, _ = _seed_one(
         committed_session,
         listing_kwargs={
             "source_listing_id": "clean",
@@ -113,6 +113,15 @@ def test_only_clean_excludes_text_problems_and_unknown(committed_session) -> Non
         },
         snapshot_kwargs={"description": "Vehículo cuidado, documentación en regla."},
     )
+    for source_id in ("clean-2", "clean-3"):
+        listing = helpers.make_listing(
+            committed_session,
+            vehicle=vehicle,
+            source_listing_id=source_id,
+            text_signals={"deal_eligible": True, "has_problem": False},
+        )
+        helpers.make_snapshot(committed_session, listing, description="Vehículo cuidado.")
+    committed_session.commit()
     _seed_one(
         committed_session,
         listing_kwargs={
@@ -127,8 +136,8 @@ def test_only_clean_excludes_text_problems_and_unknown(committed_session) -> Non
 
     response = client.get("/api/v1/listings", params={"only_clean": "true"})
     assert response.status_code == 200
-    assert response.json()["total"] == 1
-    assert response.json()["items"][0]["source_listing_id"] == "clean"
+    assert response.json()["total"] == 3
+    assert {item["source_listing_id"] for item in response.json()["items"]} == {"clean", "clean-2", "clean-3"}
 
 
 def test_listings_pagination(committed_session) -> None:
