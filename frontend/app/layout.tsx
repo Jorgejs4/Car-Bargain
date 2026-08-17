@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </header>
         <main className="flex-1">{children}</main>
         <footer className="border-t border-neutral-200 py-4 text-center text-xs text-neutral-500 dark:border-neutral-800">
-          Car Bargains · backend en localhost:8000
+          Car Bargains
         </footer>
       </body>
     </html>

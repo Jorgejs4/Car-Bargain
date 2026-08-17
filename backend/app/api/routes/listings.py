@@ -7,11 +7,14 @@ datos live con históricos.
 import math
 from decimal import Decimal
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, Body, Depends, HTTPException, Query
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.models import ListingStatus
+from app.models import Listing, ListingEvent, ListingEventType, ListingStatus
 from app.schemas import ListingDetail, ListingListItem
 from app.schemas.pagination import Page
 from app.services import listings_query
@@ -125,3 +128,28 @@ def get_listing(listing_id: int, db: Session = Depends(get_db)) -> ListingDetail
     if detail is None:
         raise HTTPException(status_code=404, detail="Listing no encontrado")
     return ListingDetail.model_validate(detail)
+
+
+@router.patch("/{listing_id}/status", response_model=ListingDetail, summary="Cambiar manualmente el estado")
+def update_listing_status(
+    listing_id: int,
+    status: ListingStatus = Body(..., embed=True),
+    db: Session = Depends(get_db),
+) -> ListingDetail:
+    """Cambia el estado desde el detalle y registra el evento."""
+    listing = db.get(Listing, listing_id)
+    if listing is None:
+        raise HTTPException(status_code=404, detail="Listing no encontrado")
+    old = listing.status
+    listing.status = status
+    if status == ListingStatus.ACTIVE:
+        listing.is_historical = False
+    db.add(ListingEvent(
+        listing_id=listing.id,
+        event_type=ListingEventType.STATUS_CHANGED,
+        event_timestamp=datetime.now(timezone.utc),
+        old_value={"status": old.value},
+        new_value={"status": status.value, "manual": True},
+    ))
+    db.commit()
+    return ListingDetail.model_validate(listings_query.get_listing_detail(db, listing_id))

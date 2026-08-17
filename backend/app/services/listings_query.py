@@ -10,7 +10,7 @@ from collections import Counter
 from decimal import Decimal
 
 from sqlalchemy import asc, desc, func, or_, select
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session, aliased, selectinload
 
 from app.models import Listing, ListingSnapshot, ListingStatus, Vehicle
 from app.schemas.listing_event import ListingEventRead
@@ -122,6 +122,18 @@ def _build_conditions(
                 ),
             ]
         )
+        comparable = aliased(Listing)
+        comparable_count = (
+            select(func.count(comparable.id))
+            .where(
+                comparable.vehicle_id == Listing.vehicle_id,
+                comparable.status == ListingStatus.ACTIVE,
+                comparable.is_historical.is_(False),
+            )
+            .correlate(Listing)
+            .scalar_subquery()
+        )
+        conditions.append(comparable_count >= 3)
     if min_bargain_score is not None:
         conditions.append(Listing.bargain_score >= min_bargain_score)
     if min_absolute_margin is not None:
