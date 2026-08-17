@@ -5,12 +5,10 @@ datos live con históricos.
 """
 
 import math
+from datetime import datetime, timezone
 from decimal import Decimal
 
-from datetime import datetime, timezone
-
 from fastapi import APIRouter, Body, Depends, HTTPException, Query
-from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db

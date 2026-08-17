@@ -1,7 +1,8 @@
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+
 from app.core.config import settings
 from celery import Celery
 from celery.schedules import crontab
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 
 def _celery_redis_url(url: str) -> str:
