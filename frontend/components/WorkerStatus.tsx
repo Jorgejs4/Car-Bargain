@@ -16,7 +16,10 @@ export function WorkerStatus() {
     } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
     finally { setLoading(false); }
   }, []);
-  useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void refresh(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [refresh]);
   const count = (name: string) => typeof data?.[name] === "number" ? data[name] as number : 0;
   const taskGroups = (name: string) => {
     const value = data?.[name];
