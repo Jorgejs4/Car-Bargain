@@ -2,6 +2,7 @@ import Link from "next/link";
 import { fetchListings, type ListingFilters } from "@/lib/api";
 import { ListingCard } from "@/components/ListingCard";
 import FilterForm from "@/components/FilterForm";
+import { ClientListings } from "@/components/ClientListings";
 
 function num(v: string | string[] | undefined): number | undefined {
   if (typeof v !== "string" || v === "") return undefined;
@@ -63,12 +64,10 @@ export default async function Home({
   const filters = parseFilters(resolved);
   let data;
   let apiUnavailable = false;
-  let apiError = "";
   try {
     data = await fetchListings(filters);
-  } catch (error) {
+  } catch {
     apiUnavailable = true;
-    apiError = error instanceof Error ? error.message : String(error);
     data = { items: [], total: 0, page: filters.page ?? 1, pages: 0 };
   }
 
@@ -84,10 +83,7 @@ export default async function Home({
       <FilterForm />
 
       {apiUnavailable && (
-        <p className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-          La API está temporalmente no disponible. La página se ha cargado, pero no se pueden mostrar ofertas ahora mismo.
-          {apiError && <span className="mt-1 block text-xs">{apiError}</span>}
-        </p>
+        <ClientListings filters={filters} />
       )}
 
       {data.items.length === 0 ? (
