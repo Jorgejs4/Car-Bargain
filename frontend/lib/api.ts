@@ -193,8 +193,12 @@ const PUBLIC_API_BASE_URL =
   "https://p01--car-bargains-backend-service--g8btymwgmj8f.code.run";
 const SERVER_API_BASE_URL =
   process.env.API_INTERNAL_URL ?? PUBLIC_API_BASE_URL;
+const normalizeApiBaseUrl = (value: string) =>
+  /^https?:\/\//i.test(value) ? value : `https://${value}`;
 export const API_BASE_URL =
-  typeof window === "undefined" ? SERVER_API_BASE_URL : PUBLIC_API_BASE_URL;
+  normalizeApiBaseUrl(
+    typeof window === "undefined" ? SERVER_API_BASE_URL : PUBLIC_API_BASE_URL,
+  );
 
 async function getJson<T>(path: string, init?: RequestInit | AbortSignal): Promise<T> {
   const opts: RequestInit = init instanceof AbortSignal
