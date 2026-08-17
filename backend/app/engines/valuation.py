@@ -26,11 +26,11 @@ listings no-ES y con comparables en el mercado español (confianza media+).
 
 Confianza por motor (jerárquica, igual que un tasador):
   alta:   mismo brand+model, edad ±2 años → mediana
-  media:  misma marca, edad ±2 años → mediana
-  sin:    sin comparables cercanos → `None` (la UI muestra "sin valoración").
+  sin:    sin comparables estrictos → `None` (la UI muestra "sin valoración").
 
-El daño visual (CV) reduce un 15% el valor antes de comparar. Solo se
-publican márgenes con confianza alta o media.
+Solo se usan señales textuales del anuncio para separar unidades con averías.
+El CV no participa en la valoración. Solo se publican márgenes con dos
+comparables estrictos como mínimo.
 """
 
 import logging
@@ -87,8 +87,8 @@ class ComparablesValuation:
         model: str | None,
         year: int,
         *,
-        same_model: bool,
-        age_window: int | None,
+        same_model: bool = True,
+        age_window: int | None = 2,
     ) -> list[dict]:
         out: list[dict] = []
         for r in self.rows:
@@ -102,6 +102,9 @@ class ComparablesValuation:
                 r_year = r.get("year") or 0
                 if not r_year or abs(r_year - year) > age_window:
                     continue
+            signals = r.get("text_signals") or {}
+            if signals.get("has_problem") is True:
+                continue
             out.append(r)
         return out
 
@@ -114,28 +117,10 @@ class ComparablesValuation:
         model = _key(row.get("model"))
         year = row.get("year") or 0
 
-        levels = [
-            (True, 2, CONFIDENCE_HIGH),
-            (True, None, CONFIDENCE_MEDIUM),
-            (False, 2, CONFIDENCE_MEDIUM),
-        ]
-        for same_model, age_window, confidence in levels:
-            comps = self._candidates(
-                my_id, brand, model, year,
-                same_model=same_model, age_window=age_window,
-            )
-            if len(comps) >= 2:
-                return self._adjusted_median(comps, row), confidence
-
-        # Misma marca, cualquier edad → solo referencia, sin publicar margen.
-        comps = self._candidates(
-            my_id, brand, model, year,
-            same_model=False, age_window=None,
-        )
-        if len(comps) >= 3:
-            return self._adjusted_median(comps, row), CONFIDENCE_NONE
-
-        return None, CONFIDENCE_NONE
+        comps = self._candidates(my_id, brand, model, year)
+        if len(comps) < 2:
+            return None, CONFIDENCE_NONE
+        return self._adjusted_median(comps, row), CONFIDENCE_HIGH
 
     def _adjusted_median(self, comps: list[dict], row: dict) -> float:
         base = _median([c["price"] for c in comps])
@@ -215,7 +200,7 @@ def fetch_training_rows(session: Session) -> list[dict]:
             "transmission": vehicle.transmission if vehicle else None,
             "brand": vehicle.brand if vehicle else None,
             "model": vehicle.model if vehicle else None,
-            "photo_signals": li.photo_signals,
+            "text_signals": li.text_signals,
         })
     return rows
 
@@ -256,8 +241,7 @@ def score_all(session: Session) -> dict:
             listing.absolute_margin = None
             none += 1
         else:
-            has_damage = bool((row.get("photo_signals") or {}).get("has_visible_damage"))
-            if has_damage:
+            if (row.get("text_signals") or {}).get("has_problem") is True:
                 predicted *= 0.85
             actual = row["price"]
             listing.predicted_price = round(predicted, 2)
@@ -276,8 +260,7 @@ def score_all(session: Session) -> dict:
         if es_pred is None or es_conf == CONFIDENCE_NONE:
             listing.predicted_price_es = None
         else:
-            has_damage = bool((row.get("photo_signals") or {}).get("has_visible_damage"))
-            if has_damage:
+            if (row.get("text_signals") or {}).get("has_problem") is True:
                 es_pred *= 0.85
             listing.predicted_price_es = round(es_pred, 2)
 
