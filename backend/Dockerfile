@@ -4,6 +4,7 @@ ARG INSTALL_CV=false
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
     PIP_NO_CACHE_DIR=1
 
 WORKDIR /app
@@ -17,6 +18,9 @@ RUN if [ "$INSTALL_CV" = "true" ]; then \
     fi
 
 COPY backend /app
+# Reafirma el paquete de scrapers para los procesos Celery, que lo importan
+# como paquete raíz (`from scrapers...`) igual que la API en desarrollo.
+COPY backend/scrapers /app/scrapers
 
 EXPOSE 8000
 
