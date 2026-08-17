@@ -65,6 +65,7 @@ class ListingListItem(BaseModel):
     price: float | None
     currency: str | None
     mileage: int | None
+    image_urls: list[str] = []
 
     condition_signals: dict | None
     photo_signals: dict | None

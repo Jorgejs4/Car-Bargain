@@ -140,8 +140,10 @@ def _item(
     mileage,
     title,
     condition_signals,
+    raw_data=None,
 ) -> dict:
     """Monta una fila de lista a partir del listing, su vehículo y su último snapshot."""
+    image_urls = (raw_data or {}).get("image_urls") or []
     return {
         "id": listing.id,
         "source": listing.source,
@@ -163,6 +165,7 @@ def _item(
         "price": price,
         "currency": currency,
         "mileage": mileage,
+        "image_urls": [str(url) for url in image_urls if url],
         "condition_signals": condition_signals,
         "photo_signals": listing.photo_signals,
         "text_signals": listing.text_signals,
@@ -206,6 +209,7 @@ def list_listings(
             latest.c.mileage,
             latest.c.title,
             latest.c.condition_signals,
+            latest.c.raw_data,
         )
         .outerjoin(latest, latest.c.listing_id == Listing.id)
         .outerjoin(Vehicle, Vehicle.id == Listing.vehicle_id)
@@ -232,8 +236,9 @@ def list_listings(
             mileage=mileage,
             title=title,
             condition_signals=condition_signals,
+            raw_data=raw_data,
         )
-        for listing, vehicle, price, currency, mileage, title, condition_signals in rows
+        for listing, vehicle, price, currency, mileage, title, condition_signals, raw_data in rows
     ]
     return items, int(total)
 
@@ -262,6 +267,7 @@ def get_listing_detail(session: Session, listing_id: int) -> dict | None:
         mileage=latest.mileage if latest else None,
         title=latest.title if latest else None,
         condition_signals=latest.condition_signals if latest else None,
+        raw_data=latest.raw_data if latest else None,
     )
     data["vehicle"] = VehicleRead.model_validate(listing.vehicle).model_dump() if listing.vehicle else None
     data["current_snapshot"] = (

@@ -30,6 +30,7 @@ export interface ListingListItem {
   price: number | null;
   currency: string | null;
   mileage: number | null;
+  image_urls: string[];
   condition_signals: Record<string, unknown> | null;
   photo_signals: Record<string, unknown> | null;
   text_signals: Record<string, unknown> | null;

@@ -8,13 +8,20 @@ function formatPrice(price: number | null, currency: string | null): string {
   return `${price.toLocaleString("es-ES", { maximumFractionDigits: 0 })} ${symbol}`;
 }
 
+function canonicalTitle(listing: ListingListItem): string {
+  const name = [listing.brand, listing.model].filter(Boolean).join(" ") || "Vehículo";
+  const price = formatPrice(listing.price, listing.currency);
+  const problem = listing.text_signals?.has_problem === true || listing.condition_signals?.has_problem === true;
+  const condition = problem
+    ? "posible avería"
+    : listing.text_signals == null
+      ? "análisis pendiente"
+      : "sin avería detectada";
+  return `${name} · ${condition} · ${price}`;
+}
+
 export function ListingCard({ listing }: { listing: ListingListItem }) {
-  const title =
-    listing.title ??
-    [listing.brand, listing.model, listing.generation, listing.variant]
-      .filter(Boolean)
-      .join(" ") ??
-    "Sin título";
+  const title = canonicalTitle(listing);
   const hasDamage =
     (listing.photo_signals?.has_visible_damage as boolean | undefined) ??
     false;
@@ -33,6 +40,9 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
       href={`/listings/${listing.id}`}
       className="group flex flex-col rounded-xl border border-neutral-200 bg-white p-4 transition-colors hover:border-blue-400 dark:border-neutral-800 dark:bg-neutral-900"
     >
+      {listing.image_urls?.[0] && (
+        <img src={listing.image_urls[0]} alt={title} className="mb-3 h-44 w-full rounded-lg object-cover" loading="lazy" />
+      )}
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-semibold leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400">
           {hasTextProblem ? "AVERÍA / PROBLEMA DETECTADO · " : ""}{title}

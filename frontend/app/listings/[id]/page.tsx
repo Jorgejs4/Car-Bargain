@@ -75,12 +75,6 @@ export default async function ListingPage({
   if (!listing) notFound();
 
   const vehicle = listing.vehicle;
-  const title =
-    listing.title ??
-    [vehicle?.brand, vehicle?.model, vehicle?.generation, vehicle?.variant]
-      .filter(Boolean)
-      .join(" ") ??
-    `Anuncio ${listing.id}`;
   const hasDamage =
     (listing.photo_signals?.has_visible_damage as boolean | undefined) ?? false;
   const damageTypes = (listing.photo_signals?.damage_types as string[] | undefined) ?? [];
@@ -96,6 +90,7 @@ export default async function ListingPage({
   const textProblems = (textSignals?.problem_types as string[] | undefined)
     ?? (listing.condition_signals?.problem_types as string[] | undefined)
     ?? [];
+  const title = `${[vehicle?.brand, vehicle?.model].filter(Boolean).join(" ") || "Vehículo"} · ${textProblem ? "posible avería" : listing.text_signals == null ? "análisis pendiente" : "sin avería detectada"} · ${fmtMoney(listing.price, listing.currency)}`;
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
@@ -106,7 +101,7 @@ export default async function ListingPage({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
            <h1 className="text-2xl font-bold">
-             {textProblem ? "AVERÍA / PROBLEMA DETECTADO · " : ""}{title}
+             {title}
            </h1>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {listing.brand && listing.model ? `${listing.brand} ${listing.model}` : "Vehículo"}
@@ -163,6 +158,13 @@ export default async function ListingPage({
       )}
 
       <div className="grid gap-6 lg:grid-cols-2">
+        {listing.image_urls?.length > 0 && (
+          <Section title="Imágenes del anuncio">
+            <div className="grid grid-cols-2 gap-3">
+              {listing.image_urls.map((url) => <a key={url} href={url} target="_blank" rel="noreferrer"><img src={url} alt={title} className="h-40 w-full rounded-lg object-cover" loading="lazy" /></a>)}
+            </div>
+          </Section>
+        )}
         <Section title="Vehículo">
           {vehicle ? (
             <div className="space-y-0.5">
@@ -234,6 +236,16 @@ export default async function ListingPage({
           )}
         </Section>
       </div>
+
+      <Section title="Descripción y comentarios del vendedor">
+        {listing.snapshots.some((s) => s.description || s.title) ? listing.snapshots.slice().reverse().map((s) => (
+          <article key={s.id} className="mb-4 border-b border-neutral-200 pb-4 last:mb-0 last:border-0 dark:border-neutral-800">
+            <p className="mb-1 text-xs text-neutral-500">{fmtDate(s.scraped_at)}</p>
+            {s.title && <h3 className="font-semibold">{s.title}</h3>}
+            <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{s.description || "Sin descripción"}</p>
+          </article>
+        )) : <p className="text-sm text-neutral-500">No hay descripción ni comentarios guardados.</p>}
+      </Section>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Section title="Historial de precios">
