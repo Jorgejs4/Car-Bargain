@@ -141,6 +141,8 @@ Nota: el SRP **no expone** año ni potencia de forma directa; se extraen de
 
 - URL: `https://www.autoscout24.es/lst?atype=C&cy=E&page=N`
   (`cy=E` = España; `D` = Alemania; `.de` usa el mismo parser).
+  Los códigos de AutoScout24 no son ISO: `F` = Francia, `I` = Italia,
+  `NL` = Países Bajos, `B` = Bélgica, `A` = Austria y `L` = Luxemburgo.
 - `__NEXT_DATA__` se lee con un solo `httpx.get` con headers de navegador
   (verificado: 200, 20 anuncios). No hace falta Scrapfly.
 - Paginación: `&page=N`. `numberOfPages` viene en el primer SRP.

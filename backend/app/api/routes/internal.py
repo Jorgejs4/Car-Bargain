@@ -81,16 +81,44 @@ def trigger_maintenance(task_name: str) -> dict:
     return {"status": "enqueued", "task": task_name, "task_id": result.id}
 
 
-@router.get("/worker-status", dependencies=[Depends(require_internal_key)])
+@router.get("/worker-status")
 def worker_status() -> dict:
-    """Diagnóstico temporal del Worker sin abrir su Shell."""
+    """Resumen público de solo lectura del estado del Worker.
+
+    No expone argumentos, resultados ni credenciales: únicamente el estado
+    operativo y el número de tareas que están ejecutándose o esperando en la
+    ventana de prefetch de Celery.
+    """
     inspector = celery_app.control.inspect(timeout=2)
     ping = inspector.ping() or {}
+    active_by_worker = inspector.active() or {}
+    reserved_by_worker = inspector.reserved() or {}
+    scheduled_by_worker = inspector.scheduled() or {}
+    stats_by_worker = inspector.stats() or {}
+
+    def task_counts(tasks_by_worker: dict) -> dict[str, int]:
+        counts: dict[str, int] = {}
+        for tasks in tasks_by_worker.values():
+            for task in tasks or []:
+                name = task.get("name") or task.get("type") or "desconocida"
+                counts[name] = counts.get(name, 0) + 1
+        return dict(sorted(counts.items()))
+
+    active = task_counts(active_by_worker)
+    queued = task_counts(reserved_by_worker)
+    scheduled = task_counts(scheduled_by_worker)
     return {
         "online": bool(ping),
-        "ping": ping,
-        "active": inspector.active() or {},
-        "reserved": inspector.reserved() or {},
-        "scheduled": inspector.scheduled() or {},
-        "stats": inspector.stats() or {},
+        "workers": len(ping),
+        "active_count": sum(active.values()),
+        "queued_count": sum(queued.values()),
+        "scheduled_count": sum(scheduled.values()),
+        "active": active,
+        "queued": queued,
+        "scheduled": scheduled,
+        "concurrency": sum(
+            int(worker.get("pool", {}).get("max-concurrency", 0) or 0)
+            for worker in stats_by_worker.values()
+        ),
+        "note": "queued refleja las tareas reservadas por Celery (prefetch), no todo el contenido del broker.",
     }

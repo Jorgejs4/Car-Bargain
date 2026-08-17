@@ -27,14 +27,16 @@ SEARCH_URL = "https://www.autoscout24.es/lst"
 
 # Países de la UE que scrapeamos (cy= parámetro, dominio Accept-Language).
 EU_COUNTRIES: list[tuple[str, str]] = [
-    ("ES", "es-ES"),
-    ("DE", "de-DE"),
-    ("FR", "fr-FR"),
-    ("IT", "it-IT"),
+    # AutoScout24 usa códigos de mercado propios en `cy`, no ISO-3166.
+    # Por ejemplo, España es `E` (no `ES`) y Alemania `D` (no `DE`).
+    ("E", "es-ES"),
+    ("D", "de-DE"),
+    ("F", "fr-FR"),
+    ("I", "it-IT"),
     ("NL", "nl-NL"),
-    ("BE", "nl-BE"),
-    ("AT", "de-AT"),
-    ("LU", "fr-LU"),
+    ("B", "nl-BE"),
+    ("A", "de-AT"),
+    ("L", "fr-LU"),
 ]
 
 _COUNTRY_DELAY_SECONDS = 5.0

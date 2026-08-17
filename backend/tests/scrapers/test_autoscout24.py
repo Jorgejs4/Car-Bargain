@@ -186,3 +186,4 @@ def test_scraper_propagates_403() -> None:
 
 def test_scraper_page_marker_in_build_url() -> None:
     assert "page=2" in AutoScout24Scraper._build_url(2)
+    assert "cy=E" in AutoScout24Scraper._build_url(1, "E")
