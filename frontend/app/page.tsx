@@ -18,7 +18,7 @@ function parseFilters(searchParams: Record<string, string | string[] | undefined
     brand: typeof searchParams.brand === "string" ? searchParams.brand || undefined : undefined,
     model: typeof searchParams.model === "string" ? searchParams.model || undefined : undefined,
     variant: typeof searchParams.variant === "string" ? searchParams.variant || undefined : undefined,
-    status: typeof searchParams.status === "string" ? searchParams.status as ListingFilters["status"] : undefined,
+    status: typeof searchParams.status === "string" ? searchParams.status as ListingFilters["status"] : "ALL",
     price_min: num(searchParams.price_min),
     price_max: num(searchParams.price_max),
     mileage_max: num(searchParams.mileage_max),
@@ -33,10 +33,10 @@ function parseFilters(searchParams: Record<string, string | string[] | undefined
     sort_by: sort_by,
     sort_order: sort_order,
     min_bargain_score:
-      searchParams.min_bargain_score === undefined ? 0 : num(searchParams.min_bargain_score),
+      searchParams.status === undefined ? (searchParams.min_bargain_score === undefined ? 0 : num(searchParams.min_bargain_score)) : undefined,
     min_absolute_margin:
       num(searchParams.min_absolute_margin),
-    only_clean: true,
+    only_clean: searchParams.status === undefined,
     needs_review:
       searchParams.needs_review === "true" ? true : undefined,
   };

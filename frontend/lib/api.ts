@@ -1,4 +1,5 @@
 export type ListingStatus = "ACTIVE" | "STALE" | "REMOVED" | "SOLD";
+export type ListingStatusFilter = ListingStatus | "ALL";
 
 export type ListingEventType =
   | "LISTED"
@@ -169,7 +170,7 @@ export interface Page<T> {
 export interface ListingFilters {
   page?: number;
   page_size?: number;
-  status?: ListingStatus;
+  status?: ListingStatusFilter;
   brand?: string;
   model?: string;
   variant?: string;
