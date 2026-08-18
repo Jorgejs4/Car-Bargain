@@ -214,10 +214,11 @@ async function getJson<T>(path: string, init?: RequestInit | AbortSignal): Promi
   const opts: RequestInit = init instanceof AbortSignal
     ? { signal: init }
     : (init ?? {});
+  const token = typeof window !== "undefined" ? window.localStorage.getItem("carbargains_token") : null;
   const res = await fetch(`${API_BASE_URL}${path}`, {
     ...opts,
     cache: "no-store",
-    headers: { Accept: "application/json", ...(opts.headers ?? {}) },
+    headers: { Accept: "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(opts.headers ?? {}) },
   });
   if (!res.ok) {
     throw new Error(`API ${res.status} en ${path}`);
@@ -304,6 +305,42 @@ export async function fetchModels(
   signal?: AbortSignal
 ): Promise<string[]> {
   return getJson<string[]>(`/api/v1/vehicles/models?brand=${encodeURIComponent(brand)}`, signal);
+}
+
+export interface AuthUser {
+  id: number;
+  email: string;
+  created_at: string;
+}
+
+interface AuthResponse {
+  access_token: string;
+  token_type: string;
+  user: AuthUser;
+}
+
+export async function login(email: string, password: string): Promise<AuthResponse> {
+  const result = await getJson<AuthResponse>("/api/v1/auth/login", {
+    method: "POST", body: JSON.stringify({ email, password }), headers: { "Content-Type": "application/json" },
+  });
+  if (typeof window !== "undefined") window.localStorage.setItem("carbargains_token", result.access_token);
+  return result;
+}
+
+export async function register(email: string, password: string): Promise<AuthResponse> {
+  const result = await getJson<AuthResponse>("/api/v1/auth/register", {
+    method: "POST", body: JSON.stringify({ email, password }), headers: { "Content-Type": "application/json" },
+  });
+  if (typeof window !== "undefined") window.localStorage.setItem("carbargains_token", result.access_token);
+  return result;
+}
+
+export async function fetchMe(): Promise<AuthUser> {
+  return getJson<AuthUser>("/api/v1/auth/me");
+}
+
+export function logout(): void {
+  if (typeof window !== "undefined") window.localStorage.removeItem("carbargains_token");
 }
 
 export async function fetchVariants(
