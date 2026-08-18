@@ -26,6 +26,10 @@ _DESCRIPTION_KEYS = {
     "omschrijving",
 }
 _TITLE_KEYS = {"title", "adtitle", "vehicletitle", "headline", "name"}
+_SELLER_COMMENT_KEYS = {
+    "sellercomment", "sellerremarks", "dealercomment", "dealernotes",
+    "sellertext", "sellercomments", "vendorcomment", "advertisercomment",
+}
 _SELLER_COMMENT_RE = re.compile(
     r'"(?:sellerComment|sellerRemarks|dealerComment|dealerNotes|sellerText)"\s*:\s*"((?:\\.|[^"\\])*)"',
     re.IGNORECASE,
@@ -140,6 +144,26 @@ def _walk_description(value: Any) -> str | None:
     return max(candidates, key=len, default=None)
 
 
+def _walk_seller_comment(value: Any) -> str | None:
+    candidates: list[str] = []
+
+    def walk(node: Any) -> None:
+        if isinstance(node, dict):
+            for key, child in node.items():
+                normalized = re.sub(r"[^a-z]", "", str(key).lower())
+                if normalized in _SELLER_COMMENT_KEYS:
+                    candidate = _clean(child.get("text") if isinstance(child, dict) else child)
+                    if candidate and len(candidate) >= 20:
+                        candidates.append(candidate)
+                walk(child)
+        elif isinstance(node, list):
+            for child in node:
+                walk(child)
+
+    walk(value)
+    return max(candidates, key=len, default=None)
+
+
 def extract_detail_text(raw_html: str) -> dict[str, str | None]:
     """Devuelve ``title`` y ``description`` desde HTML de detalle."""
     parser = _MetaParser()
@@ -147,6 +171,7 @@ def extract_detail_text(raw_html: str) -> dict[str, str | None]:
 
     title = parser.meta.get("og:title") or parser.meta.get("twitter:title") or parser.title
     description = parser.meta.get("og:description") or parser.meta.get("description")
+    seller_comment = None
 
     for script_id, script in parser.scripts:
         candidate: Any = None
@@ -159,6 +184,7 @@ def extract_detail_text(raw_html: str) -> dict[str, str | None]:
         if candidate is not None:
             candidate_description = _walk_description(candidate)
             description = candidate_description or description
+            seller_comment = _walk_seller_comment(candidate) or seller_comment
             if not title:
                 title = _walk_title(candidate)
         if candidate_description:
@@ -177,7 +203,6 @@ def extract_detail_text(raw_html: str) -> dict[str, str | None]:
             except json.JSONDecodeError:
                 description = _clean(match.group(1))
 
-    seller_comment = None
     match = _SELLER_COMMENT_RE.search(raw_html)
     if match:
         try:
