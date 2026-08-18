@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { fetchBrands, fetchModels } from "@/lib/api";
+import { fetchBrands, fetchModels, fetchVariants } from "@/lib/api";
 
 const FUELS = ["diesel", "petrol", "electric", "hybrid", "lpg", "hydrogen"];
 const TRANSMISSIONS = ["automatic", "manual"];
@@ -53,15 +53,21 @@ export function FilterFormInner() {
 
   const [brands, setBrands] = useState<string[]>([]);
   const [models, setModels] = useState<string[]>([]);
+  const [variants, setVariants] = useState<string[]>([]);
 
   useEffect(() => {
     fetchBrands().then(setBrands).catch(() => {});
   }, []);
 
   useEffect(() => {
-    if (!brand) return;
+    if (!brand) { setModels([]); setVariants([]); return; }
     void fetchModels(brand).then(setModels).catch(() => setModels([]));
   }, [brand]);
+
+  useEffect(() => {
+    if (!brand || !model) { setVariants([]); return; }
+    void fetchVariants(brand, model).then(setVariants).catch(() => setVariants([]));
+  }, [brand, model]);
 
   function apply() {
     const params = new URLSearchParams();
@@ -93,7 +99,7 @@ export function FilterFormInner() {
     setBrand(""); setModel(""); setVariant(""); setStatus("ALL"); setPriceMin(""); setPriceMax("");
     setMileageMin(""); setMileageMax(""); setYearMin(""); setYearMax(""); setFuel(""); setTransmission("");
     setSellerType(""); setRegion(""); setSortBy("absolute_margin-desc");
-    setNeedsReview(false); setOnlyBargains(pathname === "/"); setMinAbsMargin(""); setModels([]);
+    setNeedsReview(false); setOnlyBargains(pathname === "/"); setMinAbsMargin(""); setModels([]); setVariants([]);
     router.push(window.location.pathname);
   }
 
@@ -105,21 +111,24 @@ export function FilterFormInner() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
           Marca
-          <select className={selectCls} value={brand} onChange={(e) => { setBrand(e.target.value); setModel(""); }}>
+          <select className={selectCls} value={brand} onChange={(e) => { setBrand(e.target.value); setModel(""); setVariant(""); }}>
             <option value="">Todas</option>
             {brands.map((b) => (<option key={b} value={b}>{b}</option>))}
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
           Modelo
-          <select className={selectCls} value={model} onChange={(e) => setModel(e.target.value)} disabled={!brand || models.length === 0}>
+          <select className={selectCls} value={model} onChange={(e) => { setModel(e.target.value); setVariant(""); }} disabled={!brand || models.length === 0}>
             <option value="">Todos</option>
             {models.map((m) => (<option key={m} value={m}>{m}</option>))}
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
           Versión
-          <input className={inputCls} value={variant} onChange={(e) => setVariant(e.target.value)} placeholder="220 d Coupe" />
+          <select className={selectCls} value={variant} onChange={(e) => setVariant(e.target.value)} disabled={!brand || !model || variants.length === 0}>
+            <option value="">Todas</option>
+            {variants.map((item) => (<option key={item} value={item}>{item}</option>))}
+          </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
           Estado

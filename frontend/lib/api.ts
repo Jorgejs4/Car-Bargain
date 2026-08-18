@@ -305,6 +305,17 @@ export async function fetchModels(
   return getJson<string[]>(`/api/v1/vehicles/models?brand=${encodeURIComponent(brand)}`, signal);
 }
 
+export async function fetchVariants(
+  brand: string,
+  model: string,
+  signal?: AbortSignal
+): Promise<string[]> {
+  return getJson<string[]>(
+    `/api/v1/vehicles/variants?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`,
+    signal,
+  );
+}
+
 export interface AlertPreferences {
   id?: number;
   user_key?: string;

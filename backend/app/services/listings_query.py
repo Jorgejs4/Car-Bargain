@@ -491,3 +491,21 @@ def list_models(session: Session, *, brand: str) -> list[str]:
             .order_by(Vehicle.model.asc())
         ).all()
     )
+
+
+def list_variants(session: Session, *, brand: str, model: str) -> list[str]:
+    """Versiones distintas para una marca y modelo activos."""
+    return session.scalars(
+        select(Vehicle.variant)
+        .join(Listing, Listing.vehicle_id == Vehicle.id)
+        .where(
+            Vehicle.brand == brand,
+            Vehicle.model == model,
+            Listing.status == ListingStatus.ACTIVE,
+            Listing.is_historical.is_(False),
+            Vehicle.variant.is_not(None),
+            Vehicle.variant != "",
+        )
+        .distinct()
+        .order_by(Vehicle.variant.asc())
+    ).all()
