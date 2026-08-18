@@ -43,7 +43,6 @@ from app.services.ingest import ingest_listings
 from app.services.listing_images import ensure_local_images
 from app.services.photo_analysis import aggregate_photo_signals, evaluate_damage_risk
 from app.services.raw_store import save_raw
-from app.services.status import update_listing_statuses
 from app.services.vision import (
     VisionUnavailableError,
     analyze_image_file,
@@ -543,26 +542,12 @@ def analyze_pending_listings(limit: int = 50) -> dict:
 
 @celery_app.task(name="status.update_listings")
 def update_listing_status(source: str | None = None) -> dict:
-    """Marca STALE/REMOVED según `last_seen_at` y los umbrales por fuente."""
-    started = time.monotonic()
-    db = SessionLocal()
-    try:
-        result = update_listing_statuses(db, source=source)
-        db.commit()
-        duration_ms = int((time.monotonic() - started) * 1000)
-        logger.info(
-            "status: revisados=%s stale=%s removed=%s (%s ms)",
-            result.checked,
-            result.stale,
-            result.removed,
-            duration_ms,
-        )
-        return {"source": source, "duration_ms": duration_ms, **asdict(result)}
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
+    """No reconcilia por reloj; requiere una ejecución completa de la fuente.
+
+    Se conserva la tarea para no romper el beat existente. La reconciliación se
+    ejecuta desde el comando local después de un barrido completo verificado.
+    """
+    return {"source": source, "skipped": True, "reason": "requires_complete_source_scan"}
 
 
 @celery_app.task(name="text.reanalyze_source")
