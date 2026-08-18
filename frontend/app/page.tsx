@@ -17,6 +17,8 @@ function parseFilters(searchParams: Record<string, string | string[] | undefined
     page: num(searchParams.page) ?? 1,
     brand: typeof searchParams.brand === "string" ? searchParams.brand || undefined : undefined,
     model: typeof searchParams.model === "string" ? searchParams.model || undefined : undefined,
+    variant: typeof searchParams.variant === "string" ? searchParams.variant || undefined : undefined,
+    status: typeof searchParams.status === "string" ? searchParams.status as ListingFilters["status"] : undefined,
     price_min: num(searchParams.price_min),
     price_max: num(searchParams.price_max),
     mileage_max: num(searchParams.mileage_max),

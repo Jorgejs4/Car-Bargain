@@ -37,7 +37,7 @@ from app.models import (
 from app.schemas.photo_analysis import PhotoAnalysisResult
 from app.services.alerts import evaluate_alerts
 from app.services.deal_filters import is_clean_deal
-from app.services.detail_text import fetch_listing_detail
+from app.services.detail_text import fetch_listing_detail, translate_to_spanish
 from app.services.email_sender import send_deal_email
 from app.services.ingest import ingest_listings
 from app.services.listing_images import ensure_local_images
@@ -252,14 +252,18 @@ def enrich_listing_text(listing_id: int) -> dict:
 
         detail = fetch_listing_detail(listing.source, listing.url)
         title = detail.get("title") or latest.title
-        description = detail.get("description") or latest.description
-        from scrapers.base.condition import extract_condition_signals
-
+        original_description = (
+            detail.get("description")
+            or (latest.raw_data or {}).get("original_description")
+            or latest.description
+        )
         lang = {"ES": "es", "DE": "de", "AT": "de", "FR": "fr", "LU": "fr", "IT": "it", "NL": "nl", "BE": "nl"}.get(
             (listing.country or "").upper(), "en"
         )
+        description = translate_to_spanish(original_description, lang)
+        from scrapers.base.condition import extract_condition_signals
         signals = extract_condition_signals(
-            " ".join(part for part in (title, description) if part),
+            " ".join(part for part in (title, original_description, description) if part),
             lang=lang,
             source="listing_detail_lexicon",
             title=title,
@@ -282,7 +286,12 @@ def enrich_listing_text(listing_id: int) -> dict:
                     seller_type=latest.seller_type,
                     location=latest.location,
                     condition_signals=signals,
-                    raw_data={**(latest.raw_data or {}), "detail_enriched": True},
+                    raw_data={
+                        **(latest.raw_data or {}),
+                        "detail_enriched": True,
+                        "original_description": original_description,
+                        "description_language": lang,
+                    },
                 )
             )
             db.add(
@@ -554,6 +563,25 @@ def update_listing_status(source: str | None = None) -> dict:
         raise
     finally:
         db.close()
+
+
+@celery_app.task(name="text.reanalyze_source")
+def reanalyze_source_text(source: str = "coches_net", limit: int = 10000) -> dict:
+    """Reencola el enriquecimiento de todos los anuncios live de una fuente."""
+    db = SessionLocal()
+    try:
+        ids = db.scalars(
+            select(Listing.id).where(
+                Listing.source == source,
+                Listing.status.in_([ListingStatus.ACTIVE, ListingStatus.STALE]),
+                Listing.is_historical.is_(False),
+            ).limit(limit)
+        ).all()
+    finally:
+        db.close()
+    for listing_id in ids:
+        enrich_listing_text.delay(listing_id)
+    return {"source": source, "enqueued": len(ids)}
 
 
 @celery_app.task(name="score.bargains")

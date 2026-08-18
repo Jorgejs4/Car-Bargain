@@ -48,6 +48,7 @@ def _build_conditions(
     *,
     brand=None,
     model=None,
+    variant=None,
     country=None,
     price_min=None,
     price_max=None,
@@ -74,6 +75,8 @@ def _build_conditions(
         conditions.append(Vehicle.brand == brand)
     if model:
         conditions.append(Vehicle.model.ilike(f"%{model}%"))
+    if variant:
+        conditions.append(Vehicle.variant.ilike(f"%{variant}%"))
     if country:
         conditions.append(Listing.country == country.upper())
     if price_min is not None:

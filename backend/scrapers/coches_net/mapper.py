@@ -15,7 +15,7 @@ coches.net no expone transmisión en el SRP → `transmission=None` (unknown);
 
 from datetime import datetime, timezone
 
-from scrapers.base.detail import extract_record_description
+from scrapers.base.detail import extract_record_description, extract_variant_from_title
 from scrapers.base.interfaces import BaseMapper
 from scrapers.base.models import NormalizedListing
 
@@ -84,7 +84,7 @@ class CochesNetMapper(BaseMapper):
             brand=brand,
             model=model,
             generation=None,
-            variant=None,
+            variant=extract_variant_from_title(title, brand, model),
             year=record.get("year") or None,
             mileage=record.get("km") or None,
             fuel=_lookup(record.get("fuelType"), _FUEL_MAP),
