@@ -20,6 +20,12 @@ TEST_DB_URL = os.environ["DATABASE_URL"]
 TEST_DB_NAME = make_url(TEST_DB_URL).database or "carbargains_test"
 
 
+def _drop_migration_only_tables(engine):
+    """Elimina tablas creadas por migraciones que no tienen modelo ORM."""
+    with engine.begin() as conn:
+        conn.execute(text("DROP TABLE IF EXISTS deal_scores, price_predictions CASCADE"))
+
+
 @pytest.fixture(scope="session", autouse=True)
 def _test_database():
     # El servicio de CI solo garantiza la base estándar `postgres`; no asumir
@@ -35,9 +41,11 @@ def _test_database():
     admin.dispose()
 
     engine = create_engine(TEST_DB_URL)
+    _drop_migration_only_tables(engine)
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     yield
+    _drop_migration_only_tables(engine)
     Base.metadata.drop_all(engine)
     engine.dispose()
 

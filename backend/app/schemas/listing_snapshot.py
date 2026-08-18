@@ -14,6 +14,7 @@ class ListingSnapshotRead(BaseModel):
     mileage: int | None
     title: str | None
     description: str | None
+    seller_comment: str | None
     seller_type: str | None
     location: str | None
     condition_signals: dict | None

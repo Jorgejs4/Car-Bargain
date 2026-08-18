@@ -32,6 +32,7 @@ class ListingSnapshot(Base):
 
     title: Mapped[str | None] = mapped_column(Text)
     description: Mapped[str | None] = mapped_column(Text)
+    seller_comment: Mapped[str | None] = mapped_column(Text)
 
     seller_type: Mapped[str | None] = mapped_column(String(30))
 

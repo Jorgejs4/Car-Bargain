@@ -43,7 +43,6 @@ from app.services.ingest import ingest_listings
 from app.services.listing_images import ensure_local_images
 from app.services.photo_analysis import aggregate_photo_signals, evaluate_damage_risk
 from app.services.raw_store import save_raw
-from app.services.status import update_listing_statuses
 from app.services.vision import (
     VisionUnavailableError,
     analyze_image_file,
@@ -257,13 +256,15 @@ def enrich_listing_text(listing_id: int) -> dict:
             or (latest.raw_data or {}).get("original_description")
             or latest.description
         )
+        original_comment = detail.get("seller_comment") or latest.seller_comment
         lang = {"ES": "es", "DE": "de", "AT": "de", "FR": "fr", "LU": "fr", "IT": "it", "NL": "nl", "BE": "nl"}.get(
             (listing.country or "").upper(), "en"
         )
         description = translate_to_spanish(original_description, lang)
+        seller_comment = translate_to_spanish(original_comment, lang)
         from scrapers.base.condition import extract_condition_signals
         signals = extract_condition_signals(
-            " ".join(part for part in (title, original_description, description) if part),
+            " ".join(part for part in (title, original_description, original_comment, description, seller_comment) if part),
             lang=lang,
             source="listing_detail_lexicon",
             title=title,
@@ -273,7 +274,7 @@ def enrich_listing_text(listing_id: int) -> dict:
         signals["detail_fetch_status"] = "ok" if description else "not_found"
         listing.text_signals = signals
 
-        if description and description != latest.description:
+        if description != latest.description or seller_comment != latest.seller_comment or title != latest.title:
             db.add(
                 ListingSnapshot(
                     listing_id=listing.id,
@@ -283,6 +284,7 @@ def enrich_listing_text(listing_id: int) -> dict:
                     mileage=latest.mileage,
                     title=title,
                     description=description,
+                    seller_comment=seller_comment,
                     seller_type=latest.seller_type,
                     location=latest.location,
                     condition_signals=signals,
@@ -290,6 +292,7 @@ def enrich_listing_text(listing_id: int) -> dict:
                         **(latest.raw_data or {}),
                         "detail_enriched": True,
                         "original_description": original_description,
+                        "original_seller_comment": original_comment,
                         "description_language": lang,
                     },
                 )
@@ -543,26 +546,12 @@ def analyze_pending_listings(limit: int = 50) -> dict:
 
 @celery_app.task(name="status.update_listings")
 def update_listing_status(source: str | None = None) -> dict:
-    """Marca STALE/REMOVED según `last_seen_at` y los umbrales por fuente."""
-    started = time.monotonic()
-    db = SessionLocal()
-    try:
-        result = update_listing_statuses(db, source=source)
-        db.commit()
-        duration_ms = int((time.monotonic() - started) * 1000)
-        logger.info(
-            "status: revisados=%s stale=%s removed=%s (%s ms)",
-            result.checked,
-            result.stale,
-            result.removed,
-            duration_ms,
-        )
-        return {"source": source, "duration_ms": duration_ms, **asdict(result)}
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
+    """No reconcilia por reloj; requiere una ejecución completa de la fuente.
+
+    Se conserva la tarea para no romper el beat existente. La reconciliación se
+    ejecuta desde el comando local después de un barrido completo verificado.
+    """
+    return {"source": source, "skipped": True, "reason": "requires_complete_source_scan"}
 
 
 @celery_app.task(name="text.reanalyze_source")

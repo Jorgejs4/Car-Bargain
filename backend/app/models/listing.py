@@ -7,6 +7,7 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     ForeignKey,
+    Integer,
     Numeric,
     String,
     Text,
@@ -57,6 +58,10 @@ class Listing(Base):
 
     first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Evidencia de ausencias únicamente de reconciliaciones completas de la fuente.
+    consecutive_misses: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
+    first_missed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     # True si el anuncio proviene de una fuente histórica (p. ej. Wayback Machine),
     # no del scrape en vivo. Los históricos nunca aparecen en el panel de activos.

@@ -8,7 +8,7 @@ Regla del dominio: `REMOVED != SOLD`; una desaparición de la fuente solo marca
 import json
 import logging
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -43,6 +43,8 @@ def thresholds_for(source: str | None) -> dict[str, int]:
     effective = {
         "stale_after_hours": settings.status_stale_after_hours,
         "removed_after_hours": settings.status_removed_after_hours,
+        "stale_after_misses": settings.status_stale_after_misses,
+        "removed_after_misses": settings.status_removed_after_misses,
     }
     if source:
         effective.update(_per_source_thresholds().get(source, {}))
@@ -50,18 +52,24 @@ def thresholds_for(source: str | None) -> dict[str, int]:
 
 
 def update_listing_statuses(
-    session: Session, *, source: str | None = None, now: datetime | None = None
+    session: Session,
+    *,
+    source: str | None = None,
+    seen_source_listing_ids: set[str] | None = None,
+    run_complete: bool = False,
+    now: datetime | None = None,
 ) -> StatusResult:
-    """Marca STALE/REMOVED según `last_seen_at`. Nunca toca SOLD ni vuelve a ACTIVE.
+    """Reconcilia estados solo tras una ejecución completa y fiable.
 
-    Ignora los listings históricos (Wayback): su ausencia es el estado natural de
-    archivo y no deben cambiar de estado automáticamente.
+    Las ejecuciones parciales, bloqueadas o fallidas no modifican estados. La
+    ausencia se acumula por ejecución completa, no por tiempo desde `last_seen_at`.
     """
     now = now or datetime.now(timezone.utc)
     result = StatusResult()
+    if not run_complete or seen_source_listing_ids is None:
+        logger.info("Reconciliación omitida: no hay evidencia de ejecución completa")
+        return result
     thresholds = thresholds_for(source)
-    stale_delta = timedelta(hours=thresholds["stale_after_hours"])
-    removed_delta = timedelta(hours=thresholds["removed_after_hours"])
 
     query = select(Listing).where(
         Listing.status.in_([ListingStatus.ACTIVE, ListingStatus.STALE]),
@@ -71,13 +79,28 @@ def update_listing_statuses(
         query = query.where(Listing.source == source)
 
     for listing in session.scalars(query):
-        if listing.last_seen_at is None:
-            continue
         result.checked += 1
-        age = now - listing.last_seen_at
-        if age >= removed_delta:
+        if listing.source_listing_id in seen_source_listing_ids:
+            listing.consecutive_misses = 0
+            listing.first_missed_at = None
+            listing.last_verified_at = now
+            if listing.status == ListingStatus.STALE:
+                old = listing.status
+                listing.status = ListingStatus.ACTIVE
+                session.add(ListingEvent(
+                    listing_id=listing.id,
+                    event_type=ListingEventType.REAPPEARED,
+                    event_timestamp=now,
+                    old_value={"status": old.value},
+                    new_value={"status": ListingStatus.ACTIVE.value},
+                ))
+            continue
+
+        listing.consecutive_misses += 1
+        listing.first_missed_at = listing.first_missed_at or now
+        if listing.consecutive_misses >= thresholds["removed_after_misses"]:
             target = ListingStatus.REMOVED
-        elif age >= stale_delta and listing.status == ListingStatus.ACTIVE:
+        elif listing.consecutive_misses >= thresholds["stale_after_misses"] and listing.status == ListingStatus.ACTIVE:
             target = ListingStatus.STALE
         else:
             continue

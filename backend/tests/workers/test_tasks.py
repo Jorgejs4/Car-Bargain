@@ -298,50 +298,49 @@ def test_download_listing_images_reports_failures(monkeypatch, tmp_path) -> None
 
 
 def test_update_listing_status_task() -> None:
-    from datetime import datetime, timedelta, timezone
-
-    from app.db.session import engine
-    from app.models import Listing, ListingEvent, ListingStatus
     from workers import tasks
 
-    now = datetime.now(timezone.utc)
-    old = now - timedelta(hours=60)
-    stale = now - timedelta(hours=12)
-    fresh = now - timedelta(hours=1)
+    result = tasks.update_listing_status(source="mobile_de")
 
+    assert result == {
+        "source": "mobile_de",
+        "skipped": True,
+        "reason": "requires_complete_source_scan",
+    }
+
+
+def test_update_listing_statuses_requires_complete_scan() -> None:
+    from datetime import datetime, timezone
+
+    from app.db.session import engine
+    from app.models import Listing, ListingStatus
+    from app.services.status import update_listing_statuses
+
+    now = datetime.now(timezone.utc)
     with Session(engine) as db:
-        for sid, last_seen in (("stale", stale), ("removed", old), ("fresh", fresh)):
+        for sid in ("stale", "removed", "fresh"):
             db.add(
                 Listing(
                     source="mobile_de",
                     source_listing_id=sid,
                     first_seen_at=now,
-                    last_seen_at=last_seen,
                     status=ListingStatus.ACTIVE,
                 )
             )
         db.commit()
 
-    result = tasks.update_listing_status(source="mobile_de")
-
-    assert result["checked"] == 3
-    assert result["stale"] == 1
-    assert result["removed"] == 1
-
-    from sqlalchemy import select
-
     with Session(engine) as db:
-        statuses = {
-            row.source_listing_id: row.status
-            for row in db.scalars(select(Listing).where(Listing.source == "mobile_de"))
-        }
-        assert statuses["stale"] == "STALE"
-        assert statuses["removed"] == "REMOVED"
-        assert statuses["fresh"] == "ACTIVE"
+        result = update_listing_statuses(
+            db,
+            source="mobile_de",
+            seen_source_listing_ids={"fresh"},
+            run_complete=True,
+        )
+        db.commit()
 
-        event_types = set(db.scalars(select(ListingEvent.event_type)))
-        assert "REMOVED" in event_types
-        assert "STATUS_CHANGED" in event_types
+    assert result.checked == 3
+    assert result.stale == 0
+    assert result.removed == 0
 
 
 class _FakeAnalyzer:

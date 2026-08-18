@@ -38,6 +38,7 @@ class NormalizedListing(BaseModel):
 
     title: str
     description: str | None = None
+    seller_comment: str | None = None
 
     image_urls: list[str] = Field(default_factory=list)
 
