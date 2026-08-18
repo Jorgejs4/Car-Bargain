@@ -60,13 +60,15 @@ export function FilterFormInner() {
   }, []);
 
   useEffect(() => {
-    if (!brand) { setModels([]); setVariants([]); return; }
-    void fetchModels(brand).then(setModels).catch(() => setModels([]));
+    if (brand) {
+      void fetchModels(brand).then(setModels).catch(() => setModels([]));
+    }
   }, [brand]);
 
   useEffect(() => {
-    if (!brand || !model) { setVariants([]); return; }
-    void fetchVariants(brand, model).then(setVariants).catch(() => setVariants([]));
+    if (brand && model) {
+      void fetchVariants(brand, model).then(setVariants).catch(() => setVariants([]));
+    }
   }, [brand, model]);
 
   function apply() {
