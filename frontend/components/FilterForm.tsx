@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { fetchBrands, fetchModels, fetchVariants } from "@/lib/api";
+import { fetchBrands, fetchModels, fetchVariants, saveSearch } from "@/lib/api";
 
 const FUELS = ["diesel", "petrol", "electric", "hybrid", "lpg", "hydrogen"];
 const TRANSMISSIONS = ["automatic", "manual"];
@@ -103,6 +103,19 @@ export function FilterFormInner() {
     setSellerType(""); setRegion(""); setSortBy("absolute_margin-desc");
     setNeedsReview(false); setOnlyBargains(pathname === "/"); setMinAbsMargin(""); setModels([]); setVariants([]);
     router.push(window.location.pathname);
+  }
+
+  async function saveCurrentSearch() {
+    const name = window.prompt("Nombre de la búsqueda");
+    if (!name?.trim()) return;
+    const filters: Record<string, string | boolean> = {
+      brand, model, variant, status, price_min: priceMin, price_max: priceMax,
+      year_min: yearMin, year_max: yearMax, mileage_min: mileageMin, mileage_max: mileageMax,
+      fuel, transmission, seller_type: sellerType, region, sort: sortBy,
+      needs_review: needsReview, only_bargains: onlyBargains, min_absolute_margin: minAbsMargin,
+    };
+    await saveSearch(name.trim(), filters);
+    window.alert("Búsqueda guardada");
   }
 
   const inputCls = "rounded-lg border border-neutral-300 bg-white px-2.5 py-1.5 text-sm outline-none focus:border-blue-500 dark:border-neutral-700 dark:bg-neutral-800";
@@ -212,6 +225,9 @@ export function FilterFormInner() {
         </button>
         <button onClick={reset} className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800">
           Limpiar
+        </button>
+        <button onClick={saveCurrentSearch} className="rounded-lg border border-amber-300 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-50 dark:border-amber-800 dark:text-amber-300 dark:hover:bg-amber-950">
+          Guardar búsqueda
         </button>
       </div>
     </div>

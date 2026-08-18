@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ListingListItem } from "@/lib/api";
 import { DamageBadge, HistoricalBadge, ReviewBadge, StatusBadge } from "@/components/Badge";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 function formatPrice(price: number | null, currency: string | null): string {
   if (price == null) return "—";
@@ -20,7 +21,7 @@ function canonicalTitle(listing: ListingListItem): string {
   return `${name} · ${condition} · ${price}`;
 }
 
-export function ListingCard({ listing }: { listing: ListingListItem }) {
+export function ListingCard({ listing, favorite = false }: { listing: ListingListItem; favorite?: boolean }) {
   const title = canonicalTitle(listing);
   const hasDamage =
     (listing.photo_signals?.has_visible_damage as boolean | undefined) ??
@@ -36,10 +37,9 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
     ?? [];
 
   return (
-    <Link
-      href={`/listings/${listing.id}`}
-      className="group flex flex-col rounded-xl border border-neutral-200 bg-white p-4 transition-colors hover:border-blue-400 dark:border-neutral-800 dark:bg-neutral-900"
-    >
+    <div className="group relative flex flex-col rounded-xl border border-neutral-200 bg-white p-4 transition-colors hover:border-blue-400 dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="absolute right-3 top-3 z-10"><FavoriteButton listingId={listing.id} initial={favorite} /></div>
+      <Link href={`/listings/${listing.id}`}>
       {listing.image_urls?.[0] && (
         <img src={listing.image_urls[0]} alt={title} className="mb-3 h-44 w-full rounded-lg object-cover" loading="lazy" />
       )}
@@ -111,6 +111,7 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
         {hasDamage && analyzedImages > 0 && <DamageBadge />}
         {listing.needs_review && <ReviewBadge />}
       </div>
-    </Link>
+      </Link>
+    </div>
   );
 }

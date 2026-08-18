@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { NotificationBell } from "@/components/NotificationBell";
+import { AuthStatus } from "@/components/AuthStatus";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +47,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <Link href="/health" className="hover:text-neutral-900 dark:hover:text-neutral-100">
                 Salud
               </Link>
+              <Link href="/favoritos" className="hover:text-neutral-900 dark:hover:text-neutral-100">
+                Favoritos
+              </Link>
+              <Link href="/busquedas-guardadas" className="hover:text-neutral-900 dark:hover:text-neutral-100">
+                Búsquedas
+              </Link>
+              <AuthStatus />
               <Link href="/worker" className="hover:text-neutral-900 dark:hover:text-neutral-100">
                 Worker
               </Link>

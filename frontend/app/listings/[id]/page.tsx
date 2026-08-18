@@ -5,6 +5,7 @@ import { DamageBadge, ReviewBadge, StatusBadge } from "@/components/Badge";
 import { PriceChart } from "@/components/PriceChart";
 import { ImageCarousel } from "@/components/ImageCarousel";
 import { StatusControl } from "@/components/StatusControl";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 function fmtMoney(v: number | null, currency: string | null): string {
   if (v == null) return "—";
@@ -112,6 +113,7 @@ export default async function ListingPage({
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <FavoriteButton listingId={listing.id} />
           <StatusControl id={listing.id} initial={listing.status} />
           <StatusBadge status={listing.status} />
           {hasDamage && <DamageBadge />}

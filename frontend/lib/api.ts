@@ -214,10 +214,11 @@ async function getJson<T>(path: string, init?: RequestInit | AbortSignal): Promi
   const opts: RequestInit = init instanceof AbortSignal
     ? { signal: init }
     : (init ?? {});
+  const token = typeof window !== "undefined" ? window.localStorage.getItem("carbargains_token") : null;
   const res = await fetch(`${API_BASE_URL}${path}`, {
     ...opts,
     cache: "no-store",
-    headers: { Accept: "application/json", ...(opts.headers ?? {}) },
+    headers: { Accept: "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(opts.headers ?? {}) },
   });
   if (!res.ok) {
     throw new Error(`API ${res.status} en ${path}`);
@@ -306,6 +307,42 @@ export async function fetchModels(
   return getJson<string[]>(`/api/v1/vehicles/models?brand=${encodeURIComponent(brand)}`, signal);
 }
 
+export interface AuthUser {
+  id: number;
+  email: string;
+  created_at: string;
+}
+
+interface AuthResponse {
+  access_token: string;
+  token_type: string;
+  user: AuthUser;
+}
+
+export async function login(email: string, password: string): Promise<AuthResponse> {
+  const result = await getJson<AuthResponse>("/api/v1/auth/login", {
+    method: "POST", body: JSON.stringify({ email, password }), headers: { "Content-Type": "application/json" },
+  });
+  if (typeof window !== "undefined") window.localStorage.setItem("carbargains_token", result.access_token);
+  return result;
+}
+
+export async function register(email: string, password: string): Promise<AuthResponse> {
+  const result = await getJson<AuthResponse>("/api/v1/auth/register", {
+    method: "POST", body: JSON.stringify({ email, password }), headers: { "Content-Type": "application/json" },
+  });
+  if (typeof window !== "undefined") window.localStorage.setItem("carbargains_token", result.access_token);
+  return result;
+}
+
+export async function fetchMe(): Promise<AuthUser> {
+  return getJson<AuthUser>("/api/v1/auth/me");
+}
+
+export function logout(): void {
+  if (typeof window !== "undefined") window.localStorage.removeItem("carbargains_token");
+}
+
 export async function fetchVariants(
   brand: string,
   model: string,
@@ -367,4 +404,49 @@ export async function fetchNotifications(unread = false): Promise<NotificationIt
 
 export async function markNotificationRead(id: number): Promise<void> {
   await getJson(`/api/v1/users/me/notifications/${id}/read`, { method: "POST" });
+}
+
+export interface FavoriteItem {
+  id: number;
+  listing_id: number;
+  created_at: string;
+}
+
+export interface SavedSearchItem {
+  id: number;
+  name: string;
+  filters: Record<string, string | number | boolean>;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function fetchFavorites(): Promise<FavoriteItem[]> {
+  return getJson<FavoriteItem[]>("/api/v1/users/me/favorites");
+}
+
+export async function addFavorite(listingId: number): Promise<FavoriteItem> {
+  return getJson<FavoriteItem>(`/api/v1/users/me/favorites/${listingId}`, { method: "POST" });
+}
+
+export async function removeFavorite(listingId: number): Promise<void> {
+  await getJson(`/api/v1/users/me/favorites/${listingId}`, { method: "DELETE" });
+}
+
+export async function fetchSavedSearches(): Promise<SavedSearchItem[]> {
+  return getJson<SavedSearchItem[]>("/api/v1/users/me/saved-searches");
+}
+
+export async function saveSearch(
+  name: string,
+  filters: Record<string, string | number | boolean>,
+): Promise<SavedSearchItem> {
+  return getJson<SavedSearchItem>("/api/v1/users/me/saved-searches", {
+    method: "POST",
+    body: JSON.stringify({ name, filters }),
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+export async function deleteSavedSearch(id: number): Promise<void> {
+  await getJson(`/api/v1/users/me/saved-searches/${id}`, { method: "DELETE" });
 }
