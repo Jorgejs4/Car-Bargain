@@ -310,16 +310,20 @@ def test_update_listing_status_task() -> None:
 
 
 def test_update_listing_statuses_requires_complete_scan() -> None:
+    from datetime import datetime, timezone
+
     from app.db.session import engine
     from app.models import Listing, ListingStatus
     from app.services.status import update_listing_statuses
 
+    now = datetime.now(timezone.utc)
     with Session(engine) as db:
         for sid in ("stale", "removed", "fresh"):
             db.add(
                 Listing(
                     source="mobile_de",
                     source_listing_id=sid,
+                    first_seen_at=now,
                     status=ListingStatus.ACTIVE,
                 )
             )
