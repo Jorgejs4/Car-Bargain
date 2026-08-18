@@ -23,6 +23,15 @@ def list_models(
     return listings_query.list_models(db, brand=brand)
 
 
+@router.get("/variants", summary="Lista de versiones de una marca y modelo")
+def list_variants(
+    db: Session = Depends(get_db),
+    brand: str = Query(..., description="Marca exacta"),
+    model: str = Query(..., description="Modelo exacto"),
+) -> list[str]:
+    return listings_query.list_variants(db, brand=brand, model=model)
+
+
 @router.get("/{vehicle_id}", response_model=VehicleDetail, summary="Detalle de un vehículo")
 def get_vehicle(vehicle_id: int, db: Session = Depends(get_db)) -> VehicleDetail:
     detail = listings_query.vehicle_detail(db, vehicle_id)
