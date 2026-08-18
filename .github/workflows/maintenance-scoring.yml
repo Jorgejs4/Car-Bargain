@@ -1,0 +1,26 @@
+name: Mantenimiento valoración
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7,37 * * * *"
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Encolar valoración e importación
+        env:
+          API_URL: ${{ secrets.CARBARGAINS_API_URL }}
+          INTERNAL_KEY: ${{ secrets.CARBARGAINS_INTERNAL_API_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$API_URL"
+          test -n "$INTERNAL_KEY"
+          for task in score import cross-border alerts; do
+            curl --location --fail-with-body --silent --show-error \
+              -X POST "$API_URL/internal/maintenance/$task" \
+              -H "X-Internal-Key: $INTERNAL_KEY"
+            echo
+          done

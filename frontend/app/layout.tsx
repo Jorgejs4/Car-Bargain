@@ -54,6 +54,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 Búsquedas
               </Link>
               <AuthStatus />
+              <Link href="/worker" className="hover:text-neutral-900 dark:hover:text-neutral-100">
+                Worker
+              </Link>
               <NotificationBell />
             </nav>
           </div>

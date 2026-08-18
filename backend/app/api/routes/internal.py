@@ -16,6 +16,17 @@ class ScraperTrigger(BaseModel):
     enqueue_image_downloads: bool = True
 
 
+MAINTENANCE_TASKS = {
+    "status": "status.update_listings",
+    "images": "images.analyze_pending",
+    "text": "text.enrich_pending",
+    "score": "score.bargains",
+    "import": "import.costs",
+    "cross-border": "score.cross_border",
+    "alerts": "alerts.evaluate",
+}
+
+
 def _trigger(task_name: str, payload: ScraperTrigger | None) -> dict:
     params = payload.model_dump() if payload else ScraperTrigger().model_dump()
     result = celery_app.send_task(task_name, kwargs=params)
@@ -68,3 +79,56 @@ def task_status(task_id: str) -> dict:
     elif result.failed():
         response["error"] = str(result.result)
     return response
+
+
+@router.post("/maintenance/{task_name}", dependencies=[Depends(require_internal_key)])
+def trigger_maintenance(task_name: str) -> dict:
+    celery_name = MAINTENANCE_TASKS.get(task_name)
+    if celery_name is None:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Tarea de mantenimiento desconocida")
+    result = celery_app.send_task(celery_name)
+    return {"status": "enqueued", "task": task_name, "task_id": result.id}
+
+
+@router.get("/worker-status")
+def worker_status() -> dict:
+    """Resumen público de solo lectura del estado del Worker.
+
+    No expone argumentos, resultados ni credenciales: únicamente el estado
+    operativo y el número de tareas que están ejecutándose o esperando en la
+    ventana de prefetch de Celery.
+    """
+    inspector = celery_app.control.inspect(timeout=2)
+    ping = inspector.ping() or {}
+    active_by_worker = inspector.active() or {}
+    reserved_by_worker = inspector.reserved() or {}
+    scheduled_by_worker = inspector.scheduled() or {}
+    stats_by_worker = inspector.stats() or {}
+
+    def task_counts(tasks_by_worker: dict) -> dict[str, int]:
+        counts: dict[str, int] = {}
+        for tasks in tasks_by_worker.values():
+            for task in tasks or []:
+                name = task.get("name") or task.get("type") or "desconocida"
+                counts[name] = counts.get(name, 0) + 1
+        return dict(sorted(counts.items()))
+
+    active = task_counts(active_by_worker)
+    queued = task_counts(reserved_by_worker)
+    scheduled = task_counts(scheduled_by_worker)
+    return {
+        "online": bool(ping),
+        "workers": len(ping),
+        "active_count": sum(active.values()),
+        "queued_count": sum(queued.values()),
+        "scheduled_count": sum(scheduled.values()),
+        "active": active,
+        "queued": queued,
+        "scheduled": scheduled,
+        "concurrency": sum(
+            int(worker.get("pool", {}).get("max-concurrency", 0) or 0)
+            for worker in stats_by_worker.values()
+        ),
+        "note": "queued refleja las tareas reservadas por Celery (prefetch), no todo el contenido del broker.",
+    }
