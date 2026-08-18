@@ -37,3 +37,28 @@ def fetch_listing_detail(source: str, url: str) -> dict[str, str | None]:
         response = client.get(url)
         response.raise_for_status()
         return extract_detail_text(response.text)
+
+
+def translate_to_spanish(text: str | None, source_lang: str) -> str | None:
+    """Traducción gratuita y best-effort para descripciones de portales europeos.
+
+    Si el servicio no está disponible se conserva el original; no se pierde nunca
+    información del anuncio por un fallo de traducción.
+    """
+    if not text or source_lang == "es":
+        return text
+    chunks = [chunk.strip() for chunk in text.split("\n") if chunk.strip()]
+    translated: list[str] = []
+    try:
+        with httpx.Client(timeout=12.0) as client:
+            for chunk in chunks:
+                response = client.get(
+                    "https://api.mymemory.translated.net/get",
+                    params={"q": chunk[:450], "langpair": f"{source_lang}|es"},
+                )
+                response.raise_for_status()
+                value = response.json().get("responseData", {}).get("translatedText")
+                translated.append(value if isinstance(value, str) and value.strip() else chunk)
+    except (httpx.HTTPError, ValueError, TypeError):
+        return text
+    return "\n\n".join(translated) if translated else text

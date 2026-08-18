@@ -20,8 +20,8 @@ export interface ListingListItem {
   is_historical: boolean;
   brand: string | null;
   model: string | null;
-  generation: string | null;
   variant: string | null;
+  generation: string | null;
   year: number | null;
   fuel: string | null;
   transmission: string | null;
@@ -172,6 +172,7 @@ export interface ListingFilters {
   status?: ListingStatus;
   brand?: string;
   model?: string;
+  variant?: string;
   country?: string;
   region?: string;
   price_min?: number;

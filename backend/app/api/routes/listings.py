@@ -23,6 +23,7 @@ router = APIRouter(prefix="/api/v1/listings", tags=["listings"])
 def listing_filters(
     brand: str | None = Query(None, description="Marca exacta (ej. BMW)"),
     model: str | None = Query(None, description="Modelo, coincidencia parcial (ej. 320d)"),
+    variant: str | None = Query(None, description="Versión, coincidencia parcial"),
     country: str | None = Query(None, description="País (ISO 2, ej. DE)"),
     price_min: Decimal | None = Query(None, description="Precio mínimo (último snapshot)"),
     price_max: Decimal | None = Query(None, description="Precio máximo (último snapshot)"),
@@ -46,6 +47,7 @@ def listing_filters(
     return {
         "brand": brand,
         "model": model,
+        "variant": variant,
         "country": country,
         "price_min": price_min,
         "price_max": price_max,

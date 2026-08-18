@@ -49,6 +49,16 @@ def trigger_coches_net(payload: ScraperTrigger | None = None) -> dict:
     return _trigger("scrape.coches_net", payload)
 
 
+@router.post(
+    "/text/reanalyze/{source}",
+    summary="Reanaliza y traduce las descripciones de una fuente",
+    dependencies=[Depends(require_internal_key)],
+)
+def trigger_text_reanalysis(source: str) -> dict:
+    result = celery_app.send_task("text.reanalyze_source", kwargs={"source": source})
+    return {"status": "enqueued", "task_id": result.id, "source": source}
+
+
 @router.get("/tasks/{task_id}", dependencies=[Depends(require_internal_key)])
 def task_status(task_id: str) -> dict:
     result = AsyncResult(task_id, app=celery_app)

@@ -32,6 +32,8 @@ export function FilterFormInner() {
 
   const [brand, setBrand] = useState(searchParams.get("brand") ?? "");
   const [model, setModel] = useState(searchParams.get("model") ?? "");
+  const [variant, setVariant] = useState(searchParams.get("variant") ?? "");
+  const [status, setStatus] = useState(searchParams.get("status") ?? "");
   const [priceMin, setPriceMin] = useState(searchParams.get("price_min") ?? "");
   const [priceMax, setPriceMax] = useState(searchParams.get("price_max") ?? "");
   const [mileageMax, setMileageMax] = useState(searchParams.get("mileage_max") ?? "");
@@ -64,6 +66,8 @@ export function FilterFormInner() {
     const set = (key: string, value: string) => { if (value) params.set(key, value); };
     set("brand", brand);
     set("model", model);
+    set("variant", variant);
+    set("status", status);
     set("price_min", priceMin);
     set("price_max", priceMax);
     set("mileage_max", mileageMax);
@@ -82,7 +86,7 @@ export function FilterFormInner() {
   }
 
   function reset() {
-    setBrand(""); setModel(""); setPriceMin(""); setPriceMax("");
+    setBrand(""); setModel(""); setVariant(""); setStatus(""); setPriceMin(""); setPriceMax("");
     setMileageMax(""); setYearMin(""); setFuel(""); setTransmission("");
     setSellerType(""); setRegion(""); setSortBy("cross_border-desc");
     setNeedsReview(false); setOnlyBargains(pathname === "/"); setMinAbsMargin(""); setModels([]);
@@ -100,6 +104,16 @@ export function FilterFormInner() {
           <select className={selectCls} value={brand} onChange={(e) => { setBrand(e.target.value); setModel(""); }}>
             <option value="">Todas</option>
             {brands.map((b) => (<option key={b} value={b}>{b}</option>))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
+          Versión
+          <input className={inputCls} value={variant} onChange={(e) => setVariant(e.target.value)} placeholder="220 d Coupe" />
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
+          Estado
+          <select className={selectCls} value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="">Activos</option><option value="ACTIVE">Activo</option><option value="STALE">Stale</option><option value="REMOVED">Retirado</option><option value="SOLD">Vendido</option>
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">

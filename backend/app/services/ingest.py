@@ -228,6 +228,12 @@ def _ingest_one(session: Session, nl: NormalizedListing) -> tuple[Listing, bool,
     listing, created, prev_status = upsert_listing(session, nl)
     result = match_vehicle(session, nl)
     listing.vehicle_id = result.vehicle.id
+    # Completa vehículos creados antes de que el scraper empezase a extraer
+    # la versión desde el título (sin cambiar su identidad ni el histórico).
+    if not result.vehicle.variant and nl.variant:
+        result.vehicle.variant = nl.variant
+    if not result.vehicle.generation and nl.generation:
+        result.vehicle.generation = nl.generation
     _record_match(session, listing, result, nl)
     prev_snapshot = _latest_snapshot(session, listing.id)
     condition_signals = _append_snapshot(session, listing, nl)

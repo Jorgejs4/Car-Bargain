@@ -35,6 +35,19 @@ def _clean(value: Any) -> str | None:
     return value[:20000] if value else None
 
 
+def extract_variant_from_title(title: str | None, brand: str | None, model: str | None) -> str | None:
+    """Extrae la parte posterior a marca/modelo de títulos de portales."""
+    if not title or not brand or not model:
+        return None
+    value = re.sub(r"\s+", " ", title).strip()
+    prefix = re.compile(
+        rf"^\s*{re.escape(brand)}\s+{re.escape(model)}(?:\s+{re.escape(model)})?\s*",
+        re.IGNORECASE,
+    )
+    variant = prefix.sub("", value, count=1).strip(" -|/")
+    return variant or None
+
+
 def extract_record_description(record: dict) -> str | None:
     """Busca una descripción en un registro SSR sin asumir un único nombre."""
     found: list[str] = []
@@ -104,22 +117,23 @@ class _MetaParser(HTMLParser):
 
 
 def _walk_description(value: Any) -> str | None:
-    if isinstance(value, dict):
-        for key, child in value.items():
-            normalized = re.sub(r"[^a-z]", "", str(key).lower())
-            if normalized in _DESCRIPTION_KEYS:
-                candidate = _clean(child.get("text") if isinstance(child, dict) else child)
-                if candidate and len(candidate) >= 20:
-                    return candidate
-            nested = _walk_description(child)
-            if nested:
-                return nested
-    elif isinstance(value, list):
-        for child in value:
-            nested = _walk_description(child)
-            if nested:
-                return nested
-    return None
+    candidates: list[str] = []
+
+    def walk(node: Any) -> None:
+        if isinstance(node, dict):
+            for key, child in node.items():
+                normalized = re.sub(r"[^a-z]", "", str(key).lower())
+                if normalized in _DESCRIPTION_KEYS:
+                    candidate = _clean(child.get("text") if isinstance(child, dict) else child)
+                    if candidate and len(candidate) >= 20:
+                        candidates.append(candidate)
+                walk(child)
+        elif isinstance(node, list):
+            for child in node:
+                walk(child)
+
+    walk(value)
+    return max(candidates, key=len, default=None)
 
 
 def extract_detail_text(raw_html: str) -> dict[str, str | None]:
@@ -132,16 +146,18 @@ def extract_detail_text(raw_html: str) -> dict[str, str | None]:
 
     for script_id, script in parser.scripts:
         candidate: Any = None
+        candidate_description: str | None = None
         if script_id == "__NEXT_DATA__" or script.lstrip().startswith("{"):
             try:
                 candidate = json.loads(script)
             except json.JSONDecodeError:
                 candidate = None
         if candidate is not None:
-            description = _walk_description(candidate) or description
+            candidate_description = _walk_description(candidate)
+            description = candidate_description or description
             if not title:
                 title = _walk_title(candidate)
-        if description:
+        if candidate_description:
             break
 
     # Último fallback para estados JS que no son JSON puro.
