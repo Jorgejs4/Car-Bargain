@@ -28,7 +28,9 @@ def listing_filters(
     price_min: Decimal | None = Query(None, description="Precio mínimo (último snapshot)"),
     price_max: Decimal | None = Query(None, description="Precio máximo (último snapshot)"),
     mileage_max: int | None = Query(None, description="Kilómetros máximos (último snapshot)"),
+    mileage_min: int | None = Query(None, description="Kilómetros mínimos (último snapshot)"),
     year_min: int | None = Query(None, description="Año mínimo del vehículo"),
+    year_max: int | None = Query(None, description="Año máximo del vehículo"),
     fuel: str | None = Query(None, description="Combustible (ej. diesel)"),
     transmission: str | None = Query(None, description="Cambio (ej. automatic)"),
     seller_type: str | None = Query(None, description="Tipo de vendedor (dealer/private/commercial)"),
@@ -52,7 +54,9 @@ def listing_filters(
         "price_min": price_min,
         "price_max": price_max,
         "mileage_max": mileage_max,
+        "mileage_min": mileage_min,
         "year_min": year_min,
+        "year_max": year_max,
         "fuel": fuel,
         "transmission": transmission,
         "seller_type": seller_type,
@@ -77,13 +81,21 @@ def list_listings(
     db: Session = Depends(get_db),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
-    status: ListingStatus | None = Query(default=ListingStatus.ACTIVE),
+    status: str | None = Query(default=ListingStatus.ACTIVE.value),
     sort_by: str = Query("last_seen", description="Campo: price, mileage, year, last_seen"),
     sort_order: str = Query("desc", description="asc o desc"),
     filters: dict = Depends(listing_filters),
 ) -> Page[ListingListItem]:
+    if status == "ALL":
+        requested_status = None
+        filters["is_historical"] = False
+    else:
+        try:
+            requested_status = ListingStatus(status) if status else ListingStatus.ACTIVE
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail="Estado inválido") from exc
     items, total = listings_query.list_listings(
-        db, page=page, page_size=page_size, status=status, sort_by=sort_by, sort_order=sort_order, **filters
+        db, page=page, page_size=page_size, status=requested_status, sort_by=sort_by, sort_order=sort_order, **filters
     )
     return _page(items, total, page, page_size)
 

@@ -13,9 +13,9 @@ const REGIONS = [
   { value: "EU", label: "Europa" },
 ];
 const SORT_OPTIONS = [
+  { value: "absolute_margin-desc", label: "Mayor ahorro EUR" },
   { value: "cross_border-desc", label: "Mejor cross-border EUR" },
   { value: "bargain-desc", label: "Mejor ganga %" },
-  { value: "absolute_margin-desc", label: "Mayor ahorro EUR" },
   { value: "price-asc", label: "Precio bajo" },
   { value: "price-desc", label: "Precio alto" },
   { value: "total_cost-asc", label: "Precio total bajo" },
@@ -33,16 +33,18 @@ export function FilterFormInner() {
   const [brand, setBrand] = useState(searchParams.get("brand") ?? "");
   const [model, setModel] = useState(searchParams.get("model") ?? "");
   const [variant, setVariant] = useState(searchParams.get("variant") ?? "");
-  const [status, setStatus] = useState(searchParams.get("status") ?? "");
+  const [status, setStatus] = useState(searchParams.get("status") ?? "ALL");
   const [priceMin, setPriceMin] = useState(searchParams.get("price_min") ?? "");
   const [priceMax, setPriceMax] = useState(searchParams.get("price_max") ?? "");
-  const [mileageMax, setMileageMax] = useState(searchParams.get("mileage_max") ?? "");
   const [yearMin, setYearMin] = useState(searchParams.get("year_min") ?? "");
+  const [yearMax, setYearMax] = useState(searchParams.get("year_max") ?? "");
+  const [mileageMin, setMileageMin] = useState(searchParams.get("mileage_min") ?? "");
+  const [mileageMax, setMileageMax] = useState(searchParams.get("mileage_max") ?? "");
   const [fuel, setFuel] = useState(searchParams.get("fuel") ?? "");
   const [transmission, setTransmission] = useState(searchParams.get("transmission") ?? "");
   const [sellerType, setSellerType] = useState(searchParams.get("seller_type") ?? "");
   const [region, setRegion] = useState(searchParams.get("region") ?? "");
-  const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "cross_border-desc");
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "absolute_margin-desc");
   const [needsReview, setNeedsReview] = useState(searchParams.get("needs_review") === "true");
   const [onlyBargains, setOnlyBargains] = useState(
     searchParams.get("min_bargain_score") !== null || pathname === "/",
@@ -70,8 +72,10 @@ export function FilterFormInner() {
     set("status", status);
     set("price_min", priceMin);
     set("price_max", priceMax);
-    set("mileage_max", mileageMax);
     set("year_min", yearMin);
+    set("year_max", yearMax);
+    set("mileage_min", mileageMin);
+    set("mileage_max", mileageMax);
     set("fuel", fuel);
     set("transmission", transmission);
     set("seller_type", sellerType);
@@ -86,9 +90,9 @@ export function FilterFormInner() {
   }
 
   function reset() {
-    setBrand(""); setModel(""); setVariant(""); setStatus(""); setPriceMin(""); setPriceMax("");
-    setMileageMax(""); setYearMin(""); setFuel(""); setTransmission("");
-    setSellerType(""); setRegion(""); setSortBy("cross_border-desc");
+    setBrand(""); setModel(""); setVariant(""); setStatus("ALL"); setPriceMin(""); setPriceMax("");
+    setMileageMin(""); setMileageMax(""); setYearMin(""); setYearMax(""); setFuel(""); setTransmission("");
+    setSellerType(""); setRegion(""); setSortBy("absolute_margin-desc");
     setNeedsReview(false); setOnlyBargains(pathname === "/"); setMinAbsMargin(""); setModels([]);
     router.push(window.location.pathname);
   }
@@ -107,16 +111,6 @@ export function FilterFormInner() {
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
-          Versión
-          <input className={inputCls} value={variant} onChange={(e) => setVariant(e.target.value)} placeholder="220 d Coupe" />
-        </label>
-        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
-          Estado
-          <select className={selectCls} value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="">Activos</option><option value="ACTIVE">Activo</option><option value="STALE">Stale</option><option value="REMOVED">Retirado</option><option value="SOLD">Vendido</option>
-          </select>
-        </label>
-        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
           Modelo
           <select className={selectCls} value={model} onChange={(e) => setModel(e.target.value)} disabled={!brand || models.length === 0}>
             <option value="">Todos</option>
@@ -124,15 +118,19 @@ export function FilterFormInner() {
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
-          Region
-          <select className={selectCls} value={region} onChange={(e) => setRegion(e.target.value)}>
-            {REGIONS.map((r) => (<option key={r.value} value={r.value}>{r.label}</option>))}
+          Versión
+          <input className={inputCls} value={variant} onChange={(e) => setVariant(e.target.value)} placeholder="220 d Coupe" />
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
+          Estado
+          <select className={selectCls} value={status} onChange={(e) => setStatus(e.target.value)}>
+            <option value="ALL">Todos</option><option value="ACTIVE">Reciente</option><option value="STALE">Antiguo</option><option value="REMOVED">Retirado</option><option value="SOLD">Vendido</option>
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
-          Ordenar
-          <select className={selectCls} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-            {SORT_OPTIONS.map((s) => (<option key={s.value} value={s.value}>{s.label}</option>))}
+          Region
+          <select className={selectCls} value={region} onChange={(e) => setRegion(e.target.value)}>
+            {REGIONS.map((r) => (<option key={r.value} value={r.value}>{r.label}</option>))}
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
@@ -144,12 +142,20 @@ export function FilterFormInner() {
           <input className={inputCls} type="number" min={0} value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="25000" />
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
-          Km max.
-          <input className={inputCls} type="number" min={0} value={mileageMax} onChange={(e) => setMileageMax(e.target.value)} placeholder="80000" />
-        </label>
-        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
           Ano min.
           <input className={inputCls} type="number" min={1990} max={2026} value={yearMin} onChange={(e) => setYearMin(e.target.value)} placeholder="2015" />
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
+          Ano max.
+          <input className={inputCls} type="number" min={1990} max={2026} value={yearMax} onChange={(e) => setYearMax(e.target.value)} placeholder="2026" />
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
+          Km min.
+          <input className={inputCls} type="number" min={0} value={mileageMin} onChange={(e) => setMileageMin(e.target.value)} placeholder="0" />
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
+          Km max.
+          <input className={inputCls} type="number" min={0} value={mileageMax} onChange={(e) => setMileageMax(e.target.value)} placeholder="80000" />
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
           Combustible
@@ -170,6 +176,12 @@ export function FilterFormInner() {
           <select className={selectCls} value={sellerType} onChange={(e) => setSellerType(e.target.value)}>
             <option value="">Todos</option>
             {SELLER_TYPES.map((seller) => (<option key={seller} value={seller}>{seller}</option>))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-neutral-500">
+          Ordenar por
+          <select className={selectCls} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+            {SORT_OPTIONS.map((s) => (<option key={s.value} value={s.value}>{s.label}</option>))}
           </select>
         </label>
       </div>
