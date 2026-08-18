@@ -53,7 +53,9 @@ def _build_conditions(
     price_min=None,
     price_max=None,
     mileage_max=None,
+    mileage_min=None,
     year_min=None,
+    year_max=None,
     fuel=None,
     transmission=None,
     seller_type=None,
@@ -85,8 +87,12 @@ def _build_conditions(
         conditions.append(latest.c.price <= Decimal(str(price_max)))
     if mileage_max is not None:
         conditions.append(latest.c.mileage <= mileage_max)
+    if mileage_min is not None:
+        conditions.append(latest.c.mileage >= mileage_min)
     if year_min is not None:
         conditions.append(Vehicle.year >= year_min)
+    if year_max is not None:
+        conditions.append(Vehicle.year <= year_max)
     if fuel:
         conditions.append(Vehicle.fuel == fuel)
     if transmission:

@@ -11,8 +11,8 @@ function num(v: string | string[] | undefined): number | undefined {
 }
 
 function parseFilters(searchParams: Record<string, string | string[] | undefined>): ListingFilters {
-  const sortParam = typeof searchParams.sort === "string" ? searchParams.sort : "cross_border-desc";
-  const [sort_by, sort_order] = sortParam.includes("-") ? sortParam.split("-", 2) : ["cross_border", "desc"];
+  const sortParam = typeof searchParams.sort === "string" ? searchParams.sort : "absolute_margin-desc";
+  const [sort_by, sort_order] = sortParam.includes("-") ? sortParam.split("-", 2) : ["absolute_margin", "desc"];
   return {
     page: num(searchParams.page) ?? 1,
     brand: typeof searchParams.brand === "string" ? searchParams.brand || undefined : undefined,
@@ -22,7 +22,9 @@ function parseFilters(searchParams: Record<string, string | string[] | undefined
     price_min: num(searchParams.price_min),
     price_max: num(searchParams.price_max),
     mileage_max: num(searchParams.mileage_max),
+    mileage_min: num(searchParams.mileage_min),
     year_min: num(searchParams.year_min),
+    year_max: num(searchParams.year_max),
     fuel: typeof searchParams.fuel === "string" ? searchParams.fuel || undefined : undefined,
     transmission:
       typeof searchParams.transmission === "string" ? searchParams.transmission || undefined : undefined,

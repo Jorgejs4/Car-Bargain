@@ -179,7 +179,9 @@ export interface ListingFilters {
   price_min?: number;
   price_max?: number;
   mileage_max?: number;
+  mileage_min?: number;
   year_min?: number;
+  year_max?: number;
   fuel?: string;
   transmission?: string;
   seller_type?: string;
