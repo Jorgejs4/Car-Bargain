@@ -256,13 +256,15 @@ def enrich_listing_text(listing_id: int) -> dict:
             or (latest.raw_data or {}).get("original_description")
             or latest.description
         )
+        original_comment = detail.get("seller_comment") or latest.seller_comment
         lang = {"ES": "es", "DE": "de", "AT": "de", "FR": "fr", "LU": "fr", "IT": "it", "NL": "nl", "BE": "nl"}.get(
             (listing.country or "").upper(), "en"
         )
         description = translate_to_spanish(original_description, lang)
+        seller_comment = translate_to_spanish(original_comment, lang)
         from scrapers.base.condition import extract_condition_signals
         signals = extract_condition_signals(
-            " ".join(part for part in (title, original_description, description) if part),
+            " ".join(part for part in (title, original_description, original_comment, description, seller_comment) if part),
             lang=lang,
             source="listing_detail_lexicon",
             title=title,
@@ -272,7 +274,7 @@ def enrich_listing_text(listing_id: int) -> dict:
         signals["detail_fetch_status"] = "ok" if description else "not_found"
         listing.text_signals = signals
 
-        if description and description != latest.description:
+        if description != latest.description or seller_comment != latest.seller_comment or title != latest.title:
             db.add(
                 ListingSnapshot(
                     listing_id=listing.id,
@@ -282,6 +284,7 @@ def enrich_listing_text(listing_id: int) -> dict:
                     mileage=latest.mileage,
                     title=title,
                     description=description,
+                    seller_comment=seller_comment,
                     seller_type=latest.seller_type,
                     location=latest.location,
                     condition_signals=signals,
@@ -289,6 +292,7 @@ def enrich_listing_text(listing_id: int) -> dict:
                         **(latest.raw_data or {}),
                         "detail_enriched": True,
                         "original_description": original_description,
+                        "original_seller_comment": original_comment,
                         "description_language": lang,
                     },
                 )

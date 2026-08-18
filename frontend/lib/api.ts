@@ -79,6 +79,7 @@ export interface ListingSnapshotRead {
   mileage: number | null;
   title: string | null;
   description: string | null;
+  seller_comment: string | null;
   seller_type: string | null;
   location: string | null;
   condition_signals: Record<string, unknown> | null;

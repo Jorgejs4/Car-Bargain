@@ -36,7 +36,7 @@ def _language_for(nl: NormalizedListing) -> str:
 
 
 def _condition_signals_for(nl: NormalizedListing) -> dict:
-    text = " ".join(part for part in (nl.title, nl.description) if part)
+    text = " ".join(part for part in (nl.title, nl.description, nl.seller_comment) if part)
     return extract_condition_signals(
         text,
         lang=_language_for(nl),
@@ -124,6 +124,7 @@ def _append_snapshot(session: Session, listing: Listing, nl: NormalizedListing) 
             mileage=nl.mileage,
             title=nl.title,
             description=nl.description,
+            seller_comment=nl.seller_comment,
             seller_type=nl.seller_type,
             location=nl.city,
             condition_signals=condition_signals,

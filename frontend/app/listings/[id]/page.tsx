@@ -247,6 +247,7 @@ export default async function ListingPage({
             <p className="mb-1 text-xs text-neutral-500">{fmtDate(s.scraped_at)}</p>
             {s.title && <h3 className="font-semibold">{s.title}</h3>}
             <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{s.description || "Sin descripción"}</p>
+            {s.seller_comment && <p className="mt-3 whitespace-pre-wrap border-t border-neutral-100 pt-3 text-sm leading-6 dark:border-neutral-800"><strong>Comentarios del anunciante:</strong>{"\n"}{s.seller_comment}</p>}
           </article>
         )) : <p className="text-sm text-neutral-500">No hay descripción ni comentarios guardados.</p>}
       </Section>

@@ -26,6 +26,10 @@ _DESCRIPTION_KEYS = {
     "omschrijving",
 }
 _TITLE_KEYS = {"title", "adtitle", "vehicletitle", "headline", "name"}
+_SELLER_COMMENT_RE = re.compile(
+    r'"(?:sellerComment|sellerRemarks|dealerComment|dealerNotes|sellerText)"\s*:\s*"((?:\\.|[^"\\])*)"',
+    re.IGNORECASE,
+)
 
 
 def _clean(value: Any) -> str | None:
@@ -173,7 +177,18 @@ def extract_detail_text(raw_html: str) -> dict[str, str | None]:
             except json.JSONDecodeError:
                 description = _clean(match.group(1))
 
-    return {"title": _clean(title), "description": _clean(description)}
+    seller_comment = None
+    match = _SELLER_COMMENT_RE.search(raw_html)
+    if match:
+        try:
+            seller_comment = _clean(json.loads('"' + match.group(1) + '"'))
+        except json.JSONDecodeError:
+            seller_comment = _clean(match.group(1))
+    return {
+        "title": _clean(title),
+        "description": _clean(description),
+        "seller_comment": seller_comment,
+    }
 
 
 def _walk_title(value: Any) -> str | None:
