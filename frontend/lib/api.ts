@@ -368,3 +368,48 @@ export async function fetchNotifications(unread = false): Promise<NotificationIt
 export async function markNotificationRead(id: number): Promise<void> {
   await getJson(`/api/v1/users/me/notifications/${id}/read`, { method: "POST" });
 }
+
+export interface FavoriteItem {
+  id: number;
+  listing_id: number;
+  created_at: string;
+}
+
+export interface SavedSearchItem {
+  id: number;
+  name: string;
+  filters: Record<string, string | number | boolean>;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function fetchFavorites(): Promise<FavoriteItem[]> {
+  return getJson<FavoriteItem[]>("/api/v1/users/me/favorites");
+}
+
+export async function addFavorite(listingId: number): Promise<FavoriteItem> {
+  return getJson<FavoriteItem>(`/api/v1/users/me/favorites/${listingId}`, { method: "POST" });
+}
+
+export async function removeFavorite(listingId: number): Promise<void> {
+  await getJson(`/api/v1/users/me/favorites/${listingId}`, { method: "DELETE" });
+}
+
+export async function fetchSavedSearches(): Promise<SavedSearchItem[]> {
+  return getJson<SavedSearchItem[]>("/api/v1/users/me/saved-searches");
+}
+
+export async function saveSearch(
+  name: string,
+  filters: Record<string, string | number | boolean>,
+): Promise<SavedSearchItem> {
+  return getJson<SavedSearchItem>("/api/v1/users/me/saved-searches", {
+    method: "POST",
+    body: JSON.stringify({ name, filters }),
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+export async function deleteSavedSearch(id: number): Promise<void> {
+  await getJson(`/api/v1/users/me/saved-searches/${id}`, { method: "DELETE" });
+}

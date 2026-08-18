@@ -13,8 +13,22 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.models import AlertPreference, Notification, NotificationStatus
-from app.schemas import AlertPreferenceBase, AlertPreferenceRead, NotificationRead
+from app.models import (
+    AlertPreference,
+    FavoriteListing,
+    Listing,
+    Notification,
+    NotificationStatus,
+    SavedSearch,
+)
+from app.schemas import (
+    AlertPreferenceBase,
+    AlertPreferenceRead,
+    FavoriteRead,
+    NotificationRead,
+    SavedSearchCreate,
+    SavedSearchRead,
+)
 from app.services.alerts import evaluate_alerts
 from app.services.email_sender import send_deal_email
 
@@ -116,3 +130,77 @@ def mark_as_read(notification_id: int, db: Session = Depends(get_db)) -> dict:
     notification.status = NotificationStatus.READ.value
     db.commit()
     return {"id": notification_id, "status": "read"}
+
+
+@router.get("/me/favorites", response_model=list[FavoriteRead], summary="Lista las ofertas favoritas")
+def list_favorites(db: Session = Depends(get_db)) -> list[FavoriteRead]:
+    favorites = db.scalars(
+        select(FavoriteListing)
+        .where(FavoriteListing.user_key == _DEFAULT_USER_KEY)
+        .order_by(FavoriteListing.created_at.desc())
+    ).all()
+    return [FavoriteRead.model_validate(item) for item in favorites]
+
+
+@router.post("/me/favorites/{listing_id}", response_model=FavoriteRead, summary="Añade una oferta a favoritos")
+def add_favorite(listing_id: int, db: Session = Depends(get_db)) -> FavoriteRead:
+    if db.get(Listing, listing_id) is None:
+        raise HTTPException(status_code=404, detail="Listing no encontrado")
+    favorite = db.scalar(
+        select(FavoriteListing).where(
+            FavoriteListing.user_key == _DEFAULT_USER_KEY,
+            FavoriteListing.listing_id == listing_id,
+        )
+    )
+    if favorite is None:
+        favorite = FavoriteListing(user_key=_DEFAULT_USER_KEY, listing_id=listing_id)
+        db.add(favorite)
+        db.commit()
+        db.refresh(favorite)
+    return FavoriteRead.model_validate(favorite)
+
+
+@router.delete("/me/favorites/{listing_id}", status_code=204, summary="Quita una oferta de favoritos")
+def remove_favorite(listing_id: int, db: Session = Depends(get_db)) -> None:
+    favorite = db.scalar(
+        select(FavoriteListing).where(
+            FavoriteListing.user_key == _DEFAULT_USER_KEY,
+            FavoriteListing.listing_id == listing_id,
+        )
+    )
+    if favorite is not None:
+        db.delete(favorite)
+        db.commit()
+
+
+@router.get("/me/saved-searches", response_model=list[SavedSearchRead], summary="Lista las búsquedas guardadas")
+def list_saved_searches(db: Session = Depends(get_db)) -> list[SavedSearchRead]:
+    searches = db.scalars(
+        select(SavedSearch)
+        .where(SavedSearch.user_key == _DEFAULT_USER_KEY)
+        .order_by(SavedSearch.updated_at.desc())
+    ).all()
+    return [SavedSearchRead.model_validate(item) for item in searches]
+
+
+@router.post("/me/saved-searches", response_model=SavedSearchRead, summary="Guarda una búsqueda")
+def create_saved_search(payload: SavedSearchCreate, db: Session = Depends(get_db)) -> SavedSearchRead:
+    search = SavedSearch(user_key=_DEFAULT_USER_KEY, name=payload.name.strip(), filters=payload.filters)
+    db.add(search)
+    db.commit()
+    db.refresh(search)
+    return SavedSearchRead.model_validate(search)
+
+
+@router.delete("/me/saved-searches/{search_id}", status_code=204, summary="Elimina una búsqueda guardada")
+def delete_saved_search(search_id: int, db: Session = Depends(get_db)) -> None:
+    search = db.scalar(
+        select(SavedSearch).where(
+            SavedSearch.id == search_id,
+            SavedSearch.user_key == _DEFAULT_USER_KEY,
+        )
+    )
+    if search is None:
+        raise HTTPException(status_code=404, detail="Búsqueda no encontrada")
+    db.delete(search)
+    db.commit()
