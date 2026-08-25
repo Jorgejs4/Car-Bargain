@@ -44,6 +44,12 @@ services:
         condition: service_healthy
     expose:
       - "8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import json, urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5); data=json.load(r); assert data.get('database') == 'ok' and data.get('redis') == 'ok'\""]
+      interval: 10s
+      timeout: 8s
+      retries: 12
+      start_period: 30s
     volumes:
       - rawdata:/app/raw
     restart: unless-stopped
@@ -64,6 +70,8 @@ services:
       db:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      api:
         condition: service_healthy
     volumes:
       - rawdata:/app/raw
@@ -100,7 +108,8 @@ services:
       NEXT_PUBLIC_API_URL: https://${APP_DOMAIN:?APP_DOMAIN es obligatorio}
       API_INTERNAL_URL: http://api:8000
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     expose:
       - "3000"
     restart: unless-stopped
@@ -117,8 +126,10 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - frontend
-      - api
+      frontend:
+        condition: service_started
+      api:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:

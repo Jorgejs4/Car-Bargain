@@ -1,9 +1,8 @@
 name: Mantenimiento valoración
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "7,37 * * * *"
+# PAUSADO temporalmente mientras Neon recupera la cuota de transferencia.
+# Para reactivarlo, restaurar los triggers workflow_dispatch y schedule.
+on: []
 
 jobs:
   maintenance:
@@ -18,8 +17,24 @@ jobs:
           set -euo pipefail
           test -n "$API_URL"
           test -n "$INTERNAL_KEY"
+          echo "Comprobando disponibilidad de la API..."
+          for attempt in $(seq 1 60); do
+            if health=$(curl --location --silent --show-error --fail-with-body \
+              --connect-timeout 10 --max-time 20 "$API_URL/health"); then
+              echo "$health" | jq .
+              if echo "$health" | jq -e '.database == "ok" and .redis == "ok"' >/dev/null; then
+                break
+              fi
+            fi
+            if [ "$attempt" = "60" ]; then
+              echo "La API no está saludable tras 10 minutos; no se ejecuta mantenimiento."
+              exit 1
+            fi
+            sleep 10
+          done
           for task in score import cross-border alerts; do
             curl --location --fail-with-body --silent --show-error \
+              --connect-timeout 15 --max-time 120 --retry-all-errors --retry 6 --retry-delay 10 \
               -X POST "$API_URL/internal/maintenance/$task" \
               -H "X-Internal-Key: $INTERNAL_KEY"
             echo
